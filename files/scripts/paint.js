@@ -7,19 +7,14 @@ canvas.width = 940;
 canvas.height = 540;
 // Конец Настройки канваса
 
+let workspace = document.querySelector(".workspace__body");
+
 // Изменение размера
 let canvContainer = document.querySelector(".canvas"),
     canvFrame = document.querySelector(".canvas__frame"),
     canvBottom = document.getElementById("canvBottom"),
     canvRight = document.getElementById("canvRight"),
     canvCorner = document.getElementById("canvCorner");
-
-// Дебаг drad'n drop
-[canvBottom, canvRight, canvCorner].forEach((e) => {
-    e.ondragstart = function () {
-        return false;
-    };
-});
 
 // Создаём данные изображения
 let imageData = ctx.createImageData(canvas.width, canvas.height);
@@ -83,6 +78,12 @@ function onMouseDown(e) {
 }
 
 // Обработчики на все ползунки
+[canvBottom, canvRight, canvCorner].forEach((e) => {
+    e.ondragstart = function () {
+        return false;
+    };
+});
+
 canvBottom.addEventListener("mousedown", onMouseDown);
 canvRight.addEventListener("mousedown", onMouseDown);
 canvCorner.addEventListener("mousedown", onMouseDown);
@@ -119,13 +120,21 @@ canvas.addEventListener("mousedown", function (e) {
         }
     });
 
-    canvas.addEventListener("mouseup", function (e) {
+    document.addEventListener("mouseup", function (e) {
         ctx.closePath();
         isDraw = false;
     });
     canvas.addEventListener("mouseleave", function (e) {
-        ctx.closePath();
-        isDraw = false;
+        if (isDraw) {
+            mousePos = {
+                x: e.layerX,
+                y: e.layerY
+            };
+
+            ctx.lineTo(mousePos.x, mousePos.y);
+            ctx.stroke();
+            ctx.moveTo(mousePos.x, mousePos.y);
+        }
     });
 });
 // Конец Рисование
