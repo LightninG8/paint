@@ -125,16 +125,8 @@ canvas.addEventListener("mousedown", function (e) {
         isDraw = false;
     });
     canvas.addEventListener("mouseleave", function (e) {
-        if (isDraw) {
-            mousePos = {
-                x: e.layerX,
-                y: e.layerY
-            };
-
-            ctx.lineTo(mousePos.x, mousePos.y);
-            ctx.stroke();
-            ctx.moveTo(mousePos.x, mousePos.y);
-        }
+        ctx.closePath();
+        isDraw = false;
     });
 });
 // Конец Рисование
