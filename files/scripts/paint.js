@@ -14,60 +14,73 @@ let canvContainer = document.querySelector(".canvas"),
     canvRight = document.getElementById("canvRight"),
     canvCorner = document.getElementById("canvCorner");
 
-let isDraggable = false;
-
 // Создаём данные изображения
 let imageData = ctx.createImageData(canvas.width, canvas.height);
 
 // При нажатии на ползунок
-[canvBottom, canvRight, canvCorner].forEach((e) => {
-    e.addEventListener("mousedown", function (e) {
-        let direction = {
-            canvBottom: 0,
-            canvRight: 0,
-            canvCorner: 0
-        }
+function onMouseDown(e) {
+    let isDraggable = false;
 
-        canvFrame.style.display = 'block';
-        canvFrame.style.zIndex = 1000;
+    canvFrame.style.display = 'block';
+    canvFrame.style.zIndex = 1000;
 
-        isDraggable = true;
+    isDraggable = true;
 
-        imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-        // меняет рамку при событии движении мыши
-        function onMouseMove(e) {
-            if (isDraggable) {
-                // дополнительно учитывая изначальный сдвиг относительно указателя мыши
+    // меняет рамку при событии движении мыши
+    let onMouseMove = e => {
+        if (isDraggable) {
+            console.log(this);
+            // дополнительно учитывая изначальный сдвиг относительно указателя мыши
+            if (this == canvBottom) {
+                canvFrame.style.height = e.pageY - 5 - 92 + 'px';
+            } else if (this == canvRight) {
+                canvFrame.style.width = e.pageX - 5 + 'px';
+            } else if (this == canvCorner) {
                 canvFrame.style.width = e.pageX - 5 + 'px';
                 canvFrame.style.height = e.pageY - 5 - 92 + 'px';
             }
+
         }
-        // зафиксировать рамку, удалить ненужные обработчики
-        function onMouseUp(e) {
-            if (isDraggable) {
-                isDraggable = false;
-
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseUp', onMouseUp);
-
-                canvContainer.style.width = e.pageX - 5 + 'px';
-                canvContainer.style.height = e.pageY - 5 - 92 + 'px';
-
-                canvFrame.style.display = 'none';
-
-                // Канвас
-                canvas.width = parseInt(canvFrame.style.width);
-                canvas.height = parseInt(canvFrame.style.height);
-                ctx.putImageData(imageData, 0, 0);
+    }
+    // зафиксировать рамку, удалить ненужные обработчики
+    let onMouseUp = e => {
+        if (isDraggable) {
+            if (this == canvBottom) {
+                canvas.height = e.pageY - 5 - 92;
+            } else if (this == canvRight) {
+                canvas.width = e.pageX - 5;
+            } else if (this == canvCorner) {
+                canvas.width = e.pageX - 5;
+                canvas.height = e.pageY - 5 - 92;
             }
 
+
+            canvFrame.style.display = 'none';
+
+            // Канвас
+            canvContainer.style.width = canvas.width + "px";
+            canvContainer.style.height = canvas.height + "px";
+            ctx.putImageData(imageData, 0, 0);
+
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseUp', onMouseUp);
+            isDraggable = false;
         }
 
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener("mouseup", onMouseUp);
-    });
+    }
 
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+}
+
+// Обработчики на все ползунки
+canvBottom.addEventListener("mousedown", onMouseDown);
+canvRight.addEventListener("mousedown", onMouseDown);
+canvCorner.addEventListener("mousedown", onMouseDown);
+
+[canvBottom, canvRight, canvCorner].forEach((e) => {
     e.ondragstart = function () {
         return false;
     };
