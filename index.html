@@ -13,20 +13,27 @@
     <title>Paint Online</title>
 </head>
 
-<body>
-    <div class="container">
+<body class="page">
+    <div class="container page__body">
         <!-- Toolbar -->
-        <div class="toolbar"></div>
+        <div class="toolbar">
+            <div class="toolbar__body">
+                <div class="tool"></div>
+            </div>
+        </div>
         <!-- End Toolbar -->
 
         <!-- Workspace -->
         <div class="workspace">
             <div class="workspace__body">
                 <div class="canvas">
-                    <canvas id="canvas" width="960" height="540">Your browser doesn't support canvas</canvas>
+                    <canvas id="canvas">Your browser doesn't support canvas</canvas>
                     <div id="canvBottom" class="canvas__size-slider"></div>
                     <div id="canvRight" class="canvas__size-slider"></div>
                     <div id="canvCorner" class="canvas__size-slider"></div>
+                    <div class="canvas__frame">
+                        
+                    </div>
                 </div>
             </div>
         </div>
