@@ -76,15 +76,16 @@ function onMouseDown(e) {
 }
 
 // Обработчики на все ползунки
-canvBottom.addEventListener("mousedown", onMouseDown);
-canvRight.addEventListener("mousedown", onMouseDown);
-canvCorner.addEventListener("mousedown", onMouseDown);
-
 [canvBottom, canvRight, canvCorner].forEach((e) => {
     e.ondragstart = function () {
         return false;
     };
 });
+
+canvBottom.addEventListener("mousedown", onMouseDown);
+canvRight.addEventListener("mousedown", onMouseDown);
+canvCorner.addEventListener("mousedown", onMouseDown);
+
 // Конец Изменение размера
 
 // Рисование
