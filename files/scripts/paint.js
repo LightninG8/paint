@@ -14,6 +14,13 @@ let canvContainer = document.querySelector(".canvas"),
     canvRight = document.getElementById("canvRight"),
     canvCorner = document.getElementById("canvCorner");
 
+// Дебаг drad'n drop
+[canvBottom, canvRight, canvCorner].forEach((e) => {
+    e.ondragstart = function () {
+        return false;
+    };
+});
+
 // Создаём данные изображения
 let imageData = ctx.createImageData(canvas.width, canvas.height);
 
@@ -76,12 +83,6 @@ function onMouseDown(e) {
 }
 
 // Обработчики на все ползунки
-[canvBottom, canvRight, canvCorner].forEach((e) => {
-    e.ondragstart = function () {
-        return false;
-    };
-});
-
 canvBottom.addEventListener("mousedown", onMouseDown);
 canvRight.addEventListener("mousedown", onMouseDown);
 canvCorner.addEventListener("mousedown", onMouseDown);
