@@ -1,0 +1,45 @@
+.canvas {
+    position: relative;
+
+    display: inline-block;
+
+    box-shadow: 5px 5px 8px 2px rgba(0, 0, 0, 0.1);
+
+    &__size-slider {
+        position: absolute;
+
+        width: 5px;
+        height: 5px;
+        z-index: 100;
+
+        background: #ffffff;
+        border: 1px solid #000000;
+    }
+}
+
+#canvas {
+    display: block;
+
+    background: #ffffff;
+}
+
+#canvBottom {
+    bottom: -5px;
+    left: calc(50% - 3px);
+
+    cursor: s-resize;
+}
+
+#canvRight {
+    right: -5px;
+    top: calc(50% - 3px);
+
+    cursor: e-resize;
+}
+
+#canvCorner {
+    bottom: -5px;
+    right: -5px;
+
+    cursor: se-resize;
+}

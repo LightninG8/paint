@@ -2,13 +2,39 @@
 <html lang="ru">
 
 <head>
+    <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="files/css/style.css">
+
+    <!-- Others -->
     <title>Paint Online</title>
 </head>
 
 <body>
+    <div class="container">
+        <!-- Toolbar -->
+        <div class="toolbar"></div>
+        <!-- End Toolbar -->
 
+        <!-- Workspace -->
+        <div class="workspace">
+            <div class="workspace__body">
+                <div class="canvas">
+                    <canvas id="canvas" width="960" height="540">Your browser doesn't support canvas</canvas>
+                    <div id="canvBottom" class="canvas__size-slider"></div>
+                    <div id="canvRight" class="canvas__size-slider"></div>
+                    <div id="canvCorner" class="canvas__size-slider"></div>
+                </div>
+            </div>
+        </div>
+        <!-- End Workspace -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="files/scripts/paint.js"></script>
 </body>
 
 </html>

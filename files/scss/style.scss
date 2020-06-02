@@ -7,3 +7,8 @@
 @import "_reset";
 
 // Blocks
+@import "_all";
+@import "../blocks/container/_container";
+@import "../blocks/canvas/_canvas";
+@import "../blocks/toolbar/_toolbar";
+@import "../blocks/workspace/_workspace";
