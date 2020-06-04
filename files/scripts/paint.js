@@ -113,8 +113,8 @@ canvCorner.addEventListener("mousedown", onMouseDown);
 // Рисование
 subcanvas.addEventListener("mousedown", function (e) {
     let mousePos = {
-        x: e.layerX,
-        y: e.layerY
+        x: e.layerX - 5,
+        y: e.layerY - 5
     };
 
     let isDraw = true;
@@ -131,8 +131,8 @@ subcanvas.addEventListener("mousedown", function (e) {
     function onMouseMove(e) {
         if (isDraw) {
             mousePos = {
-                x: e.layerX,
-                y: e.layerY
+                x: e.layerX - 5,
+                y: e.layerY - 5
             };
 
             ctx.lineTo(mousePos.x, mousePos.y);
