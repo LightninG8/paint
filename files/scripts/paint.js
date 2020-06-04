@@ -1,23 +1,37 @@
 "use string";
 // Настройки канваса
-let canvas = document.getElementById("canvas"),
-    subcanvas = document.getElementById("subcanvas"),
+let subcanvas = document.getElementById("subcanvas"),
+    canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d");
+
+subcanvas.width = parseInt(subcanvas.parentNode.parentNode.offsetWidth);
+subcanvas.height = parseInt(subcanvas.parentNode.parentNode.offsetHeight);
 
 canvas.width = 940;
 canvas.height = 540;
 // Конец Настройки канваса
 let canvContainer = document.querySelector(".canvas"),
     canvRight = document.getElementById("canvRight"),
-    canvCorner = document.getElementById("canvCorner");
+    canvCorner = document.getElementById("canvCorner"),
+    canvFrame = document.querySelector(".canvas__frame");
 
-// Создаём данные изображения
+// Архив
+let archive = [],
+    archiveCounter = 1,
+    backsteps = 0;
 
+archive.push({
+    imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
+    width: canvas.width,
+    height: canvas.height
+});
 // При нажатии на ползунок
 function resizeCanvas(e) {
     let isDraggable = true;
     // Создаём данные изображения
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    canvFrame.style.display = 'block';
 
     // меняет рамку при событии движении мыши
     let onMouseMove = e => {
@@ -26,6 +40,11 @@ function resizeCanvas(e) {
             // дополнительно учитывая изначальный сдвиг относительно указателя мыши
             if (this == canvBottom) {
                 canvFrame.style.height = e.pageY - 5 - 92 + 'px';
+            } else if (this == canvRight) {
+                canvFrame.style.width = e.pageX - 5 + 'px';
+            } else if (this == canvCorner) {
+                canvFrame.style.height = e.pageY - 5 - 92 + 'px';
+                canvFrame.style.width = e.pageX - 5 + 'px';
             }
         }
     }
@@ -36,6 +55,8 @@ function resizeCanvas(e) {
             width: canvas.width,
             height: canvas.height
         });
+
+        isDraggable = false;
         canvFrame.style.display = 'none';
 
         // Канвас
@@ -43,24 +64,30 @@ function resizeCanvas(e) {
         canvContainer.style.height = canvas.height + "px";
         ctx.putImageData(imageData, 0, 0);
 
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseUp', onMouseUp);
-        isDraggable = false;
+
 
         archiveCounter = archive.length - 1;
+
+        this.removeEventListener('mousemove', onMouseMove);
+        this.removeEventListener('mouseUp', onMouseUp);
     }
+    this.addEventListener('mousemove', onMouseMove);
+    this.addEventListener('mouseUp', onMouseUp);
 
 }
 
 canvCorner.addEventListener("mousedown", resizeCanvas);
+canvBottom.addEventListener("mousedown", resizeCanvas);
+canvRight.addEventListener("mousedown", resizeCanvas);
+
 
 // Конец Изменение размера
 
 // Рисование
-canvas.addEventListener("mousedown", function (e) {
+subcanvas.addEventListener("mousedown", function (e) {
     let mousePos = {
-        x: e.layerX - 5,
-        y: e.layerY - 5
+        x: e.layerX,
+        y: e.layerY
     };
 
     let isDraw = true;
@@ -97,6 +124,10 @@ canvas.addEventListener("mousedown", function (e) {
         });
 
         archiveCounter = archive.length - 1;
+
+
+
+        console.log(archive.length, archiveCounter);
 
         ctx.closePath();
         isDraw = false;
