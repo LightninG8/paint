@@ -107,19 +107,19 @@ function onMouseDown(e) {
 canvBottom.addEventListener("mousedown", onMouseDown);
 canvRight.addEventListener("mousedown", onMouseDown);
 canvCorner.addEventListener("mousedown", onMouseDown);
-
 // Конец Изменение размера
 
 // Рисование
 subcanvas.addEventListener("mousedown", function (e) {
+    // ......
     let mousePos = {
-        x: e.layerX,
-        y: e.layerY
+        x: e.layerX - 5,
+        y: e.layerY - 5
     };
 
     let isDraw = true;
 
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 4;
     ctx.lineCap = "round";
 
     ctx.beginPath();
@@ -128,11 +128,12 @@ subcanvas.addEventListener("mousedown", function (e) {
     ctx.stroke();
 
 
+
     function onMouseMove(e) {
         if (isDraw) {
             mousePos = {
-                x: e.layerX,
-                y: e.layerY
+                x: e.layerX - 5,
+                y: e.layerY - 5
             };
 
             ctx.lineTo(mousePos.x, mousePos.y);
@@ -142,6 +143,7 @@ subcanvas.addEventListener("mousedown", function (e) {
     }
 
     function onMouseUp(e) {
+        console.log(e);
         // Запоминаем холст
         let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -152,10 +154,6 @@ subcanvas.addEventListener("mousedown", function (e) {
         });
 
         archiveCounter = archive.length - 1;
-
-
-
-        console.log(archive.length, archiveCounter);
 
         ctx.closePath();
         isDraw = false;
@@ -214,8 +212,6 @@ function stepBack() {
 
         // Вставляем изображение
         ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
-
-        backsteps++;
     }
 }
 
@@ -230,8 +226,6 @@ function stepNext() {
 
         // Вставляем изображение
         ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
-
-        backsteps--;
     }
 }
 runOnKeys(stepBack, "ControlLeft", "KeyZ");
