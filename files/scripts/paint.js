@@ -1,11 +1,7 @@
 "use string";
 // Настройки канваса
-let subcanvas = document.getElementById("subcanvas"),
-    canvas = document.getElementById("canvas"),
+let canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d");
-
-subcanvas.width = parseInt(subcanvas.parentNode.parentNode.offsetWidth);
-subcanvas.height = parseInt(subcanvas.parentNode.parentNode.offsetHeight);
 
 canvas.width = 940;
 canvas.height = 540;
@@ -15,6 +11,7 @@ let canvContainer = document.querySelector(".canvas"),
     canvCorner = document.getElementById("canvCorner"),
     canvFrame = document.querySelector(".canvas__frame");
 
+<<<<<<< HEAD
 // Архив
 let archive = [],
     archiveCounter = 1,
@@ -30,6 +27,21 @@ function resizeCanvas(e) {
     let isDraggable = true;
     // Создаём данные изображения
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+=======
+// Создаём данные изображения
+let imageData = ctx.createImageData(canvas.width, canvas.height);
+
+// При нажатии на ползунок
+function onMouseDown(e) {
+    let isDraggable = false;
+
+    canvFrame.style.display = 'block';
+    canvFrame.style.zIndex = 1000;
+
+    isDraggable = true;
+
+    imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
 
     canvFrame.style.display = 'block';
 
@@ -64,9 +76,16 @@ function resizeCanvas(e) {
         canvContainer.style.height = canvas.height + "px";
         ctx.putImageData(imageData, 0, 0);
 
+<<<<<<< HEAD
 
 
         archiveCounter = archive.length - 1;
+=======
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseUp', onMouseUp);
+            isDraggable = false;
+        }
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
 
         this.removeEventListener('mousemove', onMouseMove);
         this.removeEventListener('mouseUp', onMouseUp);
@@ -84,7 +103,7 @@ canvRight.addEventListener("mousedown", resizeCanvas);
 // Конец Изменение размера
 
 // Рисование
-subcanvas.addEventListener("mousedown", function (e) {
+canvas.addEventListener("mousedown", function (e) {
     let mousePos = {
         x: e.layerX,
         y: e.layerY
@@ -100,7 +119,11 @@ subcanvas.addEventListener("mousedown", function (e) {
     ctx.lineTo(mousePos.x, mousePos.y);
     ctx.stroke();
 
+<<<<<<< HEAD
     function onMouseMove(e) {
+=======
+    canvas.addEventListener("mousemove", function (e) {
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
         if (isDraw) {
             mousePos = {
                 x: e.layerX - 5,
@@ -108,6 +131,7 @@ subcanvas.addEventListener("mousedown", function (e) {
             }
         };
 
+<<<<<<< HEAD
         ctx.lineTo(mousePos.x, mousePos.y);
         ctx.stroke();
         ctx.moveTo(mousePos.x, mousePos.y);
@@ -128,9 +152,18 @@ subcanvas.addEventListener("mousedown", function (e) {
 
 
         console.log(archive.length, archiveCounter);
+=======
+            ctx.lineTo(mousePos.x, mousePos.y);
+            ctx.stroke();
+            ctx.moveTo(mousePos.x, mousePos.y);
+        }
+    });
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
 
+    document.addEventListener("mouseup", function (e) {
         ctx.closePath();
         isDraw = false;
+<<<<<<< HEAD
 
         subcanvas.removeEventListener("mousemove", onMouseMove);
         subcanvas.removeEventListener("mouseup", onMouseUp);
@@ -223,3 +256,12 @@ subcanvas.addEventListener("mousemove", function (e) {
 // // Конец Комбинации клавиш
 // });
 // });
+=======
+    });
+    canvas.addEventListener("mouseleave", function (e) {
+        ctx.closePath();
+        isDraw = false;
+    });
+});
+// Конец Рисование
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
