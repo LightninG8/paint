@@ -406,6 +406,12 @@ textarea {
   cursor: crosshair;
 }
 
+#subcanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 #canvBottom {
   bottom: -15px;
   left: calc(50% - 10px);
@@ -438,8 +444,9 @@ textarea {
 }
 
 .workspace {
-  background: #ced8e7;
+  position: relative;
   height: 100%;
+  background: #ced8e7;
 }
 .workspace__body {
   width: 100%;

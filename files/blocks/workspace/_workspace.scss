@@ -1,6 +1,9 @@
 .workspace {
-    background: $color-workspace;
+    position: relative;
+
     height: 100%;
+
+    background: $color-workspace;
 
     &__body {
         width: 100%;

@@ -12,12 +12,10 @@ let canvContainer = document.querySelector(".canvas"),
     canvCorner = document.getElementById("canvCorner");
 
 // Создаём данные изображения
-let imageData = ctx.createImageData(canvas.width, canvas.height);
 
 // При нажатии на ползунок
-function onMouseDown(e) {
-
-    isDraggable = true;
+function resizeCanvas(e) {
+    let isDraggable = true;
     // Создаём данные изображения
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -32,7 +30,7 @@ function onMouseDown(e) {
         }
     }
 
-    function onMouseDown(e) {
+    function onMouseUp(e) {
         archive.push({
             imageData: imageData,
             width: canvas.width,
@@ -49,207 +47,148 @@ function onMouseDown(e) {
         document.removeEventListener('mouseUp', onMouseUp);
         isDraggable = false;
 
-
         archiveCounter = archive.length - 1;
     }
 
 }
 
-canvCorner.addEventListener("mousedown", onMouseDown);
+canvCorner.addEventListener("mousedown", resizeCanvas);
 
 // Конец Изменение размера
 
 // Рисование
-<<
-<< << < HEAD
 subcanvas.addEventListener("mousedown", function (e) {
-    <<
-    << << < HEAD
-        <<
-        << << < HEAD ===
-        === = ===
-        === = >>>
-        >>> > parent of 8939349...Doesn 't work ===
-        === =
-        canvas.addEventListener("mousedown", function (e) {
-                >>>
-                >>> > parent of 0 c0afa3...Add: steps + modify drawing
-                let mousePos = {
-                    x: e.layerX,
-                    y: e.layerY
-                };
+    let mousePos = {
+        x: e.layerX - 5,
+        y: e.layerY - 5
+    };
 
-                let isDraw = true;
+    let isDraw = true;
 
-                ctx.lineWidth = 1;
-                ctx.lineCap = "round";
+    ctx.lineWidth = 1;
+    ctx.lineCap = "round";
 
-                ctx.beginPath();
-                ctx.moveTo(mousePos.x, mousePos.y);
-                ctx.lineTo(mousePos.x, mousePos.y);
-                ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(mousePos.x, mousePos.y);
+    ctx.lineTo(mousePos.x, mousePos.y);
+    ctx.stroke();
 
-                <<
-                << << < HEAD
-
-                    <<
-                    << << < HEAD >>>
-                    >>> > parent of 8939349...Doesn 't work ===
-                    === = >>>
-                    >>> > parent of 8939349...Doesn 't work
-
-                function onMouseMove(e) {
-                    ===
-                    === =
-                    canvas.addEventListener("mousemove", function (e) {
-                            >>>
-                            >>> > parent of 0 c0afa3...Add: steps + modify drawing
-                            if (isDraw) {
-                                mousePos = {
-                                        x: e.layerX,
-                                        y: e.layerY <<
-                                            << << < HEAD <<
-                                            << << < HEAD
-                                    } ===
-                                    === = ===
-                                    === = >>>
-                                    >>> > parent of 8939349...Doesn 't work
-                            }; >>>
-                            >>> > parent of 8939349...Doesn 't work
-
-                            ctx.lineTo(mousePos.x, mousePos.y);
-                            ctx.stroke();
-                            ctx.moveTo(mousePos.x, mousePos.y);
-                        } <<
-                        << << < HEAD
-                    }
-
-                    function onMouseUp(e) {
-                        // Запоминаем холст
-                        let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-                        archive.push({
-                            imageData: imageData,
-                            width: canvas.width,
-                            height: canvas.height
-                        });
-
-                        archiveCounter = archive.length - 1;
-
-
-
-                        console.log(archive.length, archiveCounter); <<
-                        << << < HEAD
-                            <<
-                            << << < HEAD
-                    }
-                    document.addEventListener("mouseup", function (e) {
-                        ===
-                        === =
-
-                        >>>
-                        >>> > parent of 8939349...Doesn 't work ===
-                            === =
-
-                            >>>
-                            >>> > parent of 8939349...Doesn 't work
-                        ctx.closePath();
-                        isDraw = false;
-
-                        subcanvas.removeEventListener("mousemove", onMouseMove);
-                        document.removeEventListener("mouseup", onMouseUp);
-                    });
-
-                    subcanvas.addEventListener("mousemove", onMouseMove);
-                    document.addEventListener("mouseup", onMouseUp);
-                });
-
-            // Конец Рисование
-
-            // Изменение курсора
-            subcanvas.addEventListener("mousemove", function (e) {
-                if (e.layerX <= canvas.width && e.layerY <= canvas.height) {
-                    subcanvas.style.cursor = "crosshair";
-                } else {
-                    subcanvas.style.cursor = "default";
-                }
-
-            });
-            // Конец Изменение курсора
-
-            // Комбинации клавиш
-            function runOnKeys(func, ...codes) {
-                let pressed = new Set();
-
-                document.addEventListener("keydown", function (e) {
-                    pressed.add(e.code);
-
-                    for (let code of codes) {
-                        if (!pressed.has(code)) {
-                            return;
-                        }
-                    }
-
-                    pressed.clear();
-
-                    func(); ===
-                    === =
-                });
-
-                document.addEventListener("mouseup", function (e) {
-                    ctx.closePath();
-                    isDraw = false; >>>
-                    >>> > parent of 0 c0afa3...Add: steps + modify drawing
-                });
-                canvas.addEventListener("mouseleave", function (e) {
-                    ctx.closePath();
-                    isDraw = false; <<
-                    << << < HEAD
-
-                    document.addEventListener("keyup", function (e) {
-                        pressed.delete(e.code);
-                    });
-                });
-                // Конец Рисование
+    function onMouseMove(e) {
+        if (isDraw) {
+            mousePos = {
+                x: e.layerX - 5,
+                y: e.layerY - 5
             }
+        };
 
-            function stepBack() {
-                if (archiveCounter > 0) {
-                    --archiveCounter;
-                    // Восстанавливаем размер
-                    canvas.width = archive[archiveCounter].width;
-                    canvas.height = archive[archiveCounter].height;
-                    canvContainer.style.width = canvas.width + "px";
-                    canvContainer.style.height = canvas.height + "px";
+        ctx.lineTo(mousePos.x, mousePos.y);
+        ctx.stroke();
+        ctx.moveTo(mousePos.x, mousePos.y);
+    }
 
-                    // Вставляем изображение
-                    ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
+    function onMouseUp(e) {
+        // Запоминаем холст
+        let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-                    backsteps++;
-                }
-            }
-
-            function stepNext() {
-                if (archiveCounter < archive.length - 1) {
-                    ++archiveCounter;
-                    // Восстанавливаем размер
-                    canvas.width = archive[archiveCounter].width;
-                    canvas.height = archive[archiveCounter].height;
-                    canvContainer.style.width = canvas.width + "px";
-                    canvContainer.style.height = canvas.height + "px";
-
-                    // Вставляем изображение
-                    ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
-
-                    backsteps--;
-                }
-            }
-            runOnKeys(stepBack, "ControlLeft", "KeyZ"); runOnKeys(stepNext, "ControlLeft", "KeyY");
-            // Конец Комбинации клавиш
-            ===
-            === =
+        archive.push({
+            imageData: imageData,
+            width: canvas.width,
+            height: canvas.height
         });
+
+        archiveCounter = archive.length - 1;
+
+        ctx.closePath();
+        isDraw = false;
+
+        subcanvas.removeEventListener("mousemove", onMouseMove);
+        subcanvas.removeEventListener("mouseup", onMouseUp);
+    }
+
+
+    subcanvas.addEventListener("mousemove", onMouseMove);
+    subcanvas.addEventListener("mouseup", onMouseUp);
 });
+
 // Конец Рисование
->>>
->>> > parent of 0 c0afa3...Add: steps + modify drawing
+
+// Изменение курсора
+subcanvas.addEventListener("mousemove", function (e) {
+    if (e.layerX <= canvas.width && e.layerY <= canvas.height) {
+        subcanvas.style.cursor = "crosshair";
+    } else {
+        subcanvas.style.cursor = "default";
+    }
+
+});
+// Конец Изменение курсора
+
+// // Комбинации клавиш
+// function runOnKeys(func, ...codes) {
+//     let pressed = new Set();
+
+//     document.addEventListener("keydown", function (e) {
+//         pressed.add(e.code);
+
+//         for (let code of codes) {
+//             if (!pressed.has(code)) {
+//                 return;
+//             }
+//         }
+
+//         pressed.clear();
+
+//         func();
+//     });
+
+//     document.addEventListener("mouseup", function (e) {
+//         ctx.closePath();
+//         isDraw = false;
+//     });
+//     canvas.addEventListener("mouseleave", function (e) {
+//         ctx.closePath();
+//         isDraw = false;
+
+//         document.addEventListener("keyup", function (e) {
+//             pressed.delete(e.code);
+//         });
+//     });
+//     // Конец Рисование
+// }
+
+// function stepBack() {
+//     if (archiveCounter > 0) {
+//         --archiveCounter;
+//         // Восстанавливаем размер
+//         canvas.width = archive[archiveCounter].width;
+//         canvas.height = archive[archiveCounter].height;
+//         canvContainer.style.width = canvas.width + "px";
+//         canvContainer.style.height = canvas.height + "px";
+
+//         // Вставляем изображение
+//         ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
+
+//         backsteps++;
+//     }
+// }
+
+// function stepNext() {
+//     if (archiveCounter < archive.length - 1) {
+//         ++archiveCounter;
+//         // Восстанавливаем размер
+//         canvas.width = archive[archiveCounter].width;
+//         canvas.height = archive[archiveCounter].height;
+//         canvContainer.style.width = canvas.width + "px";
+//         canvContainer.style.height = canvas.height + "px";
+
+//         // Вставляем изображение
+//         ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
+
+//         backsteps--;
+//     }
+// }
+// runOnKeys(stepBack, "ControlLeft", "KeyZ");
+// runOnKeys(stepNext, "ControlLeft", "KeyY");
+// // Конец Комбинации клавиш
+// });
+// });

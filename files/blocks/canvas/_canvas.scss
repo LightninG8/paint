@@ -51,6 +51,13 @@
     cursor: crosshair;
 }
 
+#subcanvas {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+}
+
 #canvBottom {
     bottom: -15px;
     left: calc(50% - 10px);
