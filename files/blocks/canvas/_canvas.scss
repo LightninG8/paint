@@ -4,7 +4,8 @@
     width: 940px;
     height: 540px;
 
-    box-shadow: 5px 5px 8px 2px rgba(0, 0, 0, 0.1);
+
+    cursor: crosshair;
 
     &__size-slider {
         position: absolute;
@@ -45,25 +46,22 @@
 
 #canvas {
     display: block;
+    z-index: 200;
 
     background: #ffffff;
+    box-shadow: 5px 5px 8px 2px rgba(0, 0, 0, 0.1);
 
-    cursor: crosshair;
 }
 
-<<<<<<< HEAD:files/styles/blocks/canvas/_canvas.scss
-<<<<<<< HEAD
 #subcanvas {
     position: absolute;
-
+    width: 1900px;
+    height: 847px;
     top: 0;
     left: 0;
 }
 
-=======
->>>>>>> parent of 0c0afa3... Add: steps + modify drawing
-=======
->>>>>>> parent of 0c0afa3... Add: steps + modify drawing:files/blocks/canvas/_canvas.scss
+
 #canvBottom {
     bottom: -15px;
     left: calc(50% - 10px);
