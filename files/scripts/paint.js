@@ -57,7 +57,7 @@ canvCorner.addEventListener("mousedown", resizeCanvas);
 // Конец Изменение размера
 
 // Рисование
-subcanvas.addEventListener("mousedown", function (e) {
+canvas.addEventListener("mousedown", function (e) {
     let mousePos = {
         x: e.layerX - 5,
         y: e.layerY - 5
