@@ -12,6 +12,7 @@ let canvContainer = document.querySelector(".canvas"),
     canvFrame = document.querySelector(".canvas__frame");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Архив
 let archive = [],
     archiveCounter = 1,
@@ -28,6 +29,8 @@ function resizeCanvas(e) {
     // Создаём данные изображения
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 =======
+=======
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
 // Создаём данные изображения
 let imageData = ctx.createImageData(canvas.width, canvas.height);
 
@@ -41,9 +44,12 @@ function onMouseDown(e) {
     isDraggable = true;
 
     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+<<<<<<< HEAD
 >>>>>>> parent of 0c0afa3... Add: steps + modify drawing
 
     canvFrame.style.display = 'block';
+=======
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
 
     // меняет рамку при событии движении мыши
     let onMouseMove = e => {
@@ -120,7 +126,11 @@ canvas.addEventListener("mousedown", function (e) {
     ctx.stroke();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     function onMouseMove(e) {
+=======
+    canvas.addEventListener("mousemove", function (e) {
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
 =======
     canvas.addEventListener("mousemove", function (e) {
 >>>>>>> parent of 0c0afa3... Add: steps + modify drawing
@@ -131,6 +141,7 @@ canvas.addEventListener("mousedown", function (e) {
             }
         };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         ctx.lineTo(mousePos.x, mousePos.y);
         ctx.stroke();
@@ -153,16 +164,22 @@ canvas.addEventListener("mousedown", function (e) {
 
         console.log(archive.length, archiveCounter);
 =======
+=======
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
             ctx.lineTo(mousePos.x, mousePos.y);
             ctx.stroke();
             ctx.moveTo(mousePos.x, mousePos.y);
         }
     });
+<<<<<<< HEAD
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
+=======
 >>>>>>> parent of 0c0afa3... Add: steps + modify drawing
 
     document.addEventListener("mouseup", function (e) {
         ctx.closePath();
         isDraw = false;
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         subcanvas.removeEventListener("mousemove", onMouseMove);
@@ -257,11 +274,17 @@ subcanvas.addEventListener("mousemove", function (e) {
 // });
 // });
 =======
+=======
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
     });
     canvas.addEventListener("mouseleave", function (e) {
         ctx.closePath();
         isDraw = false;
     });
 });
+<<<<<<< HEAD
+// Конец Рисование
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing
+=======
 // Конец Рисование
 >>>>>>> parent of 0c0afa3... Add: steps + modify drawing

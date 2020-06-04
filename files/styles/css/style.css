@@ -404,6 +404,7 @@ textarea {
   display: block;
   background: #ffffff;
   cursor: crosshair;
+<<<<<<< HEAD:files/styles/css/style.css
 <<<<<<< HEAD
 }
 
@@ -413,6 +414,8 @@ textarea {
   left: 0;
 =======
 >>>>>>> parent of 0c0afa3... Add: steps + modify drawing
+=======
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing:files/css/style.css
 }
 
 #canvBottom {
@@ -447,9 +450,12 @@ textarea {
 }
 
 .workspace {
+<<<<<<< HEAD:files/styles/css/style.css
 <<<<<<< HEAD
   position: relative;
 =======
+=======
+>>>>>>> parent of 0c0afa3... Add: steps + modify drawing:files/css/style.css
   background: #ced8e7;
 >>>>>>> parent of 0c0afa3... Add: steps + modify drawing
   height: 100%;
