@@ -145,6 +145,12 @@ subcanvas.addEventListener("mousedown", function (e) {
         // Запоминаем холст
         let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
+        if (backsteps != 0) {
+            for (; backsteps > 0; backsteps--) {
+                archive.pop();
+            }
+        }
+
         archive.push({
             imageData: imageData,
             width: canvas.width,
@@ -152,10 +158,6 @@ subcanvas.addEventListener("mousedown", function (e) {
         });
 
         archiveCounter = archive.length - 1;
-
-
-
-        console.log(archive.length, archiveCounter);
 
         ctx.closePath();
         isDraw = false;
@@ -193,8 +195,6 @@ function runOnKeys(func, ...codes) {
             }
         }
 
-        pressed.clear();
-
         func();
     });
 
@@ -216,6 +216,7 @@ function stepBack() {
         ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
 
         backsteps++;
+        console.log(backsteps);
     }
 }
 
@@ -232,6 +233,7 @@ function stepNext() {
         ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
 
         backsteps--;
+        console.log(backsteps);
     }
 }
 runOnKeys(stepBack, "ControlLeft", "KeyZ");
