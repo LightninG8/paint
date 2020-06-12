@@ -86,6 +86,11 @@ function onMouseDown(e) {
 
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseUp', onMouseUp);
+
+            // Mobile adaptation
+            document.removeEventListener('touchmove', onMouseMove);
+            document.removeEventListener("touchend", onMouseUp);
+
             isDraggable = false;
 
             archive.push({
@@ -100,7 +105,11 @@ function onMouseDown(e) {
     }
 
     document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("touchend", onMouseUp);
+
+    // Mobile adaptation
+    document.addEventListener('touchmove', onMouseMove);
+    document.addEventListener("touchend", onMouseUp);
 }
 
 // Обработчики на все ползунки
@@ -114,10 +123,14 @@ canvBottom.addEventListener("mousedown", onMouseDown);
 canvRight.addEventListener("mousedown", onMouseDown);
 canvCorner.addEventListener("mousedown", onMouseDown);
 
+// Mobile adaptation
+canvBottom.addEventListener("touchstart", onMouseDown);
+canvRight.addEventListener("touchstart", onMouseDown);
+canvCorner.addEventListener("touchstart", onMouseDown);
 // Конец Изменение размера
 
 // Рисование
-subcanvas.addEventListener("mousedown", function (e) {
+function draw(e) {
     let mousePos = {
         x: e.layerX - 5,
         y: e.layerY - 5
@@ -170,11 +183,19 @@ subcanvas.addEventListener("mousedown", function (e) {
 
         subcanvas.removeEventListener("mousemove", onMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
+
+        subcanvas.removeEventListener("touchmove", onMouseMove);
+        document.removeEventListener("touchend", onMouseUp);
     }
 
     subcanvas.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
-});
+
+    subcanvas.addEventListener("touchmove", onMouseMove);
+    document.addEventListener("touchend", onMouseUp);
+}
+subcanvas.addEventListener("mousedown", draw);
+subcanvas.addEventListener("touchstart", draw);
 // Конец Рисование
 
 // Изменение курсора
@@ -273,6 +294,7 @@ subcanvas.addEventListener("mousemove", function (e) {
         showMousePos();
     }
 });
+
 
 // Отоброжение размера канваса
 function showCanvasSize(w, h) {
