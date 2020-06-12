@@ -1,4 +1,10 @@
 .toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    z-index: 400;
     border-bottom: 1px solid $color-lines;
 
     &__body {
