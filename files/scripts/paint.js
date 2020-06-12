@@ -4,11 +4,11 @@ let subcanvas = document.getElementById("subcanvas"),
     canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d");
 
-subcanvas.width = parseInt(subcanvas.parentNode.parentNode.offsetWidth);
-subcanvas.height = parseInt(subcanvas.parentNode.parentNode.offsetHeight);
-
 canvas.width = 940;
 canvas.height = 540;
+
+subcanvas.width = canvas.width + 100;
+subcanvas.height = canvas.height + 100;
 // Конец Настройки канваса
 
 let workspace = document.querySelector(".workspace__body");
@@ -19,6 +19,7 @@ let canvContainer = document.querySelector(".canvas"),
     canvBottom = document.getElementById("canvBottom"),
     canvRight = document.getElementById("canvRight"),
     canvCorner = document.getElementById("canvCorner");
+
 
 // Архив
 let archive = [],
@@ -35,6 +36,8 @@ archive.push({
 function onMouseDown(e) {
     let isDraggable = false;
 
+    canvFrame.style.width = canvas.width + 'px';
+    canvFrame.style.height = canvas.height + 'px';
     canvFrame.style.display = 'block';
     canvFrame.style.zIndex = 1000;
 
@@ -55,6 +58,7 @@ function onMouseDown(e) {
                 canvFrame.style.width = e.pageX - 5 + 'px';
                 canvFrame.style.height = e.pageY - 5 - 92 + 'px';
             }
+            showCanvasSize(parseInt(canvFrame.style.width), parseInt(canvFrame.style.height));
 
         }
     }
@@ -70,6 +74,8 @@ function onMouseDown(e) {
                 canvas.height = e.pageY - 5 - 92;
             }
 
+            subcanvas.width = canvas.width + 100;
+            subcanvas.height = canvas.height + 100;
 
             canvFrame.style.display = 'none';
 
@@ -239,3 +245,39 @@ function stepNext() {
 runOnKeys(stepBack, "ControlLeft", "KeyZ");
 runOnKeys(stepNext, "ControlLeft", "KeyY");
 // Конец Комбинации клавиш
+
+// ******* Инфопанель *******
+let canvMousePos = document.getElementById("mousepos"),
+    canvFrameSize = document.getElementById("framesize"),
+    canvCanvasSize = document.getElementById("canvassize"),
+    canvZoom = document.getElementById("zoom");
+
+// Отображение положения курсора
+function showMousePos(x, y) {
+    let container = canvMousePos.querySelector(".infocell__value");
+
+    container.textContent = `${x} x ${y}пкс`;
+
+    if (arguments.length != 2) {
+        container.textContent = "";
+    }
+}
+
+subcanvas.addEventListener("mousemove", function (e) {
+    if (e.layerX >= 5 &&
+        e.layerY >= 5 &&
+        e.layerX - 5 <= canvas.width &&
+        e.layerY - 5 <= canvas.height) {
+        showMousePos(e.layerX - 5, e.layerY - 5)
+    } else {
+        showMousePos();
+    }
+});
+
+// Отоброжение размера канваса
+function showCanvasSize(w, h) {
+    let container = canvCanvasSize.querySelector(".infocell__value");
+
+    container.textContent = `${w} x ${h}пкс`;
+}
+showCanvasSize(canvas.width, canvas.height);

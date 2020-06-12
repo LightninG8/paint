@@ -37,9 +37,6 @@
 
         display: none;
 
-        width: 940px;
-        height: 540px;
-
         border: 1px dotted $color-frame;
     }
 }
@@ -52,15 +49,6 @@
     box-shadow: 5px 5px 8px 2px rgba(0, 0, 0, 0.1);
 
 }
-
-#subcanvas {
-    position: absolute;
-    width: 1900px;
-    height: 847px;
-    top: 0;
-    left: 0;
-}
-
 
 #canvBottom {
     bottom: -15px;

@@ -1,0 +1,18 @@
+.infopanel {
+
+    border-top: 1px solid $color-lines;
+
+    &__body {
+        display: flex;
+        align-items: center;
+        height: 26px;
+        padding: 1px 0;
+
+        background: $color-infopanel;
+    }
+    &__cell {
+        width: 156px;
+        height: 100%;
+        padding-left: 5px;
+    }
+}

@@ -1,16 +1,21 @@
 .workspace {
-    position: fixed;
-    top: 92px;
-
-    width: 100%;
-    height: calc(100% - 92px);
+    position: relative;
 
     overflow: auto;
     background: $color-workspace;
 
 
     &__body {
+        height: 100%;
         padding: 5px;
         padding-bottom: 15px;
     }
+}
+
+#subcanvas {
+    position: absolute;
+    width: 1900px;
+    height: 847px;
+    top: 0;
+    left: 0;
 }

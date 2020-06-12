@@ -364,6 +364,9 @@ textarea {
 .page__body {
   height: 100vh;
 }
+.page__workspace {
+  height: 100%;
+}
 
 .container {
   display: flex;
@@ -395,8 +398,6 @@ textarea {
   position: absolute;
   top: 0;
   display: none;
-  width: 940px;
-  height: 540px;
   border: 1px dotted #261d10;
 }
 
@@ -405,14 +406,6 @@ textarea {
   z-index: 200;
   background: #ffffff;
   box-shadow: 5px 5px 8px 2px rgba(0, 0, 0, 0.1);
-}
-
-#subcanvas {
-  position: absolute;
-  width: 1900px;
-  height: 847px;
-  top: 0;
-  left: 0;
 }
 
 #canvBottom {
@@ -436,10 +429,6 @@ textarea {
 }
 
 .toolbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
   z-index: 400;
   border-bottom: 1px solid #e3e4e5;
 }
@@ -452,19 +441,53 @@ textarea {
 }
 
 .workspace {
-  position: fixed;
-  top: 92px;
-  width: 100%;
-  height: calc(100% - 92px);
+  position: relative;
   overflow: auto;
   background: #ced8e7;
 }
 .workspace__body {
+  height: 100%;
   padding: 5px;
   padding-bottom: 15px;
+}
+
+#subcanvas {
+  position: absolute;
+  width: 1900px;
+  height: 847px;
+  top: 0;
+  left: 0;
 }
 
 .tool {
   width: 100%;
   height: 100%;
+}
+
+.infopanel {
+  border-top: 1px solid #e3e4e5;
+}
+.infopanel__body {
+  display: flex;
+  align-items: center;
+  height: 26px;
+  padding: 1px 0;
+  background: #f0f0f0;
+}
+.infopanel__cell {
+  width: 156px;
+  height: 100%;
+  padding-left: 5px;
+}
+
+.infocell {
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #e3e4e5;
+}
+.infocell__value {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0;
+  margin-left: 5px;
 }

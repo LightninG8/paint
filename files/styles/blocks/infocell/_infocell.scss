@@ -1,0 +1,14 @@
+.infocell {
+    display: flex;
+    align-items: center;
+
+    border-right: 1px solid $color-lines;
+
+    &__value {
+        font-family: 'Roboto', sans-serif;
+        font-size: 12px;
+        letter-spacing: 0;
+
+        margin-left: 5px;
+    }
+}
