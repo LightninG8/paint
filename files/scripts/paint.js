@@ -23,31 +23,58 @@ let canvContainer = document.querySelector(".canvas"),
 
 // Архив
 let archive = [],
-    archiveCounter = 1,
+    archiveCounter = 0,
     backsteps = 0;
 
-archive.push({
-    imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
-    width: canvas.width,
-    height: canvas.height
-});
+function saveCache() {
+    archive.push({
+        imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
+        width: canvas.width,
+        height: canvas.height
+    });
+
+    archiveCounter = archive.length - 1;
+}
+saveCache();
+
+// 
+function showElem(elem) {
+    elem.style.display = 'block';
+}
+
+function hideElem(elem) {
+    elem.style.display = 'none';
+}
+
+function resizeElem(elem, size) {
+    elem.style.width = size.width + 'px';
+    elem.style.height = size.height + 'px';
+}
+
+function resizeCanvas(canvas, size) {
+    canvas.width = size.width;
+    canvas.width = size.height;
+}
+
+function getCanvasSize() {
+    return {
+        width: canvas.width,
+        height: canvas.height,
+    }
+}
 
 // При нажатии на ползунок
-function onMouseDown(e) {
-    let isDraggable = false;
+function canvasResizeStart(e) {
+    let isDraggable = true;
 
-    canvFrame.style.width = canvas.width + 'px';
-    canvFrame.style.height = canvas.height + 'px';
-    canvFrame.style.display = 'block';
-    canvFrame.style.zIndex = 1000;
-
-    isDraggable = true;
+    resizeElem(canvFrame, getCanvasSize());
+    showElem(canvFrame)
 
     // Создаём данные изображения
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
     // меняет рамку при событии движении мыши
-    let onMouseMove = e => {
+    let canvasResizeMove = e => {
         if (isDraggable) {
             // дополнительно учитывая изначальный сдвиг относительно указателя мыши
             if (this == canvBottom) {
@@ -63,8 +90,10 @@ function onMouseDown(e) {
         }
     }
     // зафиксировать рамку, удалить ненужные обработчики
-    let onMouseUp = e => {
+    let canvasResizeEnd = e => {
         if (isDraggable) {
+            isDraggable = false;
+
             if (this == canvBottom) {
                 canvas.height = e.pageY - 5 - 92;
             } else if (this == canvRight) {
@@ -77,39 +106,22 @@ function onMouseDown(e) {
             subcanvas.width = canvas.width + 100;
             subcanvas.height = canvas.height + 100;
 
-            canvFrame.style.display = 'none';
+            hideElem(canvFrame);
 
             // Канвас
-            canvContainer.style.width = canvas.width + "px";
-            canvContainer.style.height = canvas.height + "px";
+            resizeElem(canvContainer, getCanvasSize());
             ctx.putImageData(imageData, 0, 0);
 
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseUp', onMouseUp);
+            document.removeEventListener('mousemove', canvasResizeMove);
+            document.removeEventListener('mouseup', canvasResizeEnd);
 
-            // Mobile adaptation
-            document.removeEventListener('touchmove', onMouseMove);
-            document.removeEventListener("touchend", onMouseUp);
-
-            isDraggable = false;
-
-            archive.push({
-                imageData: imageData,
-                width: canvas.width,
-                height: canvas.height
-            });
-
-            archiveCounter = archive.length - 1;
+            saveCache();
         }
 
     }
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener("touchend", onMouseUp);
-
-    // Mobile adaptation
-    document.addEventListener('touchmove', onMouseMove);
-    document.addEventListener("touchend", onMouseUp);
+    document.addEventListener('mousemove', canvasResizeMove);
+    document.addEventListener("mouseup", canvasResizeEnd);
 }
 
 // Обработчики на все ползунки
@@ -117,20 +129,12 @@ function onMouseDown(e) {
     e.ondragstart = function () {
         return false;
     };
+    e.addEventListener("mousedown", canvasResizeStart);
 });
-
-canvBottom.addEventListener("mousedown", onMouseDown);
-canvRight.addEventListener("mousedown", onMouseDown);
-canvCorner.addEventListener("mousedown", onMouseDown);
-
-// Mobile adaptation
-canvBottom.addEventListener("touchstart", onMouseDown);
-canvRight.addEventListener("touchstart", onMouseDown);
-canvCorner.addEventListener("touchstart", onMouseDown);
-// Конец Изменение размера
+// // Конец Изменение размера
 
 // Рисование
-function draw(e) {
+function drawStart(e) {
     let mousePos = {
         x: e.layerX - 5,
         y: e.layerY - 5
@@ -147,7 +151,7 @@ function draw(e) {
     ctx.stroke();
 
 
-    function onMouseMove(e) {
+    function drawMove(e) {
         if (isDraw) {
             mousePos = {
                 x: e.layerX - 5,
@@ -160,9 +164,9 @@ function draw(e) {
         }
     }
 
-    function onMouseUp(e) {
-        // Запоминаем холст
-        let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    function drawEnd(e) {
+        isDraw = false;
+        ctx.closePath();
 
         if (backsteps != 0) {
             for (; backsteps > 0; backsteps--) {
@@ -170,32 +174,18 @@ function draw(e) {
             }
         }
 
-        archive.push({
-            imageData: imageData,
-            width: canvas.width,
-            height: canvas.height
-        });
+        saveCache();
 
-        archiveCounter = archive.length - 1;
-
-        ctx.closePath();
-        isDraw = false;
-
-        subcanvas.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseup", onMouseUp);
-
-        subcanvas.removeEventListener("touchmove", onMouseMove);
-        document.removeEventListener("touchend", onMouseUp);
+        subcanvas.removeEventListener("mousemove", drawMove);
+        document.removeEventListener("mouseup", drawEnd);
     }
 
-    subcanvas.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
+    subcanvas.addEventListener("mousemove", drawMove);
+    document.addEventListener("mouseup", drawEnd);
 
-    subcanvas.addEventListener("touchmove", onMouseMove);
-    document.addEventListener("touchend", onMouseUp);
 }
-subcanvas.addEventListener("mousedown", draw);
-subcanvas.addEventListener("touchstart", draw);
+subcanvas.addEventListener("mousedown", drawStart);
+
 // Конец Рисование
 
 // Изменение курсора
