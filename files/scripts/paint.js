@@ -13,13 +13,6 @@ subcanvas.height = canvas.height + 100;
 
 let workspace = document.querySelector(".workspace__body");
 
-// Изменение размера
-let canvContainer = document.querySelector(".canvas"),
-    canvFrame = document.querySelector(".canvas__frame"),
-    canvBottom = document.getElementById("canvBottom"),
-    canvRight = document.getElementById("canvRight"),
-    canvCorner = document.getElementById("canvCorner");
-
 
 // Архив
 let archive = [],
@@ -37,7 +30,22 @@ function saveCache() {
 }
 saveCache();
 
-// 
+// Глобальные объекты
+let canvasStatus = {
+    isDraggable: false,
+    isDraw: true,
+    mousePos: {
+        x: 0,
+        y: 0,
+    },
+
+};
+
+let paintSettings = {
+
+}
+
+// Функции-инструменты
 function showElem(elem) {
     elem.style.display = 'block';
 }
@@ -60,22 +68,28 @@ function getCanvasSize() {
     return {
         width: canvas.width,
         height: canvas.height,
-    }
+    };
 }
+// Изменение размера
+let canvContainer = document.querySelector(".canvas"),
+    canvFrame = document.querySelector(".canvas__frame"),
+    canvBottom = document.getElementById("canvBottom"),
+    canvRight = document.getElementById("canvRight"),
+    canvCorner = document.getElementById("canvCorner");
 
 // При нажатии на ползунок
 function canvasResizeStart(e) {
-    let isDraggable = true;
+    canvasStatus.isDraggable = true;
 
     resizeElem(canvFrame, getCanvasSize());
-    showElem(canvFrame)
+    showElem(canvFrame);
 
     // Создаём данные изображения
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
     // меняет рамку при событии движении мыши
     let canvasResizeMove = e => {
-        if (isDraggable) {
+        if (canvasStatus.isDraggable) {
             // дополнительно учитывая изначальный сдвиг относительно указателя мыши
             if (this == canvBottom) {
                 canvFrame.style.height = e.pageY - 5 - 92 + 'px';
@@ -88,11 +102,11 @@ function canvasResizeStart(e) {
             showCanvasSize(parseInt(canvFrame.style.width), parseInt(canvFrame.style.height));
 
         }
-    }
+    };
     // зафиксировать рамку, удалить ненужные обработчики
     let canvasResizeEnd = e => {
-        if (isDraggable) {
-            isDraggable = false;
+        if (canvasStatus.isDraggable) {
+            canvasStatus.isDraggable = false;
 
             if (this == canvBottom) {
                 canvas.height = e.pageY - 5 - 92;
@@ -115,32 +129,35 @@ function canvasResizeStart(e) {
             document.removeEventListener('mousemove', canvasResizeMove);
             document.removeEventListener('mouseup', canvasResizeEnd);
 
+
+            // Другой функционал
+            // - Архив
             saveCache();
         }
 
-    }
+    };
 
     document.addEventListener('mousemove', canvasResizeMove);
     document.addEventListener("mouseup", canvasResizeEnd);
 }
 
-// Обработчики на все ползунки
+// - Обработчики на все ползунки
 [canvBottom, canvRight, canvCorner].forEach((e) => {
     e.ondragstart = function () {
         return false;
     };
     e.addEventListener("mousedown", canvasResizeStart);
 });
-// // Конец Изменение размера
+// Конец Изменение размера
 
 // Рисование
 function drawStart(e) {
+    canvasStatus.isDraw = true;
+
     let mousePos = {
         x: e.layerX - 5,
         y: e.layerY - 5
     };
-
-    let isDraw = true;
 
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
@@ -152,7 +169,7 @@ function drawStart(e) {
 
 
     function drawMove(e) {
-        if (isDraw) {
+        if (canvasStatus.isDraw) {
             mousePos = {
                 x: e.layerX - 5,
                 y: e.layerY - 5
@@ -165,19 +182,23 @@ function drawStart(e) {
     }
 
     function drawEnd(e) {
-        isDraw = false;
+        canvasStatus.isDraw = false;
         ctx.closePath();
 
+
+        subcanvas.removeEventListener("mousemove", drawMove);
+        document.removeEventListener("mouseup", drawEnd);
+
+        // Другой функционал
+        // - Сохранение кэша
+        saveCache();
+
+        // - Шаги назад
         if (backsteps != 0) {
             for (; backsteps > 0; backsteps--) {
                 archive.pop();
             }
         }
-
-        saveCache();
-
-        subcanvas.removeEventListener("mousemove", drawMove);
-        document.removeEventListener("mouseup", drawEnd);
     }
 
     subcanvas.addEventListener("mousemove", drawMove);
@@ -279,7 +300,7 @@ subcanvas.addEventListener("mousemove", function (e) {
         e.layerY >= 5 &&
         e.layerX - 5 <= canvas.width &&
         e.layerY - 5 <= canvas.height) {
-        showMousePos(e.layerX - 5, e.layerY - 5)
+        showMousePos(e.layerX - 5, e.layerY - 5);
     } else {
         showMousePos();
     }
