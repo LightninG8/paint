@@ -1,4 +1,4 @@
-let canvas = (function () {
+let init = (function () {
     // Настройки канваса
     let subcanvas = document.getElementById("subcanvas"),
         canvas = document.getElementById("canvas"),
@@ -12,13 +12,20 @@ let canvas = (function () {
     // Конец Настройки канваса
 
     return {
+        canvas: canvas,
+        subcanvas: subcanvas,
+        ctx: ctx,
         getCanvasSize: function () {
             return {
                 width: canvas.width,
                 height: canvas.height
             }
-        }
+        },
+        setCanvasSize: function (width, height) {
+            canvas.width = width;
+            canvas.height = height;
+        },
     }
 })();
 
-module.exports = canvas;
+module.exports = init;
