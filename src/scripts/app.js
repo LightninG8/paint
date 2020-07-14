@@ -1,3 +1,5 @@
+// webpack refactoring
+
 // scss
 import "../../src/styles/scss/style.scss";
 
