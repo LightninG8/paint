@@ -104,9 +104,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // js
-let canvas = __webpack_require__(/*! ./init.js */ "./src/scripts/init.js");
-let draw = __webpack_require__(/*! ./draw.js */ "./src/scripts/draw.js");
-let resizing = __webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
+__webpack_require__(/*! ./draw.js */ "./src/scripts/draw.js");
+__webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
 
 /***/ }),
 
@@ -117,16 +116,11 @@ let resizing = __webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-// Инициализируем "каркас"
-let init = __webpack_require__(/*! ./init.js */ "./src/scripts/init.js");
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 
-let draw = (function () {
-    // Для упрощения
-    let canvas = init.canvas,
-        subcanvas = init.subcanvas,
-        ctx = init.ctx;
-
+let draw = (function (subcanvas, canvas, ctx) {
     function drawStart(e) {
+
         let isDraw = true;
 
         let mousePos = {
@@ -141,7 +135,6 @@ let draw = (function () {
         ctx.moveTo(mousePos.x, mousePos.y);
         ctx.lineTo(mousePos.x, mousePos.y);
         ctx.stroke();
-
 
         function drawMove(e) {
             if (isDraw) {
@@ -160,7 +153,6 @@ let draw = (function () {
             isDraw = false;
             ctx.closePath();
 
-
             subcanvas.removeEventListener("mousemove", drawMove);
             document.removeEventListener("mouseup", drawEnd);
         }
@@ -171,27 +163,27 @@ let draw = (function () {
     }
     subcanvas.addEventListener("mousedown", drawStart);
 
-    return {
-
-    }
-})();
+    return {}
+})(general.subcanvas, general.canvas, general.ctx);
 
 module.exports = draw;
 
 /***/ }),
 
-/***/ "./src/scripts/init.js":
-/*!*****************************!*\
-  !*** ./src/scripts/init.js ***!
-  \*****************************/
+/***/ "./src/scripts/general.js":
+/*!********************************!*\
+  !*** ./src/scripts/general.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-let init = (function () {
+let general = (function () {
     // Настройки канваса
     let subcanvas = document.getElementById("subcanvas"),
         canvas = document.getElementById("canvas"),
         ctx = canvas.getContext("2d");
+
+    let workspace = document.querySelector(".workspace__body");
 
     canvas.width = 940;
     canvas.height = 540;
@@ -204,20 +196,11 @@ let init = (function () {
         canvas: canvas,
         subcanvas: subcanvas,
         ctx: ctx,
-        getCanvasSize: function () {
-            return {
-                width: canvas.width,
-                height: canvas.height
-            }
-        },
-        setCanvasSize: function (width, height) {
-            canvas.width = width;
-            canvas.height = height;
-        },
+        workspace: workspace
     }
 })();
 
-module.exports = init;
+module.exports = general;
 
 /***/ }),
 
@@ -229,13 +212,13 @@ module.exports = init;
 /***/ (function(module, exports, __webpack_require__) {
 
 // Инициализируем "каркас"
-let init = __webpack_require__(/*! ./init.js */ "./src/scripts/init.js");
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 
-let resizing = (function () {
+let resizing = (function (subcanvas, canvas, ctx) {
     // Для упрощения
-    let canvas = init.canvas,
-        subcanvas = init.subcanvas,
-        ctx = init.ctx;
+    // let canvas = init.canvas,
+    //     subcanvas = init.subcanvas,
+    //     ctx = init.ctx;
 
     // Изменение размера
     let canvContainer = document.querySelector(".canvas"),
@@ -243,25 +226,11 @@ let resizing = (function () {
         canvBottom = document.getElementById("canvBottom"),
         canvRight = document.getElementById("canvRight"),
         canvCorner = document.getElementById("canvCorner");
-
-    // Функции-инструменты
-    function showElem(elem) {
-        elem.style.display = 'block';
-    }
-
-    function hideElem(elem) {
-        elem.style.display = 'none';
-    }
-
-    function resizeElem(elem, size) {
-        elem.style.width = size.width + 'px';
-        elem.style.height = size.height + 'px';
-    }
     // При нажатии на ползунок
     function canvasResizeStart(e) {
         let isDraggable = true;
 
-        resizeElem(canvFrame, init.getCanvasSize());
+        resizeElem(canvFrame, getCanvasSize());
         showElem(canvFrame);
 
         // Создаём данные изображения
@@ -302,7 +271,7 @@ let resizing = (function () {
                 hideElem(canvFrame);
 
                 // Канвас
-                resizeElem(canvContainer, init.getCanvasSize());
+                resizeElem(canvContainer, getCanvasSize());
                 ctx.putImageData(imageData, 0, 0);
 
                 document.removeEventListener('mousemove', canvasResizeMove);
@@ -327,7 +296,7 @@ let resizing = (function () {
     return {
 
     }
-})();
+})(general.subcanvas, general.canvas, general.ctx);
 
 module.exports = resizing;
 

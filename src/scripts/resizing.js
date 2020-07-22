@@ -1,11 +1,11 @@
 // Инициализируем "каркас"
-let init = require("./init.js");
+let general = require("./general.js");
 
-let resizing = (function () {
+let resizing = (function (subcanvas, canvas, ctx) {
     // Для упрощения
-    let canvas = init.canvas,
-        subcanvas = init.subcanvas,
-        ctx = init.ctx;
+    // let canvas = init.canvas,
+    //     subcanvas = init.subcanvas,
+    //     ctx = init.ctx;
 
     // Изменение размера
     let canvContainer = document.querySelector(".canvas"),
@@ -13,25 +13,11 @@ let resizing = (function () {
         canvBottom = document.getElementById("canvBottom"),
         canvRight = document.getElementById("canvRight"),
         canvCorner = document.getElementById("canvCorner");
-
-    // Функции-инструменты
-    function showElem(elem) {
-        elem.style.display = 'block';
-    }
-
-    function hideElem(elem) {
-        elem.style.display = 'none';
-    }
-
-    function resizeElem(elem, size) {
-        elem.style.width = size.width + 'px';
-        elem.style.height = size.height + 'px';
-    }
     // При нажатии на ползунок
     function canvasResizeStart(e) {
         let isDraggable = true;
 
-        resizeElem(canvFrame, init.getCanvasSize());
+        resizeElem(canvFrame, getCanvasSize());
         showElem(canvFrame);
 
         // Создаём данные изображения
@@ -72,7 +58,7 @@ let resizing = (function () {
                 hideElem(canvFrame);
 
                 // Канвас
-                resizeElem(canvContainer, init.getCanvasSize());
+                resizeElem(canvContainer, getCanvasSize());
                 ctx.putImageData(imageData, 0, 0);
 
                 document.removeEventListener('mousemove', canvasResizeMove);
@@ -97,6 +83,6 @@ let resizing = (function () {
     return {
 
     }
-})();
+})(general.subcanvas, general.canvas, general.ctx);
 
 module.exports = resizing;

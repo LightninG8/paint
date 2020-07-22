@@ -1,13 +1,8 @@
-// Инициализируем "каркас"
-let init = require("./init.js");
+let general = require("./general.js");
 
-let draw = (function () {
-    // Для упрощения
-    let canvas = init.canvas,
-        subcanvas = init.subcanvas,
-        ctx = init.ctx;
-
+let draw = (function (subcanvas, canvas, ctx) {
     function drawStart(e) {
+
         let isDraw = true;
 
         let mousePos = {
@@ -22,7 +17,6 @@ let draw = (function () {
         ctx.moveTo(mousePos.x, mousePos.y);
         ctx.lineTo(mousePos.x, mousePos.y);
         ctx.stroke();
-
 
         function drawMove(e) {
             if (isDraw) {
@@ -41,7 +35,6 @@ let draw = (function () {
             isDraw = false;
             ctx.closePath();
 
-
             subcanvas.removeEventListener("mousemove", drawMove);
             document.removeEventListener("mouseup", drawEnd);
         }
@@ -52,9 +45,7 @@ let draw = (function () {
     }
     subcanvas.addEventListener("mousedown", drawStart);
 
-    return {
-
-    }
-})();
+    return {}
+})(general.subcanvas, general.canvas, general.ctx);
 
 module.exports = draw;
