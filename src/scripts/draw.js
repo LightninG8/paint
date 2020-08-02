@@ -1,6 +1,10 @@
 let general = require("./general.js");
 
-let draw = (function (subcanvas, canvas, ctx) {
+let draw = (function ({
+    subcanvas,
+    canvas,
+    ctx
+}) {
     function drawStart(e) {
 
         let isDraw = true;
@@ -46,6 +50,6 @@ let draw = (function (subcanvas, canvas, ctx) {
     subcanvas.addEventListener("mousedown", drawStart);
 
     return {}
-})(general.subcanvas, general.canvas, general.ctx);
-
+})(general);
+//  general.subcanvas, general.canvas, general.ctx
 module.exports = draw;

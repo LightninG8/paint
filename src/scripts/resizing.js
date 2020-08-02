@@ -1,7 +1,16 @@
 // Инициализируем "каркас"
 let general = require("./general.js");
 
-let resizing = (function (subcanvas, canvas, ctx) {
+let resizing = (function ({
+    subcanvas,
+    canvas,
+    ctx,
+    showElem,
+    hideElem,
+    resizeElem,
+    resizeCanvas,
+    getCanvasSize
+}) {
     // Для упрощения
     // let canvas = init.canvas,
     //     subcanvas = init.subcanvas,
@@ -83,6 +92,6 @@ let resizing = (function (subcanvas, canvas, ctx) {
     return {
 
     }
-})(general.subcanvas, general.canvas, general.ctx);
+})(general);
 
 module.exports = resizing;

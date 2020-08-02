@@ -210,16 +210,7 @@ subcanvas.addEventListener("mousedown", drawStart);
 
 // Конец Рисование
 
-// Изменение курсора
-subcanvas.addEventListener("mousemove", function (e) {
-    if (e.layerX - 5 <= canvas.width && e.layerY - 5 <= canvas.height) {
-        subcanvas.style.cursor = "crosshair";
-    } else {
-        subcanvas.style.cursor = "default";
-    }
 
-});
-// Конец Изменение курсора
 
 // Комбинации клавиш
 function runOnKeys(func, ...codes) {
