@@ -7,4 +7,5 @@ import "../styles/scss/style.scss";
 require("./draw.js");
 require("./resizing.js");
 require("./subcanvasActions.js");
-require("./actionArchive.js");
+require("./archive.js");
+require("./infopanel.js");

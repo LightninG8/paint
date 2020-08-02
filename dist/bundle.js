@@ -87,10 +87,35 @@ var home =
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/scripts/actionArchive.js":
-/*!**************************************!*\
-  !*** ./src/scripts/actionArchive.js ***!
-  \**************************************/
+/***/ "./src/scripts/app.js":
+/*!****************************!*\
+  !*** ./src/scripts/app.js ***!
+  \****************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _styles_scss_style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../styles/scss/style.scss */ "./src/styles/scss/style.scss");
+/* harmony import */ var _styles_scss_style_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_styles_scss_style_scss__WEBPACK_IMPORTED_MODULE_0__);
+// webpack refactoring
+
+// scss
+
+
+// js
+__webpack_require__(/*! ./draw.js */ "./src/scripts/draw.js");
+__webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
+__webpack_require__(/*! ./subcanvasActions.js */ "./src/scripts/subcanvasActions.js");
+__webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
+__webpack_require__(/*! ./infopanel.js */ "./src/scripts/infopanel.js");
+
+/***/ }),
+
+/***/ "./src/scripts/archive.js":
+/*!********************************!*\
+  !*** ./src/scripts/archive.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -110,7 +135,7 @@ let actionArchive = (function ({
 }) {
     // Архив
     let archive = [],
-        archiveCounter = 1,
+        archiveCounter = 0,
         backsteps = 0;
 
     function saveCache() {
@@ -124,57 +149,16 @@ let actionArchive = (function ({
     }
     saveCache();
 
-    // События
-    // Ресайзинг
-    let canvBottom = document.getElementById("canvBottom"),
-        canvRight = document.getElementById("canvRight"),
-        canvCorner = document.getElementById("canvCorner");
-
-    function canvasResizeStart(e) {
-        let isDraggable = true;
-
-        let canvasResizeEnd = e => {
-            if (isDraggable) {
-                isDraggable = false;
-
-                document.removeEventListener('mouseup', canvasResizeEnd);
-
-                console.log("Before:" + archive);
-                saveCache();
-                console.log("After:" + archive);
-            }
-
-        };
-
-        document.addEventListener("mouseup", canvasResizeEnd);
-    }
-    [canvBottom, canvRight, canvCorner].forEach((e) => {
-        e.addEventListener("mousedown", canvasResizeStart);
-    });
-    // Рисование
-    function drawStart(e) {
-        let isDraw = true;
-
-        function drawEnd(e) {
-            isDraw = false;
-
-            document.removeEventListener("mouseup", drawEnd);
-
-            // - Сохранение кэша
-            saveCache();
-
-            // - Шаги назад
-            if (backsteps != 0) {
-                for (; backsteps > 0; backsteps--) {
-                    archive.pop();
-                }
+    function clearPastImageData() {
+        // - Шаги назад
+        if (backsteps != 0) {
+            for (; backsteps > 0; backsteps--) {
+                archive.pop();
+                console.log("delete", backsteps);
             }
         }
-
-        document.addEventListener("mouseup", drawEnd);
-
     }
-    subcanvas.addEventListener("mousedown", drawStart);
+
     // Комбинации клавиш
     function runOnKeys(func, ...codes) {
         let pressed = new Set();
@@ -230,34 +214,13 @@ let actionArchive = (function ({
     runOnKeys(stepBack, "ControlLeft", "KeyZ");
     runOnKeys(stepNext, "ControlLeft", "KeyY");
     // Конец Комбинации клавиш
-    return {}
+    return {
+        save: saveCache,
+        clearPastImageData: clearPastImageData
+    }
 })(general);
 
 module.exports = actionArchive;
-
-/***/ }),
-
-/***/ "./src/scripts/app.js":
-/*!****************************!*\
-  !*** ./src/scripts/app.js ***!
-  \****************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _styles_scss_style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../styles/scss/style.scss */ "./src/styles/scss/style.scss");
-/* harmony import */ var _styles_scss_style_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_styles_scss_style_scss__WEBPACK_IMPORTED_MODULE_0__);
-// webpack refactoring
-
-// scss
-
-
-// js
-__webpack_require__(/*! ./draw.js */ "./src/scripts/draw.js");
-__webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
-__webpack_require__(/*! ./subcanvasActions.js */ "./src/scripts/subcanvasActions.js");
-__webpack_require__(/*! ./actionArchive.js */ "./src/scripts/actionArchive.js");
 
 /***/ }),
 
@@ -269,12 +232,13 @@ __webpack_require__(/*! ./actionArchive.js */ "./src/scripts/actionArchive.js");
 /***/ (function(module, exports, __webpack_require__) {
 
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+let archive = __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
 
 let draw = (function ({
     subcanvas,
     canvas,
     ctx
-}) {
+}, actionArchive) {
     function drawStart(e) {
 
         let isDraw = true;
@@ -311,6 +275,10 @@ let draw = (function ({
 
             subcanvas.removeEventListener("mousemove", drawMove);
             document.removeEventListener("mouseup", drawEnd);
+
+            archive.clearPastImageData();
+            archive.save();
+
         }
 
         subcanvas.addEventListener("mousemove", drawMove);
@@ -320,7 +288,7 @@ let draw = (function ({
     subcanvas.addEventListener("mousedown", drawStart);
 
     return {}
-})(general);
+})(general, archive);
 //  general.subcanvas, general.canvas, general.ctx
 module.exports = draw;
 
@@ -396,6 +364,66 @@ module.exports = general;
 
 /***/ }),
 
+/***/ "./src/scripts/infopanel.js":
+/*!**********************************!*\
+  !*** ./src/scripts/infopanel.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+
+let infopanel = (function ({
+    subcanvas,
+    canvas,
+    ctx
+}) {
+    // ******* Инфопанель *******
+    let canvMousePos = document.getElementById("mousepos"),
+        canvFrameSize = document.getElementById("framesize"),
+        canvCanvasSize = document.getElementById("canvassize"),
+        canvZoom = document.getElementById("zoom");
+
+    // Отображение положения курсора
+    function showMousePos(x, y) {
+        let container = canvMousePos.querySelector(".infocell__value");
+
+        container.textContent = `${x} x ${y}пкс`;
+
+        if (arguments.length != 2) {
+            container.textContent = "";
+        }
+    }
+
+    subcanvas.addEventListener("mousemove", function (e) {
+        if (e.layerX >= 5 &&
+            e.layerY >= 5 &&
+            e.layerX - 5 <= canvas.width &&
+            e.layerY - 5 <= canvas.height) {
+            showMousePos(e.layerX - 5, e.layerY - 5);
+        } else {
+            showMousePos();
+        }
+    });
+
+
+    // Отоброжение размера канваса
+    function showCanvasSize() {
+        let container = canvCanvasSize.querySelector(".infocell__value");
+
+        container.textContent = `${canvas.width} x ${canvas.height}пкс`;
+    }
+    showCanvasSize();
+
+    return {
+        showCanvasSize: showCanvasSize
+    }
+})(general);
+
+module.exports = infopanel;
+
+/***/ }),
+
 /***/ "./src/scripts/resizing.js":
 /*!*********************************!*\
   !*** ./src/scripts/resizing.js ***!
@@ -405,6 +433,8 @@ module.exports = general;
 
 // Инициализируем "каркас"
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+let archive = __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
+let infopanel = __webpack_require__(/*! ./infopanel.js */ "./src/scripts/infopanel.js");
 
 let resizing = (function ({
     subcanvas,
@@ -415,7 +445,7 @@ let resizing = (function ({
     resizeElem,
     resizeCanvas,
     getCanvasSize
-}) {
+}, archive, infopanel) {
     // Для упрощения
     // let canvas = init.canvas,
     //     subcanvas = init.subcanvas,
@@ -478,6 +508,11 @@ let resizing = (function ({
                 document.removeEventListener('mousemove', canvasResizeMove);
                 document.removeEventListener('mouseup', canvasResizeEnd);
 
+                // Другое из зависимостей
+                archive.clearPastImageData();
+                archive.save();
+
+                infopanel.showCanvasSize();
             }
 
         };
@@ -497,7 +532,7 @@ let resizing = (function ({
     return {
 
     }
-})(general);
+})(general, archive, infopanel);
 
 module.exports = resizing;
 

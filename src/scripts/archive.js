@@ -14,7 +14,7 @@ let actionArchive = (function ({
 }) {
     // Архив
     let archive = [],
-        archiveCounter = 1,
+        archiveCounter = 0,
         backsteps = 0;
 
     function saveCache() {
@@ -28,57 +28,16 @@ let actionArchive = (function ({
     }
     saveCache();
 
-    // События
-    // Ресайзинг
-    let canvBottom = document.getElementById("canvBottom"),
-        canvRight = document.getElementById("canvRight"),
-        canvCorner = document.getElementById("canvCorner");
-
-    function canvasResizeStart(e) {
-        let isDraggable = true;
-
-        let canvasResizeEnd = e => {
-            if (isDraggable) {
-                isDraggable = false;
-
-                document.removeEventListener('mouseup', canvasResizeEnd);
-
-                console.log("Before:" + archive);
-                saveCache();
-                console.log("After:" + archive);
-            }
-
-        };
-
-        document.addEventListener("mouseup", canvasResizeEnd);
-    }
-    [canvBottom, canvRight, canvCorner].forEach((e) => {
-        e.addEventListener("mousedown", canvasResizeStart);
-    });
-    // Рисование
-    function drawStart(e) {
-        let isDraw = true;
-
-        function drawEnd(e) {
-            isDraw = false;
-
-            document.removeEventListener("mouseup", drawEnd);
-
-            // - Сохранение кэша
-            saveCache();
-
-            // - Шаги назад
-            if (backsteps != 0) {
-                for (; backsteps > 0; backsteps--) {
-                    archive.pop();
-                }
+    function clearPastImageData() {
+        // - Шаги назад
+        if (backsteps != 0) {
+            for (; backsteps > 0; backsteps--) {
+                archive.pop();
+                console.log("delete", backsteps);
             }
         }
-
-        document.addEventListener("mouseup", drawEnd);
-
     }
-    subcanvas.addEventListener("mousedown", drawStart);
+
     // Комбинации клавиш
     function runOnKeys(func, ...codes) {
         let pressed = new Set();
@@ -134,7 +93,10 @@ let actionArchive = (function ({
     runOnKeys(stepBack, "ControlLeft", "KeyZ");
     runOnKeys(stepNext, "ControlLeft", "KeyY");
     // Конец Комбинации клавиш
-    return {}
+    return {
+        save: saveCache,
+        clearPastImageData: clearPastImageData
+    }
 })(general);
 
 module.exports = actionArchive;

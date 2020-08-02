@@ -1,10 +1,11 @@
 let general = require("./general.js");
+let archive = require("./archive.js");
 
 let draw = (function ({
     subcanvas,
     canvas,
     ctx
-}) {
+}, actionArchive) {
     function drawStart(e) {
 
         let isDraw = true;
@@ -41,6 +42,10 @@ let draw = (function ({
 
             subcanvas.removeEventListener("mousemove", drawMove);
             document.removeEventListener("mouseup", drawEnd);
+
+            archive.clearPastImageData();
+            archive.save();
+
         }
 
         subcanvas.addEventListener("mousemove", drawMove);
@@ -50,6 +55,6 @@ let draw = (function ({
     subcanvas.addEventListener("mousedown", drawStart);
 
     return {}
-})(general);
+})(general, archive);
 //  general.subcanvas, general.canvas, general.ctx
 module.exports = draw;

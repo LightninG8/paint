@@ -31,7 +31,6 @@ function saveCache() {
 }
 saveCache();
 
-// Глобальные объекты
 let canvasStatus = {
     isDraggable: false,
     isDraw: true,

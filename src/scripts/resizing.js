@@ -1,5 +1,7 @@
 // Инициализируем "каркас"
 let general = require("./general.js");
+let archive = require("./archive.js");
+let infopanel = require("./infopanel.js");
 
 let resizing = (function ({
     subcanvas,
@@ -10,7 +12,7 @@ let resizing = (function ({
     resizeElem,
     resizeCanvas,
     getCanvasSize
-}) {
+}, archive, infopanel) {
     // Для упрощения
     // let canvas = init.canvas,
     //     subcanvas = init.subcanvas,
@@ -73,6 +75,11 @@ let resizing = (function ({
                 document.removeEventListener('mousemove', canvasResizeMove);
                 document.removeEventListener('mouseup', canvasResizeEnd);
 
+                // Другое из зависимостей
+                archive.clearPastImageData();
+                archive.save();
+
+                infopanel.showCanvasSize();
             }
 
         };
@@ -92,6 +99,6 @@ let resizing = (function ({
     return {
 
     }
-})(general);
+})(general, archive, infopanel);
 
 module.exports = resizing;
