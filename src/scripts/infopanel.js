@@ -1,11 +1,12 @@
+// Подключение необходимых модулей
 let general = require("./general.js");
 
+// Модуль
 let infopanel = (function ({
     subcanvas,
     canvas,
     ctx
 }) {
-    // ******* Инфопанель *******
     let canvMousePos = document.getElementById("mousepos"),
         canvFrameSize = document.getElementById("framesize"),
         canvCanvasSize = document.getElementById("canvassize"),
@@ -15,13 +16,10 @@ let infopanel = (function ({
     function showMousePos(x, y) {
         let container = canvMousePos.querySelector(".infocell__value");
 
-        container.textContent = `${x} x ${y}пкс`;
-
-        if (arguments.length != 2) {
-            container.textContent = "";
-        }
+        container.textContent = arguments.length != 2 ? "" : `${x} x ${y}пкс`;
     }
 
+    // Если наведён на холст
     subcanvas.addEventListener("mousemove", function (e) {
         if (e.layerX >= 5 &&
             e.layerY >= 5 &&
@@ -47,4 +45,5 @@ let infopanel = (function ({
     }
 })(general);
 
+// Экспорт модуля
 module.exports = infopanel;

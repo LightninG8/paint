@@ -1,22 +1,14 @@
-// Инициализируем "каркас"
+// Подключение необходимых модулей
 let general = require("./general.js");
 let archive = require("./archive.js");
 let infopanel = require("./infopanel.js");
 
+// Модуль
 let resizing = (function ({
     subcanvas,
     canvas,
     ctx,
-    showElem,
-    hideElem,
-    resizeElem,
-    resizeCanvas,
-    getCanvasSize
 }, archive, infopanel) {
-    // Для упрощения
-    // let canvas = init.canvas,
-    //     subcanvas = init.subcanvas,
-    //     ctx = init.ctx;
 
     // Изменение размера
     let canvContainer = document.querySelector(".canvas"),
@@ -24,12 +16,15 @@ let resizing = (function ({
         canvBottom = document.getElementById("canvBottom"),
         canvRight = document.getElementById("canvRight"),
         canvCorner = document.getElementById("canvCorner");
+
     // При нажатии на ползунок
     function canvasResizeStart(e) {
         let isDraggable = true;
 
-        resizeElem(canvFrame, getCanvasSize());
-        showElem(canvFrame);
+        console.log(e);
+
+        general.resizeElem(canvFrame, general.getCanvasSize());
+        general.showElem(canvFrame);
 
         // Создаём данные изображения
         let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -38,13 +33,19 @@ let resizing = (function ({
         let canvasResizeMove = e => {
             if (isDraggable) {
                 // дополнительно учитывая изначальный сдвиг относительно указателя мыши
+                let rect = canvas.getBoundingClientRect(),
+                    x = e.clientX - rect.left,
+                    y = e.clientY - rect.top;
+
+                console.log("x: " + x + " y: " + y);
+
                 if (this == canvBottom) {
-                    canvFrame.style.height = e.pageY - 5 - 92 + 'px';
+                    canvFrame.style.height = y + 'px';
                 } else if (this == canvRight) {
-                    canvFrame.style.width = e.pageX - 5 + 'px';
+                    canvFrame.style.width = x + 'px';
                 } else if (this == canvCorner) {
-                    canvFrame.style.width = e.pageX - 5 + 'px';
-                    canvFrame.style.height = e.pageY - 5 - 92 + 'px';
+                    canvFrame.style.width = x + 'px';
+                    canvFrame.style.height = y + 'px';
                 }
 
             }
@@ -54,22 +55,26 @@ let resizing = (function ({
             if (isDraggable) {
                 isDraggable = false;
 
+                let rect = canvas.getBoundingClientRect(),
+                    x = e.clientX - rect.left,
+                    y = e.clientY - rect.top;
+
                 if (this == canvBottom) {
-                    canvas.height = e.pageY - 5 - 92;
+                    canvas.height = y;
                 } else if (this == canvRight) {
-                    canvas.width = e.pageX - 5;
+                    canvas.width = x;
                 } else if (this == canvCorner) {
-                    canvas.width = e.pageX - 5;
-                    canvas.height = e.pageY - 5 - 92;
+                    canvas.width = x;
+                    canvas.height = y;
                 }
 
                 subcanvas.width = canvas.width + 100;
                 subcanvas.height = canvas.height + 100;
 
-                hideElem(canvFrame);
+                general.hideElem(canvFrame);
 
                 // Канвас
-                resizeElem(canvContainer, getCanvasSize());
+                general.resizeElem(canvContainer, general.getCanvasSize());
                 ctx.putImageData(imageData, 0, 0);
 
                 document.removeEventListener('mousemove', canvasResizeMove);
@@ -96,9 +101,8 @@ let resizing = (function ({
         e.addEventListener("mousedown", canvasResizeStart);
     });
     // Конец Изменение размера
-    return {
-
-    }
+    return {}
 })(general, archive, infopanel);
 
+// Экспорт модуля
 module.exports = resizing;

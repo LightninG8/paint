@@ -1,16 +1,11 @@
-// Инициализируем "каркас"
+// Подключение необходимых модулей
 let general = require("./general.js");
 
+// Модуль
 let actionArchive = (function ({
     subcanvas,
     canvas,
-    ctx,
-    canvContainer,
-    showElem,
-    hideElem,
-    resizeElem,
-    resizeCanvas,
-    getCanvasSize
+    ctx
 }) {
     // Архив
     let archive = [],
@@ -36,6 +31,7 @@ let actionArchive = (function ({
                 console.log("delete", backsteps);
             }
         }
+
     }
 
     // Комбинации клавиш
@@ -65,8 +61,8 @@ let actionArchive = (function ({
             // Восстанавливаем размер
             canvas.width = archive[archiveCounter].width;
             canvas.height = archive[archiveCounter].height;
-            canvContainer.style.width = canvas.width + "px";
-            canvContainer.style.height = canvas.height + "px";
+            general.canvContainer.style.width = canvas.width + "px";
+            general.canvContainer.style.height = canvas.height + "px";
 
             // Вставляем изображение
             ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
@@ -81,8 +77,8 @@ let actionArchive = (function ({
             // Восстанавливаем размер
             canvas.width = archive[archiveCounter].width;
             canvas.height = archive[archiveCounter].height;
-            canvContainer.style.width = canvas.width + "px";
-            canvContainer.style.height = canvas.height + "px";
+            general.canvContainer.style.width = canvas.width + "px";
+            general.canvContainer.style.height = canvas.height + "px";
 
             // Вставляем изображение
             ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
@@ -90,13 +86,15 @@ let actionArchive = (function ({
             backsteps--;
         }
     }
+
     runOnKeys(stepBack, "ControlLeft", "KeyZ");
     runOnKeys(stepNext, "ControlLeft", "KeyY");
-    // Конец Комбинации клавиш
+
     return {
         save: saveCache,
         clearPastImageData: clearPastImageData
     }
 })(general);
 
+// Экспорт модуля
 module.exports = actionArchive;

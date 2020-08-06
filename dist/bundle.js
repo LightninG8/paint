@@ -119,19 +119,14 @@ __webpack_require__(/*! ./infopanel.js */ "./src/scripts/infopanel.js");
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-// Инициализируем "каркас"
+// Подключение необходимых модулей
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 
+// Модуль
 let actionArchive = (function ({
     subcanvas,
     canvas,
-    ctx,
-    canvContainer,
-    showElem,
-    hideElem,
-    resizeElem,
-    resizeCanvas,
-    getCanvasSize
+    ctx
 }) {
     // Архив
     let archive = [],
@@ -157,6 +152,7 @@ let actionArchive = (function ({
                 console.log("delete", backsteps);
             }
         }
+
     }
 
     // Комбинации клавиш
@@ -186,8 +182,8 @@ let actionArchive = (function ({
             // Восстанавливаем размер
             canvas.width = archive[archiveCounter].width;
             canvas.height = archive[archiveCounter].height;
-            canvContainer.style.width = canvas.width + "px";
-            canvContainer.style.height = canvas.height + "px";
+            general.canvContainer.style.width = canvas.width + "px";
+            general.canvContainer.style.height = canvas.height + "px";
 
             // Вставляем изображение
             ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
@@ -202,8 +198,8 @@ let actionArchive = (function ({
             // Восстанавливаем размер
             canvas.width = archive[archiveCounter].width;
             canvas.height = archive[archiveCounter].height;
-            canvContainer.style.width = canvas.width + "px";
-            canvContainer.style.height = canvas.height + "px";
+            general.canvContainer.style.width = canvas.width + "px";
+            general.canvContainer.style.height = canvas.height + "px";
 
             // Вставляем изображение
             ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
@@ -211,15 +207,17 @@ let actionArchive = (function ({
             backsteps--;
         }
     }
+
     runOnKeys(stepBack, "ControlLeft", "KeyZ");
     runOnKeys(stepNext, "ControlLeft", "KeyY");
-    // Конец Комбинации клавиш
+
     return {
         save: saveCache,
         clearPastImageData: clearPastImageData
     }
 })(general);
 
+// Экспорт модуля
 module.exports = actionArchive;
 
 /***/ }),
@@ -231,16 +229,18 @@ module.exports = actionArchive;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+// Подключение необходимых модулей
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 let archive = __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
 
+// Модуль
 let draw = (function ({
     subcanvas,
     canvas,
     ctx
 }, actionArchive) {
     function drawStart(e) {
-
+        // Рисование началось
         let isDraw = true;
 
         let mousePos = {
@@ -248,9 +248,11 @@ let draw = (function ({
             y: e.layerY - 5
         };
 
+        // Стили рисования
         ctx.lineWidth = 2;
         ctx.lineCap = "round";
 
+        // Начало рисования точки
         ctx.beginPath();
         ctx.moveTo(mousePos.x, mousePos.y);
         ctx.lineTo(mousePos.x, mousePos.y);
@@ -263,6 +265,7 @@ let draw = (function ({
                     y: e.layerY - 5
                 };
 
+                // Проведение линии
                 ctx.lineTo(mousePos.x, mousePos.y);
                 ctx.stroke();
                 ctx.moveTo(mousePos.x, mousePos.y);
@@ -270,12 +273,16 @@ let draw = (function ({
         }
 
         function drawEnd(e) {
+            // Рисование закончилось
             isDraw = false;
+
             ctx.closePath();
 
+            // Удалить обработчики, чтобы не стакались
             subcanvas.removeEventListener("mousemove", drawMove);
             document.removeEventListener("mouseup", drawEnd);
 
+            // Заносим измекнения в архив
             archive.clearPastImageData();
             archive.save();
 
@@ -289,7 +296,8 @@ let draw = (function ({
 
     return {}
 })(general, archive);
-//  general.subcanvas, general.canvas, general.ctx
+
+// Экспорт модуля
 module.exports = draw;
 
 /***/ }),
@@ -315,7 +323,6 @@ let general = (function () {
 
     subcanvas.width = canvas.width + 100;
     subcanvas.height = canvas.height + 100;
-    // Конец Настройки канваса
 
     // Функции-инструменты
     function showElem(elem) {
@@ -371,14 +378,15 @@ module.exports = general;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+// Подключение необходимых модулей
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 
+// Модуль
 let infopanel = (function ({
     subcanvas,
     canvas,
     ctx
 }) {
-    // ******* Инфопанель *******
     let canvMousePos = document.getElementById("mousepos"),
         canvFrameSize = document.getElementById("framesize"),
         canvCanvasSize = document.getElementById("canvassize"),
@@ -388,13 +396,10 @@ let infopanel = (function ({
     function showMousePos(x, y) {
         let container = canvMousePos.querySelector(".infocell__value");
 
-        container.textContent = `${x} x ${y}пкс`;
-
-        if (arguments.length != 2) {
-            container.textContent = "";
-        }
+        container.textContent = arguments.length != 2 ? "" : `${x} x ${y}пкс`;
     }
 
+    // Если наведён на холст
     subcanvas.addEventListener("mousemove", function (e) {
         if (e.layerX >= 5 &&
             e.layerY >= 5 &&
@@ -420,6 +425,7 @@ let infopanel = (function ({
     }
 })(general);
 
+// Экспорт модуля
 module.exports = infopanel;
 
 /***/ }),
@@ -431,25 +437,17 @@ module.exports = infopanel;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-// Инициализируем "каркас"
+// Подключение необходимых модулей
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 let archive = __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
 let infopanel = __webpack_require__(/*! ./infopanel.js */ "./src/scripts/infopanel.js");
 
+// Модуль
 let resizing = (function ({
     subcanvas,
     canvas,
     ctx,
-    showElem,
-    hideElem,
-    resizeElem,
-    resizeCanvas,
-    getCanvasSize
 }, archive, infopanel) {
-    // Для упрощения
-    // let canvas = init.canvas,
-    //     subcanvas = init.subcanvas,
-    //     ctx = init.ctx;
 
     // Изменение размера
     let canvContainer = document.querySelector(".canvas"),
@@ -457,12 +455,15 @@ let resizing = (function ({
         canvBottom = document.getElementById("canvBottom"),
         canvRight = document.getElementById("canvRight"),
         canvCorner = document.getElementById("canvCorner");
+
     // При нажатии на ползунок
     function canvasResizeStart(e) {
         let isDraggable = true;
 
-        resizeElem(canvFrame, getCanvasSize());
-        showElem(canvFrame);
+        console.log(e);
+
+        general.resizeElem(canvFrame, general.getCanvasSize());
+        general.showElem(canvFrame);
 
         // Создаём данные изображения
         let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -471,13 +472,19 @@ let resizing = (function ({
         let canvasResizeMove = e => {
             if (isDraggable) {
                 // дополнительно учитывая изначальный сдвиг относительно указателя мыши
+                let rect = canvas.getBoundingClientRect(),
+                    x = e.clientX - rect.left,
+                    y = e.clientY - rect.top;
+
+                console.log("x: " + x + " y: " + y);
+
                 if (this == canvBottom) {
-                    canvFrame.style.height = e.pageY - 5 - 92 + 'px';
+                    canvFrame.style.height = y + 'px';
                 } else if (this == canvRight) {
-                    canvFrame.style.width = e.pageX - 5 + 'px';
+                    canvFrame.style.width = x + 'px';
                 } else if (this == canvCorner) {
-                    canvFrame.style.width = e.pageX - 5 + 'px';
-                    canvFrame.style.height = e.pageY - 5 - 92 + 'px';
+                    canvFrame.style.width = x + 'px';
+                    canvFrame.style.height = y + 'px';
                 }
 
             }
@@ -487,22 +494,26 @@ let resizing = (function ({
             if (isDraggable) {
                 isDraggable = false;
 
+                let rect = canvas.getBoundingClientRect(),
+                    x = e.clientX - rect.left,
+                    y = e.clientY - rect.top;
+
                 if (this == canvBottom) {
-                    canvas.height = e.pageY - 5 - 92;
+                    canvas.height = y;
                 } else if (this == canvRight) {
-                    canvas.width = e.pageX - 5;
+                    canvas.width = x;
                 } else if (this == canvCorner) {
-                    canvas.width = e.pageX - 5;
-                    canvas.height = e.pageY - 5 - 92;
+                    canvas.width = x;
+                    canvas.height = y;
                 }
 
                 subcanvas.width = canvas.width + 100;
                 subcanvas.height = canvas.height + 100;
 
-                hideElem(canvFrame);
+                general.hideElem(canvFrame);
 
                 // Канвас
-                resizeElem(canvContainer, getCanvasSize());
+                general.resizeElem(canvContainer, general.getCanvasSize());
                 ctx.putImageData(imageData, 0, 0);
 
                 document.removeEventListener('mousemove', canvasResizeMove);
@@ -529,11 +540,10 @@ let resizing = (function ({
         e.addEventListener("mousedown", canvasResizeStart);
     });
     // Конец Изменение размера
-    return {
-
-    }
+    return {}
 })(general, archive, infopanel);
 
+// Экспорт модуля
 module.exports = resizing;
 
 /***/ }),
@@ -545,21 +555,22 @@ module.exports = resizing;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+// Подключение необходимых модулей
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 
+// Модуль
 let subcanvasActions = (function ({
     subcanvas,
     canvas,
-    ctx,
-    showElem,
-    hideElem,
-    resizeElem,
-    resizeCanvas,
-    getCanvasSize
+    ctx
 }) {
     // Изменение курсора
     subcanvas.addEventListener("mousemove", function (e) {
-        if (e.layerX - 5 <= canvas.width && e.layerY - 5 <= canvas.height) {
+        // При наведении на холст
+        if (e.layerX >= 5 &&
+            e.layerY >= 5 &&
+            e.layerX - 5 <= canvas.width &&
+            e.layerY - 5 <= canvas.height) {
             subcanvas.style.cursor = "crosshair";
         } else {
             subcanvas.style.cursor = "default";
@@ -570,6 +581,7 @@ let subcanvasActions = (function ({
     return {}
 })(general);
 
+// Экспорт модуля
 module.exports = subcanvasActions;
 
 /***/ }),

@@ -12,7 +12,6 @@ let general = (function () {
 
     subcanvas.width = canvas.width + 100;
     subcanvas.height = canvas.height + 100;
-    // Конец Настройки канваса
 
     // Функции-инструменты
     function showElem(elem) {
