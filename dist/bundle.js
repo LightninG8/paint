@@ -243,9 +243,10 @@ let draw = (function ({
         status.isDraw = true;
         // Рисование началось
         let mousePos = {
-            x: e.layerX,
-            y: e.layerY
+            x: e.layerX || e.changedTouches[0].pageX - 5,
+            y: e.layerY || e.changedTouches[0].pageY - 5 - 92
         };
+
 
         // Стили рисования
         ctx.lineWidth = 2;
@@ -260,10 +261,9 @@ let draw = (function ({
     function drawMove(e) {
         if (status.isDraw) {
             mousePos = {
-                x: e.layerX,
-                y: e.layerY
+                x: e.layerX || e.changedTouches[0].pageX - 5,
+                y: e.layerY || e.changedTouches[0].pageY - 5 - 92
             };
-
             // Проведение линии
             ctx.lineTo(mousePos.x, mousePos.y);
             ctx.stroke();
@@ -304,12 +304,18 @@ let draw = (function ({
         });
 
     }
+    // desktop
     canvas.addEventListener("mouseleave", drawLeave);
     canvas.addEventListener("mousemove", drawMove);
     document.addEventListener("mouseup", drawEnd);
 
     canvas.addEventListener("mousedown", drawStart);
 
+    // mobile
+    canvas.addEventListener("touchmove", drawMove);
+    document.addEventListener("touchend", drawEnd);
+
+    canvas.addEventListener("touchstart", drawStart);
     return {}
 })(general, archive);
 
@@ -479,8 +485,8 @@ let resizing = (function ({
             if (status.isResizing) {
                 // дополнительно учитывая изначальный сдвиг относительно указателя мыши
                 let rect = canvas.getBoundingClientRect(),
-                    x = e.clientX - rect.left,
-                    y = e.clientY - rect.top;
+                    x = e.clientX - rect.left || e.changedTouches[0].clientX - rect.left,
+                    y = e.clientY - rect.top || e.changedTouches[0].clientY - rect.top;
 
                 if (this == canvBottom) {
                     canvFrame.style.height = y + 'px';
@@ -499,8 +505,8 @@ let resizing = (function ({
                 status.isResizing = false;
 
                 let rect = canvas.getBoundingClientRect(),
-                    x = e.clientX - rect.left,
-                    y = e.clientY - rect.top;
+                    x = e.clientX - rect.left || e.changedTouches[0].clientX - rect.left,
+                    y = e.clientY - rect.top || e.changedTouches[0].clientY - rect.top;
 
                 if (this == canvBottom) {
                     canvas.height = y;
@@ -517,9 +523,13 @@ let resizing = (function ({
                 general.resizeElem(canvContainer, general.getCanvasSize());
                 ctx.putImageData(imageData, 0, 0);
 
+                // desktop
                 document.removeEventListener('mousemove', canvasResizeMove);
                 document.removeEventListener('mouseup', canvasResizeEnd);
 
+                // mobile
+                document.removeEventListener('touchmove', canvasResizeMove);
+                document.removeEventListener('touchend', canvasResizeEnd);
                 // Другое из зависимостей
                 archive.clearPastImageData();
                 archive.save();
@@ -529,8 +539,13 @@ let resizing = (function ({
 
         };
 
+        // desktop
         document.addEventListener('mousemove', canvasResizeMove);
         document.addEventListener("mouseup", canvasResizeEnd);
+
+        // mobile
+        document.addEventListener('touchmove', canvasResizeMove);
+        document.addEventListener("touchend", canvasResizeEnd);
     }
 
     // - Обработчики на все ползунки
@@ -539,6 +554,7 @@ let resizing = (function ({
             return false;
         };
         e.addEventListener("mousedown", canvasResizeStart);
+        e.addEventListener("touchstart", canvasResizeStart);
     });
 
     // Конец Изменение размера

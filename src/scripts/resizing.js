@@ -32,8 +32,8 @@ let resizing = (function ({
             if (status.isResizing) {
                 // дополнительно учитывая изначальный сдвиг относительно указателя мыши
                 let rect = canvas.getBoundingClientRect(),
-                    x = e.clientX - rect.left,
-                    y = e.clientY - rect.top;
+                    x = e.clientX - rect.left || e.changedTouches[0].clientX - rect.left,
+                    y = e.clientY - rect.top || e.changedTouches[0].clientY - rect.top;
 
                 if (this == canvBottom) {
                     canvFrame.style.height = y + 'px';
@@ -52,8 +52,8 @@ let resizing = (function ({
                 status.isResizing = false;
 
                 let rect = canvas.getBoundingClientRect(),
-                    x = e.clientX - rect.left,
-                    y = e.clientY - rect.top;
+                    x = e.clientX - rect.left || e.changedTouches[0].clientX - rect.left,
+                    y = e.clientY - rect.top || e.changedTouches[0].clientY - rect.top;
 
                 if (this == canvBottom) {
                     canvas.height = y;
@@ -70,9 +70,13 @@ let resizing = (function ({
                 general.resizeElem(canvContainer, general.getCanvasSize());
                 ctx.putImageData(imageData, 0, 0);
 
+                // desktop
                 document.removeEventListener('mousemove', canvasResizeMove);
                 document.removeEventListener('mouseup', canvasResizeEnd);
 
+                // mobile
+                document.removeEventListener('touchmove', canvasResizeMove);
+                document.removeEventListener('touchend', canvasResizeEnd);
                 // Другое из зависимостей
                 archive.clearPastImageData();
                 archive.save();
@@ -82,8 +86,13 @@ let resizing = (function ({
 
         };
 
+        // desktop
         document.addEventListener('mousemove', canvasResizeMove);
         document.addEventListener("mouseup", canvasResizeEnd);
+
+        // mobile
+        document.addEventListener('touchmove', canvasResizeMove);
+        document.addEventListener("touchend", canvasResizeEnd);
     }
 
     // - Обработчики на все ползунки
@@ -92,6 +101,7 @@ let resizing = (function ({
             return false;
         };
         e.addEventListener("mousedown", canvasResizeStart);
+        e.addEventListener("touchstart", canvasResizeStart);
     });
 
     // Конец Изменение размера

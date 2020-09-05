@@ -13,9 +13,10 @@ let draw = (function ({
         status.isDraw = true;
         // Рисование началось
         let mousePos = {
-            x: e.layerX,
-            y: e.layerY
+            x: e.layerX || e.changedTouches[0].pageX - 5,
+            y: e.layerY || e.changedTouches[0].pageY - 5 - 92
         };
+
 
         // Стили рисования
         ctx.lineWidth = 2;
@@ -30,10 +31,9 @@ let draw = (function ({
     function drawMove(e) {
         if (status.isDraw) {
             mousePos = {
-                x: e.layerX,
-                y: e.layerY
+                x: e.layerX || e.changedTouches[0].pageX - 5,
+                y: e.layerY || e.changedTouches[0].pageY - 5 - 92
             };
-
             // Проведение линии
             ctx.lineTo(mousePos.x, mousePos.y);
             ctx.stroke();
@@ -74,12 +74,18 @@ let draw = (function ({
         });
 
     }
+    // desktop
     canvas.addEventListener("mouseleave", drawLeave);
     canvas.addEventListener("mousemove", drawMove);
     document.addEventListener("mouseup", drawEnd);
 
     canvas.addEventListener("mousedown", drawStart);
 
+    // mobile
+    canvas.addEventListener("touchmove", drawMove);
+    document.addEventListener("touchend", drawEnd);
+
+    canvas.addEventListener("touchstart", drawStart);
     return {}
 })(general, archive);
 
