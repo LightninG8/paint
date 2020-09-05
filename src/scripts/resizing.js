@@ -5,9 +5,9 @@ let infopanel = require("./infopanel.js");
 
 // Модуль
 let resizing = (function ({
-    subcanvas,
     canvas,
     ctx,
+    status,
 }, archive, infopanel) {
 
     // Изменение размера
@@ -19,9 +19,7 @@ let resizing = (function ({
 
     // При нажатии на ползунок
     function canvasResizeStart(e) {
-        let isDraggable = true;
-
-        console.log(e);
+        status.isResizing = true;
 
         general.resizeElem(canvFrame, general.getCanvasSize());
         general.showElem(canvFrame);
@@ -31,13 +29,11 @@ let resizing = (function ({
 
         // меняет рамку при событии движении мыши
         let canvasResizeMove = e => {
-            if (isDraggable) {
+            if (status.isResizing) {
                 // дополнительно учитывая изначальный сдвиг относительно указателя мыши
                 let rect = canvas.getBoundingClientRect(),
                     x = e.clientX - rect.left,
                     y = e.clientY - rect.top;
-
-                console.log("x: " + x + " y: " + y);
 
                 if (this == canvBottom) {
                     canvFrame.style.height = y + 'px';
@@ -52,8 +48,8 @@ let resizing = (function ({
         };
         // зафиксировать рамку, удалить ненужные обработчики
         let canvasResizeEnd = e => {
-            if (isDraggable) {
-                isDraggable = false;
+            if (status.isResizing) {
+                status.isResizing = false;
 
                 let rect = canvas.getBoundingClientRect(),
                     x = e.clientX - rect.left,
@@ -67,9 +63,6 @@ let resizing = (function ({
                     canvas.width = x;
                     canvas.height = y;
                 }
-
-                subcanvas.width = canvas.width + 100;
-                subcanvas.height = canvas.height + 100;
 
                 general.hideElem(canvFrame);
 
@@ -100,6 +93,7 @@ let resizing = (function ({
         };
         e.addEventListener("mousedown", canvasResizeStart);
     });
+
     // Конец Изменение размера
     return {}
 })(general, archive, infopanel);

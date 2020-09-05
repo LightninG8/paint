@@ -124,7 +124,6 @@ let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js"
 
 // Модуль
 let actionArchive = (function ({
-    subcanvas,
     canvas,
     ctx
 }) {
@@ -235,17 +234,17 @@ let archive = __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js"
 
 // Модуль
 let draw = (function ({
-    subcanvas,
     canvas,
-    ctx
+    workspace,
+    ctx,
+    status
 }, actionArchive) {
     function drawStart(e) {
+        status.isDraw = true;
         // Рисование началось
-        let isDraw = true;
-
         let mousePos = {
-            x: e.layerX - 5,
-            y: e.layerY - 5
+            x: e.layerX,
+            y: e.layerY
         };
 
         // Стили рисования
@@ -257,42 +256,59 @@ let draw = (function ({
         ctx.moveTo(mousePos.x, mousePos.y);
         ctx.lineTo(mousePos.x, mousePos.y);
         ctx.stroke();
+    }
+    function drawMove(e) {
+        if (status.isDraw) {
+            mousePos = {
+                x: e.layerX,
+                y: e.layerY
+            };
 
-        function drawMove(e) {
-            if (isDraw) {
+            // Проведение линии
+            ctx.lineTo(mousePos.x, mousePos.y);
+            ctx.stroke();
+            ctx.moveTo(mousePos.x, mousePos.y);
+            ctx.closePath();
+        }
+    }
+
+    function drawEnd(e) {
+        // Рисование закончилось
+        status.isDraw = false;
+
+
+        // Удалить обработчики, чтобы не стакались
+        // Заносим измекнения в архив
+        archive.clearPastImageData();
+        archive.save();
+
+    }
+    function drawLeave(e) {
+        function mousemove(e) {
+            if (status.isDraw) {
                 mousePos = {
-                    x: e.layerX - 5,
-                    y: e.layerY - 5
+                    x: e.pageX - 5 + workspace.scrollLeft,
+                    y: e.pageY - 5 - 92 + workspace.scrollTop
                 };
-
+                console.log();
                 // Проведение линии
                 ctx.lineTo(mousePos.x, mousePos.y);
                 ctx.stroke();
                 ctx.moveTo(mousePos.x, mousePos.y);
             }
-        }
-
-        function drawEnd(e) {
-            // Рисование закончилось
-            isDraw = false;
-
-            ctx.closePath();
-
-            // Удалить обработчики, чтобы не стакались
-            subcanvas.removeEventListener("mousemove", drawMove);
-            document.removeEventListener("mouseup", drawEnd);
-
-            // Заносим измекнения в архив
-            archive.clearPastImageData();
-            archive.save();
 
         }
-
-        subcanvas.addEventListener("mousemove", drawMove);
-        document.addEventListener("mouseup", drawEnd);
+        document.addEventListener("mousemove", mousemove);
+        canvas.addEventListener("mouseover", () => {
+            document.removeEventListener("mousemove", mousemove);
+        });
 
     }
-    subcanvas.addEventListener("mousedown", drawStart);
+    canvas.addEventListener("mouseleave", drawLeave);
+    canvas.addEventListener("mousemove", drawMove);
+    document.addEventListener("mouseup", drawEnd);
+
+    canvas.addEventListener("mousedown", drawStart);
 
     return {}
 })(general, archive);
@@ -311,19 +327,18 @@ module.exports = draw;
 
 let general = (function () {
     // Настройки канваса
-    let subcanvas = document.getElementById("subcanvas"),
-        canvas = document.getElementById("canvas"),
+    let canvas = document.getElementById("canvas"),
         ctx = canvas.getContext("2d");
 
-    let workspace = document.querySelector(".workspace__body"),
+    let workspace = document.querySelector(".workspace"),
+        workspaceBody = document.querySelector(".workspace__body"),
         canvContainer = document.querySelector(".canvas");
 
-    canvas.width = 940;
-    canvas.height = 540;
-
-    subcanvas.width = canvas.width + 100;
-    subcanvas.height = canvas.height + 100;
-
+    let status = {
+        isDraw: false,
+        isResizing: false,
+        technicalImageData: undefined,
+    }
     // Функции-инструменты
     function showElem(elem) {
         elem.style.display = 'block';
@@ -350,14 +365,12 @@ let general = (function () {
         };
     }
 
-
-
     return {
         canvas: canvas,
-        subcanvas: subcanvas,
         ctx: ctx,
         workspace: workspace,
         canvContainer: canvContainer,
+        status: status,
         showElem: showElem,
         hideElem: hideElem,
         resizeElem: resizeElem,
@@ -383,7 +396,6 @@ let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js"
 
 // Модуль
 let infopanel = (function ({
-    subcanvas,
     canvas,
     ctx
 }) {
@@ -400,16 +412,12 @@ let infopanel = (function ({
     }
 
     // Если наведён на холст
-    subcanvas.addEventListener("mousemove", function (e) {
-        if (e.layerX >= 5 &&
-            e.layerY >= 5 &&
-            e.layerX - 5 <= canvas.width &&
-            e.layerY - 5 <= canvas.height) {
-            showMousePos(e.layerX - 5, e.layerY - 5);
-        } else {
-            showMousePos();
-        }
+    canvas.addEventListener("mousemove", function (e) {
+        showMousePos(e.layerX - 5, e.layerY - 5);
     });
+    canvas.addEventListener("mouseleave", e => {
+        showMousePos();
+    })
 
 
     // Отоброжение размера канваса
@@ -444,9 +452,9 @@ let infopanel = __webpack_require__(/*! ./infopanel.js */ "./src/scripts/infopan
 
 // Модуль
 let resizing = (function ({
-    subcanvas,
     canvas,
     ctx,
+    status,
 }, archive, infopanel) {
 
     // Изменение размера
@@ -458,9 +466,7 @@ let resizing = (function ({
 
     // При нажатии на ползунок
     function canvasResizeStart(e) {
-        let isDraggable = true;
-
-        console.log(e);
+        status.isResizing = true;
 
         general.resizeElem(canvFrame, general.getCanvasSize());
         general.showElem(canvFrame);
@@ -470,13 +476,11 @@ let resizing = (function ({
 
         // меняет рамку при событии движении мыши
         let canvasResizeMove = e => {
-            if (isDraggable) {
+            if (status.isResizing) {
                 // дополнительно учитывая изначальный сдвиг относительно указателя мыши
                 let rect = canvas.getBoundingClientRect(),
                     x = e.clientX - rect.left,
                     y = e.clientY - rect.top;
-
-                console.log("x: " + x + " y: " + y);
 
                 if (this == canvBottom) {
                     canvFrame.style.height = y + 'px';
@@ -491,8 +495,8 @@ let resizing = (function ({
         };
         // зафиксировать рамку, удалить ненужные обработчики
         let canvasResizeEnd = e => {
-            if (isDraggable) {
-                isDraggable = false;
+            if (status.isResizing) {
+                status.isResizing = false;
 
                 let rect = canvas.getBoundingClientRect(),
                     x = e.clientX - rect.left,
@@ -506,9 +510,6 @@ let resizing = (function ({
                     canvas.width = x;
                     canvas.height = y;
                 }
-
-                subcanvas.width = canvas.width + 100;
-                subcanvas.height = canvas.height + 100;
 
                 general.hideElem(canvFrame);
 
@@ -539,6 +540,7 @@ let resizing = (function ({
         };
         e.addEventListener("mousedown", canvasResizeStart);
     });
+
     // Конец Изменение размера
     return {}
 })(general, archive, infopanel);
@@ -553,36 +555,9 @@ module.exports = resizing;
   !*** ./src/scripts/subcanvasActions.js ***!
   \*****************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-// Подключение необходимых модулей
-let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 
-// Модуль
-let subcanvasActions = (function ({
-    subcanvas,
-    canvas,
-    ctx
-}) {
-    // Изменение курсора
-    subcanvas.addEventListener("mousemove", function (e) {
-        // При наведении на холст
-        if (e.layerX >= 5 &&
-            e.layerY >= 5 &&
-            e.layerX - 5 <= canvas.width &&
-            e.layerY - 5 <= canvas.height) {
-            subcanvas.style.cursor = "crosshair";
-        } else {
-            subcanvas.style.cursor = "default";
-        }
-
-    });
-
-    return {}
-})(general);
-
-// Экспорт модуля
-module.exports = subcanvasActions;
 
 /***/ }),
 

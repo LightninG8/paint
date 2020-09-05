@@ -1,18 +1,17 @@
 let general = (function () {
     // Настройки канваса
-    let subcanvas = document.getElementById("subcanvas"),
-        canvas = document.getElementById("canvas"),
+    let canvas = document.getElementById("canvas"),
         ctx = canvas.getContext("2d");
 
-    let workspace = document.querySelector(".workspace__body"),
+    let workspace = document.querySelector(".workspace"),
+        workspaceBody = document.querySelector(".workspace__body"),
         canvContainer = document.querySelector(".canvas");
 
-    canvas.width = 940;
-    canvas.height = 540;
-
-    subcanvas.width = canvas.width + 100;
-    subcanvas.height = canvas.height + 100;
-
+    let status = {
+        isDraw: false,
+        isResizing: false,
+        technicalImageData: undefined,
+    }
     // Функции-инструменты
     function showElem(elem) {
         elem.style.display = 'block';
@@ -39,14 +38,12 @@ let general = (function () {
         };
     }
 
-
-
     return {
         canvas: canvas,
-        subcanvas: subcanvas,
         ctx: ctx,
         workspace: workspace,
         canvContainer: canvContainer,
+        status: status,
         showElem: showElem,
         hideElem: hideElem,
         resizeElem: resizeElem,

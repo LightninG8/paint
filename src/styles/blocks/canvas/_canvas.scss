@@ -4,16 +4,13 @@
     width: 940px;
     height: 540px;
 
-
-    cursor: crosshair;
-
     &__size-slider {
         position: absolute;
 
         display: flex;
         width: 15px;
         height: 15px;
-        z-index: 100;
+
 
         &:before {
             content: '';
@@ -46,8 +43,9 @@
     z-index: 200;
 
     background: #ffffff;
-    box-shadow: 5px 5px 8px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 5px 8px 2px rgba(0, 0, 0, 0.1); 
 
+    cursor: crosshair;
 }
 
 #canvBottom {

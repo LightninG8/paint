@@ -3,7 +3,6 @@ let general = require("./general.js");
 
 // Модуль
 let infopanel = (function ({
-    subcanvas,
     canvas,
     ctx
 }) {
@@ -20,16 +19,12 @@ let infopanel = (function ({
     }
 
     // Если наведён на холст
-    subcanvas.addEventListener("mousemove", function (e) {
-        if (e.layerX >= 5 &&
-            e.layerY >= 5 &&
-            e.layerX - 5 <= canvas.width &&
-            e.layerY - 5 <= canvas.height) {
-            showMousePos(e.layerX - 5, e.layerY - 5);
-        } else {
-            showMousePos();
-        }
+    canvas.addEventListener("mousemove", function (e) {
+        showMousePos(e.layerX - 5, e.layerY - 5);
     });
+    canvas.addEventListener("mouseleave", e => {
+        showMousePos();
+    })
 
 
     // Отоброжение размера канваса

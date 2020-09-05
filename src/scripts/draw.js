@@ -4,17 +4,17 @@ let archive = require("./archive.js");
 
 // Модуль
 let draw = (function ({
-    subcanvas,
     canvas,
-    ctx
+    workspace,
+    ctx,
+    status
 }, actionArchive) {
     function drawStart(e) {
+        status.isDraw = true;
         // Рисование началось
-        let isDraw = true;
-
         let mousePos = {
-            x: e.layerX - 5,
-            y: e.layerY - 5
+            x: e.layerX,
+            y: e.layerY
         };
 
         // Стили рисования
@@ -26,42 +26,59 @@ let draw = (function ({
         ctx.moveTo(mousePos.x, mousePos.y);
         ctx.lineTo(mousePos.x, mousePos.y);
         ctx.stroke();
+    }
+    function drawMove(e) {
+        if (status.isDraw) {
+            mousePos = {
+                x: e.layerX,
+                y: e.layerY
+            };
 
-        function drawMove(e) {
-            if (isDraw) {
+            // Проведение линии
+            ctx.lineTo(mousePos.x, mousePos.y);
+            ctx.stroke();
+            ctx.moveTo(mousePos.x, mousePos.y);
+            ctx.closePath();
+        }
+    }
+
+    function drawEnd(e) {
+        // Рисование закончилось
+        status.isDraw = false;
+
+
+        // Удалить обработчики, чтобы не стакались
+        // Заносим измекнения в архив
+        archive.clearPastImageData();
+        archive.save();
+
+    }
+    function drawLeave(e) {
+        function mousemove(e) {
+            if (status.isDraw) {
                 mousePos = {
-                    x: e.layerX - 5,
-                    y: e.layerY - 5
+                    x: e.pageX - 5 + workspace.scrollLeft,
+                    y: e.pageY - 5 - 92 + workspace.scrollTop
                 };
-
+                console.log();
                 // Проведение линии
                 ctx.lineTo(mousePos.x, mousePos.y);
                 ctx.stroke();
                 ctx.moveTo(mousePos.x, mousePos.y);
             }
-        }
-
-        function drawEnd(e) {
-            // Рисование закончилось
-            isDraw = false;
-
-            ctx.closePath();
-
-            // Удалить обработчики, чтобы не стакались
-            subcanvas.removeEventListener("mousemove", drawMove);
-            document.removeEventListener("mouseup", drawEnd);
-
-            // Заносим измекнения в архив
-            archive.clearPastImageData();
-            archive.save();
 
         }
-
-        subcanvas.addEventListener("mousemove", drawMove);
-        document.addEventListener("mouseup", drawEnd);
+        document.addEventListener("mousemove", mousemove);
+        canvas.addEventListener("mouseover", () => {
+            document.removeEventListener("mousemove", mousemove);
+        });
 
     }
-    subcanvas.addEventListener("mousedown", drawStart);
+    canvas.addEventListener("mouseleave", drawLeave);
+    canvas.addEventListener("mousemove", drawMove);
+    document.addEventListener("mouseup", drawEnd);
+
+    canvas.addEventListener("mousedown", drawStart);
 
     return {}
 })(general, archive);

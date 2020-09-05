@@ -3,7 +3,6 @@ let general = require("./general.js");
 
 // Модуль
 let actionArchive = (function ({
-    subcanvas,
     canvas,
     ctx
 }) {
