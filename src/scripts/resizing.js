@@ -21,7 +21,9 @@ let resizing = (function ({
     function canvasResizeStart(e) {
         status.isResizing = true;
 
-        general.resizeElem(canvFrame, general.getCanvasSize());
+        canvFrame.style.width = canvas.width;
+        canvFrame.style.height = canvas.height;
+
         general.showElem(canvFrame);
 
         // Создаём данные изображения
@@ -67,7 +69,9 @@ let resizing = (function ({
                 general.hideElem(canvFrame);
 
                 // Канвас
-                general.resizeElem(canvContainer, general.getCanvasSize());
+                canvContainer.style.width = canvas.width + 'px';
+                canvContainer.style.height = canvas.height + 'px';
+
                 ctx.putImageData(imageData, 0, 0);
 
                 // desktop

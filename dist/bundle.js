@@ -106,7 +106,6 @@ __webpack_require__.r(__webpack_exports__);
 // js
 __webpack_require__(/*! ./draw.js */ "./src/scripts/draw.js");
 __webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
-__webpack_require__(/*! ./subcanvasActions.js */ "./src/scripts/subcanvasActions.js");
 __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
 __webpack_require__(/*! ./infopanel.js */ "./src/scripts/infopanel.js");
 
@@ -243,8 +242,8 @@ let draw = (function ({
         status.isDraw = true;
         // Рисование началось
         let mousePos = {
-            x: e.layerX || e.changedTouches[0].pageX - 5,
-            y: e.layerY || e.changedTouches[0].pageY - 5 - 92
+            x: e.layerX || e.changedTouches[0].pageX - 5 + workspace.scrollLeft,
+            y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
         };
 
 
@@ -261,8 +260,8 @@ let draw = (function ({
     function drawMove(e) {
         if (status.isDraw) {
             mousePos = {
-                x: e.layerX || e.changedTouches[0].pageX - 5,
-                y: e.layerY || e.changedTouches[0].pageY - 5 - 92
+                x: e.layerX || e.changedTouches[0].pageX - 5 + workspace.scrollLeft,
+                y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
             };
             // Проведение линии
             ctx.lineTo(mousePos.x, mousePos.y);
@@ -354,23 +353,6 @@ let general = (function () {
         elem.style.display = 'none';
     }
 
-    function resizeElem(elem, size) {
-        elem.style.width = size.width + 'px';
-        elem.style.height = size.height + 'px';
-    }
-
-    function resizeCanvas(canvas, size) {
-        canvas.width = size.width;
-        canvas.width = size.height;
-    }
-
-    function getCanvasSize() {
-        return {
-            width: canvas.width,
-            height: canvas.height,
-        };
-    }
-
     return {
         canvas: canvas,
         ctx: ctx,
@@ -379,10 +361,6 @@ let general = (function () {
         status: status,
         showElem: showElem,
         hideElem: hideElem,
-        resizeElem: resizeElem,
-        resizeCanvas: resizeCanvas,
-        getCanvasSize: getCanvasSize,
-
     }
 })();
 
@@ -474,7 +452,9 @@ let resizing = (function ({
     function canvasResizeStart(e) {
         status.isResizing = true;
 
-        general.resizeElem(canvFrame, general.getCanvasSize());
+        canvFrame.style.width = canvas.width;
+        canvFrame.style.height = canvas.height;
+
         general.showElem(canvFrame);
 
         // Создаём данные изображения
@@ -520,7 +500,9 @@ let resizing = (function ({
                 general.hideElem(canvFrame);
 
                 // Канвас
-                general.resizeElem(canvContainer, general.getCanvasSize());
+                canvContainer.style.width = canvas.width + 'px';
+                canvContainer.style.height = canvas.height + 'px';
+
                 ctx.putImageData(imageData, 0, 0);
 
                 // desktop
@@ -563,17 +545,6 @@ let resizing = (function ({
 
 // Экспорт модуля
 module.exports = resizing;
-
-/***/ }),
-
-/***/ "./src/scripts/subcanvasActions.js":
-/*!*****************************************!*\
-  !*** ./src/scripts/subcanvasActions.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-
 
 /***/ }),
 

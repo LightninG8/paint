@@ -21,23 +21,6 @@ let general = (function () {
         elem.style.display = 'none';
     }
 
-    function resizeElem(elem, size) {
-        elem.style.width = size.width + 'px';
-        elem.style.height = size.height + 'px';
-    }
-
-    function resizeCanvas(canvas, size) {
-        canvas.width = size.width;
-        canvas.width = size.height;
-    }
-
-    function getCanvasSize() {
-        return {
-            width: canvas.width,
-            height: canvas.height,
-        };
-    }
-
     return {
         canvas: canvas,
         ctx: ctx,
@@ -46,10 +29,6 @@ let general = (function () {
         status: status,
         showElem: showElem,
         hideElem: hideElem,
-        resizeElem: resizeElem,
-        resizeCanvas: resizeCanvas,
-        getCanvasSize: getCanvasSize,
-
     }
 })();
 

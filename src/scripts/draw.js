@@ -13,8 +13,8 @@ let draw = (function ({
         status.isDraw = true;
         // Рисование началось
         let mousePos = {
-            x: e.layerX || e.changedTouches[0].pageX - 5,
-            y: e.layerY || e.changedTouches[0].pageY - 5 - 92
+            x: e.layerX || e.changedTouches[0].pageX - 5 + workspace.scrollLeft,
+            y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
         };
 
 
@@ -31,8 +31,8 @@ let draw = (function ({
     function drawMove(e) {
         if (status.isDraw) {
             mousePos = {
-                x: e.layerX || e.changedTouches[0].pageX - 5,
-                y: e.layerY || e.changedTouches[0].pageY - 5 - 92
+                x: e.layerX || e.changedTouches[0].pageX - 5 + workspace.scrollLeft,
+                y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
             };
             // Проведение линии
             ctx.lineTo(mousePos.x, mousePos.y);
