@@ -7,6 +7,7 @@ let general = (function () {
         workspaceBody = document.querySelector(".workspace__body"),
         canvContainer = document.querySelector(".canvas");
 
+    // TODO: Сделать общий объект состояния приложения
     let status = {
         isDraw: false,
         isResizing: false,

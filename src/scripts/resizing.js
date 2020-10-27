@@ -1,14 +1,14 @@
 // Подключение необходимых модулей
 let general = require("./general.js");
 let archive = require("./archive.js");
-let infopanel = require("./infopanel.js");
+let statusbar = require("./statusbar.js");
 
 // Модуль
 let resizing = (function ({
     canvas,
     ctx,
     status,
-}, archive, infopanel) {
+}, archive, statusbar) {
 
     // Изменение размера
     let canvContainer = document.querySelector(".canvas"),
@@ -85,7 +85,7 @@ let resizing = (function ({
                 archive.clearPastImageData();
                 archive.save();
 
-                infopanel.showCanvasSize();
+                statusbar.showCanvasSize();
             }
 
         };
@@ -110,7 +110,7 @@ let resizing = (function ({
 
     // Конец Изменение размера
     return {}
-})(general, archive, infopanel);
+})(general, archive, statusbar);
 
 // Экспорт модуля
 module.exports = resizing;

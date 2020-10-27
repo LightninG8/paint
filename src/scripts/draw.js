@@ -12,6 +12,7 @@ let draw = (function ({
     function drawStart(e) {
         status.isDraw = true;
         // Рисование началось
+        // TODO: С мобильных устройств плохо рисуется в некоторых браузерах
         let mousePos = {
             x: e.layerX || e.changedTouches[0].pageX - 5 + workspace.scrollLeft,
             y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
@@ -19,7 +20,7 @@ let draw = (function ({
 
 
         // Стили рисования
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 4;
         ctx.lineCap = "round";
 
         // Начало рисования точки
@@ -38,7 +39,9 @@ let draw = (function ({
             ctx.lineTo(mousePos.x, mousePos.y);
             ctx.stroke();
             ctx.moveTo(mousePos.x, mousePos.y);
+            
             ctx.closePath();
+            
         }
     }
 

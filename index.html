@@ -19,7 +19,47 @@
         <!-- Toolbar -->
         <div class="toolbar">
             <div class="toolbar__body">
-                <div class="tool"></div>
+                <!-- Clipboard -->
+                <div class="tools-group">
+
+                </div>
+                <!-- End Clipboard -->
+
+                <!-- Image -->
+                <div class="tools-group">
+
+                </div>
+                <!-- End Image -->
+
+                <!-- Tools -->
+                <div class="tools-group">
+
+                </div>
+                <!-- End Tools -->
+
+                <!-- Brushes -->
+                <div class="tools-group">
+
+                </div>
+                <!-- End Brushes -->
+
+                <!-- Figures -->
+                <div class="tools-group">
+ 
+                </div>
+                <!-- End Figures -->
+
+                <!--Tthickness -->
+                <div class="tools-group">
+
+                </div>
+                <!-- End Thickness -->
+                
+                <!--Colors -->
+                <div class="tools-group">
+
+                </div>
+                <!-- End Colors -->
             </div>
         </div>
         <!-- End Toolbar -->
@@ -38,47 +78,43 @@
         </div>
         <!-- End Workspace -->
 
-        <!-- Infopanel -->
-        <div class="infopanel">
-            <div class="infopanel__body">
+        <!-- Statusbar -->
+        <div class="statusbar">
+            <div class="statusbar__body">
                 <!-- Mousepos -->
-                <div class="infocell infopanel__cell" id="mousepos">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="11px"
-                        height="11px">
-                        <image x="0px" y="0px" width="11px" height="11px"
-                            xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALAgMAAADUwp+1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAADFBMVEX///8eOVseOVv///+ugXkYAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AYMFzgecG6NQQAAAChJREFUCNdjYFBhYGBYCcSpEKyiosKwatUKhtTUFIbQ1BAGERURmDwAmsYHlkPT3lIAAAAASUVORK5CYII=" />
-                    </svg>
+                <div class="infocell statusbar__cell" id="mousepos">
+                    <img src="./images/icons/statusbar/cursor-position.png" alt="mousepos" class="img statusbar__icon">
                     <div class="infocell__value"></div>
                 </div>
                 <!-- End Mousepos -->
 
                 <!-- Framesize -->
-                <div class="infocell infopanel__cell" id="framesize">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="13px"
-                        height="12px">
-                        <image x="0px" y="0px" width="13px" height="12px"
-                            xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAMBAMAAABLmSrqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX///8eOVseOVuGlKX////v94n8AAAAAnRSTlMA+MX1txYAAAABYktHRACIBR1IAAAAB3RJTUUH5AYMFzgx27+wGAAAAC1JREFUCNdjYGIwYlJiMmBQElBgYGBQYGBigAAmBhgflzhEHwoAK1ICAgUYHwCeLAL9QBxUEAAAAABJRU5ErkJggg==" />
-                    </svg>
+                <div class="infocell statusbar__cell" id="framesize">
+                    <img src="./images/icons/statusbar/element-size.png" alt="framesize" class="img statusbar__icon">
                     <div class="infocell__value"></div>
                 </div>
                 <!-- End Framesize -->
 
                 <!-- Canvassize -->
-                <div class="infocell infopanel__cell" id="canvassize">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="13px"
-                        height="12px">
-                        <image x="0px" y="0px" width="13px" height="12px"
-                            xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAMBAMAAABLmSrqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAKlBMVEX///8eOVv////9/v77/f73+/30+vvw+Prs9vnp9Pjl8vfi8fXe7/Tc7vS8bC3BAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAHdElNRQfkBgwXODs7alkGAAAAQElEQVQI12NgZBAEAgEGQQEhk7AKAQZGBmHX9E4QLRJWMQtEi6Z3rgbRYhWz9oBo8c7VZ0E0RB8KYAQRSOKMDACLvgsLVGYWTgAAAABJRU5ErkJggg==" />
-                    </svg>
+                <div class="infocell statusbar__cell" id="canvassize">
+                    <img src="./images/icons/statusbar/canvas-size.png" alt="canvassize" class="img statusbar__icon">
                     <div class="infocell__value"></div>
                 </div>
                 <!-- End Canvassize -->
 
+                <!-- Save -->
+                <div class="infocell statusbar__cell" id="savestatus">
+                    <img src="./images/icons/statusbar/save.png" alt="savestatus" class="img statusbar__icon">
+                    <div class="infocell__value"></div>
+                </div>
+                <!-- End Save -->
+
+                <!-- TODO: Сделать зум -->
                 <!-- Zoom -->
-                <div class="infocell infopanel__cell" id="zoom"></div>
+                <!-- <div class="infocell statusbar__cell" id="zoom"></div> -->
                 <!-- End Zoom -->
             </div>
-            <!-- End Infopanel -->
+            <!-- End Statusbar -->
         </div>
 
         <!-- Scripts -->

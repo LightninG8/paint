@@ -1,3 +1,11 @@
+html {
+  font-family: 'Arial', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.5px; }
+
+body {
+  font-size: 1.1rem; }
+
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 /* Document
    ========================================================================== */
@@ -337,6 +345,9 @@ template {
   .canvas__frame {
     position: absolute;
     top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     display: none;
     border: 1px dotted #261d10; }
 
@@ -368,9 +379,10 @@ template {
   z-index: 400;
   border-bottom: 1px solid #e3e4e5; }
   .toolbar__body {
+    display: flex;
     width: 100%;
     height: 92px;
-    padding: 2px 8px 3px 8px;
+    padding: 2px 0 3px 0;
     z-index: 110;
     background: #f5f6f7; }
 
@@ -388,19 +400,15 @@ template {
   top: 0;
   left: 0; }
 
-.tool {
-  width: 100%;
-  height: 100%; }
-
-.infopanel {
+.statusbar {
   border-top: 1px solid #e3e4e5; }
-  .infopanel__body {
+  .statusbar__body {
     display: flex;
     align-items: center;
     height: 26px;
     padding: 1px 0;
     background: #f0f0f0; }
-  .infopanel__cell {
+  .statusbar__cell {
     width: 156px;
     height: 100%;
     padding-left: 5px; }
@@ -410,9 +418,6 @@ template {
   align-items: center;
   border-right: 1px solid #e3e4e5; }
   .infocell__value {
-    font-family: 'Roboto', sans-serif;
-    font-size: 12px;
-    letter-spacing: 0;
     margin-left: 5px; }
 
 

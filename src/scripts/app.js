@@ -7,4 +7,4 @@ import "../styles/scss/style.scss";
 require("./draw.js");
 require("./resizing.js");
 require("./archive.js");
-require("./infopanel.js");
+require("./statusbar.js");

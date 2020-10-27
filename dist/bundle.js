@@ -107,7 +107,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! ./draw.js */ "./src/scripts/draw.js");
 __webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
 __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
-__webpack_require__(/*! ./infopanel.js */ "./src/scripts/infopanel.js");
+__webpack_require__(/*! ./statusbar.js */ "./src/scripts/statusbar.js");
 
 /***/ }),
 
@@ -241,6 +241,7 @@ let draw = (function ({
     function drawStart(e) {
         status.isDraw = true;
         // Рисование началось
+        // TODO: С мобильных устройств плохо рисуется в некоторых браузерах
         let mousePos = {
             x: e.layerX || e.changedTouches[0].pageX - 5 + workspace.scrollLeft,
             y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
@@ -248,7 +249,7 @@ let draw = (function ({
 
 
         // Стили рисования
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 4;
         ctx.lineCap = "round";
 
         // Начало рисования точки
@@ -267,7 +268,9 @@ let draw = (function ({
             ctx.lineTo(mousePos.x, mousePos.y);
             ctx.stroke();
             ctx.moveTo(mousePos.x, mousePos.y);
+            
             ctx.closePath();
+            
         }
     }
 
@@ -339,6 +342,7 @@ let general = (function () {
         workspaceBody = document.querySelector(".workspace__body"),
         canvContainer = document.querySelector(".canvas");
 
+    // TODO: Сделать общий объект состояния приложения
     let status = {
         isDraw: false,
         isResizing: false,
@@ -368,60 +372,6 @@ module.exports = general;
 
 /***/ }),
 
-/***/ "./src/scripts/infopanel.js":
-/*!**********************************!*\
-  !*** ./src/scripts/infopanel.js ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Подключение необходимых модулей
-let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
-
-// Модуль
-let infopanel = (function ({
-    canvas,
-    ctx
-}) {
-    let canvMousePos = document.getElementById("mousepos"),
-        canvFrameSize = document.getElementById("framesize"),
-        canvCanvasSize = document.getElementById("canvassize"),
-        canvZoom = document.getElementById("zoom");
-
-    // Отображение положения курсора
-    function showMousePos(x, y) {
-        let container = canvMousePos.querySelector(".infocell__value");
-
-        container.textContent = arguments.length != 2 ? "" : `${x} x ${y}пкс`;
-    }
-
-    // Если наведён на холст
-    canvas.addEventListener("mousemove", function (e) {
-        showMousePos(e.layerX - 5, e.layerY - 5);
-    });
-    canvas.addEventListener("mouseleave", e => {
-        showMousePos();
-    })
-
-
-    // Отоброжение размера канваса
-    function showCanvasSize() {
-        let container = canvCanvasSize.querySelector(".infocell__value");
-
-        container.textContent = `${canvas.width} x ${canvas.height}пкс`;
-    }
-    showCanvasSize();
-
-    return {
-        showCanvasSize: showCanvasSize
-    }
-})(general);
-
-// Экспорт модуля
-module.exports = infopanel;
-
-/***/ }),
-
 /***/ "./src/scripts/resizing.js":
 /*!*********************************!*\
   !*** ./src/scripts/resizing.js ***!
@@ -432,14 +382,14 @@ module.exports = infopanel;
 // Подключение необходимых модулей
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 let archive = __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
-let infopanel = __webpack_require__(/*! ./infopanel.js */ "./src/scripts/infopanel.js");
+let statusbar = __webpack_require__(/*! ./statusbar.js */ "./src/scripts/statusbar.js");
 
 // Модуль
 let resizing = (function ({
     canvas,
     ctx,
     status,
-}, archive, infopanel) {
+}, archive, statusbar) {
 
     // Изменение размера
     let canvContainer = document.querySelector(".canvas"),
@@ -516,7 +466,7 @@ let resizing = (function ({
                 archive.clearPastImageData();
                 archive.save();
 
-                infopanel.showCanvasSize();
+                statusbar.showCanvasSize();
             }
 
         };
@@ -541,10 +491,64 @@ let resizing = (function ({
 
     // Конец Изменение размера
     return {}
-})(general, archive, infopanel);
+})(general, archive, statusbar);
 
 // Экспорт модуля
 module.exports = resizing;
+
+/***/ }),
+
+/***/ "./src/scripts/statusbar.js":
+/*!**********************************!*\
+  !*** ./src/scripts/statusbar.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Подключение необходимых модулей
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+
+// Модуль
+let statusbar = (function ({
+    canvas,
+    ctx
+}) {
+    let canvMousePos = document.getElementById("mousepos"),
+        canvFrameSize = document.getElementById("framesize"),
+        canvCanvasSize = document.getElementById("canvassize"),
+        canvZoom = document.getElementById("zoom");
+
+    // Отображение положения курсора
+    function showMousePos(x, y) {
+        let container = canvMousePos.querySelector(".infocell__value");
+
+        container.textContent = arguments.length != 2 ? "" : `${x} x ${y}пкс`;
+    }
+
+    // Если наведён на холст
+    canvas.addEventListener("mousemove", function (e) {
+        showMousePos(e.layerX, e.layerY);
+    });
+    canvas.addEventListener("mouseleave", e => {
+        showMousePos();
+    })
+
+
+    // Отоброжение размера канваса
+    function showCanvasSize() {
+        let container = canvCanvasSize.querySelector(".infocell__value");
+
+        container.textContent = `${canvas.width} x ${canvas.height}пкс`;
+    }
+    showCanvasSize();
+
+    return {
+        showCanvasSize: showCanvasSize
+    }
+})(general);
+
+// Экспорт модуля
+module.exports = statusbar;
 
 /***/ }),
 
