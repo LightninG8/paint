@@ -108,6 +108,7 @@ __webpack_require__(/*! ./draw.js */ "./src/scripts/draw.js");
 __webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
 __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
 __webpack_require__(/*! ./statusbar.js */ "./src/scripts/statusbar.js");
+__webpack_require__(/*! ./dropdown.js */ "./src/scripts/dropdown.js");
 
 /***/ }),
 
@@ -323,6 +324,35 @@ let draw = (function ({
 
 // Экспорт модуля
 module.exports = draw;
+
+/***/ }),
+
+/***/ "./src/scripts/dropdown.js":
+/*!*********************************!*\
+  !*** ./src/scripts/dropdown.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Подключение необходимых модулей
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+
+// Модуль
+let dropdown = (function () {
+    let dropdownAll = document.querySelectorAll(".dropdown");
+
+    dropdownAll.forEach(elem => {
+        elem.addEventListener("click", function() {
+            elem.querySelector(".dropdown__item").classList.toggle("isHidden");
+        })
+    })
+    return {
+
+    }
+})(general);
+
+// Экспорт модуля
+module.exports = dropdown;
 
 /***/ }),
 
