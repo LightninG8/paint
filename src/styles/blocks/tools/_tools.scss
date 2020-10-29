@@ -1,24 +1,20 @@
 .tools {
-    position: relative;
-
-    &__body {
+    &__tool {
+        width: 20px;
+        height: 20px;
         display: flex;
-        padding: 4px 7px;
-        height: 90px;
+        justify-content: center;
+        align-items: center;
 
-        background-color: #f5f6f7;
-        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.0000000000000001)
     }
-    &__title {
-        position: absolute;
-        bottom: 2px;
-        left: calc(50%);
-        transform: translateX(-50%);
-
-        text-align: center;
-
-        width: 100%;
-
-        color: #5a5a5a;
+    &__list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    &__row {
+        display: flex;
+        margin-bottom: 7px;
     }
 }

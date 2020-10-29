@@ -1,0 +1,25 @@
+.item {
+    &__body {
+        display: flex;
+        align-items: center;
+        height: 20px;
+    }
+    &__quickview {
+        width: 22px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &__title {
+        white-space: nowrap;
+        
+        display: flex;
+        align-items: center;
+        height: 100%;
+        padding: 0 10px 0 6px;
+        
+        color: #444444;
+        border-left: 1px solid #dcddde;
+    }
+}

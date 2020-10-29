@@ -1,8 +1,16 @@
 .tools-group {
-    &__shortcut {
+    &__body {
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 10px 5px 0 2px;
+
+        border-right: 1px solid #e3e4e5;
     }
-    &__tool {
-        
+    &__name {
+        text-align: center;
+
+        color: #5a5a5a;
     }
 }

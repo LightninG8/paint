@@ -15,7 +15,11 @@ let actionArchive = (function ({
         archive.push({
             imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
             width: canvas.width,
-            height: canvas.height
+            height: canvas.height,
+            strokeStyle: ctx.strokeStyle,
+            fillStyle: ctx.fillStyle,
+            lineWidth: ctx.lineWidth,
+            lineCap: ctx.lineCap,
         });
 
         archiveCounter = archive.length - 1;
@@ -53,18 +57,28 @@ let actionArchive = (function ({
             pressed.delete(e.code);
         });
     }
+    function recovery() {
+        // Восстанавливаем размер
+        canvas.width = archive[archiveCounter].width;
+        canvas.height = archive[archiveCounter].height;
+        general.canvContainer.style.width = canvas.width + "px";
+        general.canvContainer.style.height = canvas.height + "px";
+
+        // Вставляем изображение
+        ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
+
+        // Восстанавливаем настройки
+        ctx.strokeStyle = archive[archiveCounter].strokeStyle;
+        ctx.fillStyle = archive[archiveCounter].fillStyle;
+        ctx.lineWidth = archive[archiveCounter].lineWidth;
+        ctx.lineCap = archive[archiveCounter].lineCap;
+    }
 
     function stepBack() {
         if (archiveCounter > 0) {
             --archiveCounter;
-            // Восстанавливаем размер
-            canvas.width = archive[archiveCounter].width;
-            canvas.height = archive[archiveCounter].height;
-            general.canvContainer.style.width = canvas.width + "px";
-            general.canvContainer.style.height = canvas.height + "px";
-
-            // Вставляем изображение
-            ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
+            
+            recovery();
 
             backsteps++;
         }
@@ -73,14 +87,8 @@ let actionArchive = (function ({
     function stepNext() {
         if (archiveCounter < archive.length - 1) {
             ++archiveCounter;
-            // Восстанавливаем размер
-            canvas.width = archive[archiveCounter].width;
-            canvas.height = archive[archiveCounter].height;
-            general.canvContainer.style.width = canvas.width + "px";
-            general.canvContainer.style.height = canvas.height + "px";
-
-            // Вставляем изображение
-            ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
+            
+            recovery();
 
             backsteps--;
         }

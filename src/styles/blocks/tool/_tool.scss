@@ -1,24 +1,10 @@
 .tool {
-    display: inline-block;
-    border: 1px solid rgba(255, 255, 255, 0.000001);
-
     &:hover {
-        background: #e8eff7;
+        background: #e8eff7 !important;
         border: 1px solid #a4cef9;
     }
-    &__quickview {
-        width: 16px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &__body {
-        
-        padding: 4px;
-        display: flex;
-        align-items: center;
-    }
-    &__title {
-        margin-left: 4px;
+    &_actived {
+        background: #c9e0f7;
+        border: 1px solid #62a2e4 !important;   
     }
 }

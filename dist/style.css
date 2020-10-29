@@ -406,25 +406,16 @@ template {
   top: 0;
   left: 0; }
 
-.tool {
-  display: inline-block;
-  border: 1px solid rgba(255, 255, 255, 1e-06); }
-  .tool:hover {
-    background: #e8eff7;
-    border: 1px solid #a4cef9; }
-  .tool__quickview {
-    width: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center; }
-  .tool__body {
-    padding: 4px;
-    display: flex;
-    align-items: center; }
-  .tool__title {
-    margin-left: 4px; }
+.tool:hover {
+  background: #e8eff7 !important;
+  border: 1px solid #a4cef9; }
+
+.tool_actived {
+  background: #c9e0f7;
+  border: 1px solid #62a2e4 !important; }
 
 .double-tool {
+  z-index: 10;
   display: inline; }
   .double-tool__body {
     width: 53px; }
@@ -475,25 +466,34 @@ template {
   .infocell__value {
     margin-left: 5px; }
 
-.tools-group__shortcut {
-  height: 100%; }
+.tools-group__body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 5px 0 2px;
+  border-right: 1px solid #e3e4e5; }
 
-.tools {
-  position: relative; }
-  .tools__body {
-    display: flex;
-    padding: 4px 7px;
-    height: 90px;
-    background-color: #f5f6f7;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.05); }
-  .tools__title {
-    position: absolute;
-    bottom: 2px;
-    left: calc(50%);
-    transform: translateX(-50%);
-    text-align: center;
-    width: 100%;
-    color: #5a5a5a; }
+.tools-group__name {
+  text-align: center;
+  color: #5a5a5a; }
+
+.tools__tool {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 1e-16); }
+
+.tools__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+
+.tools__row {
+  display: flex;
+  margin-bottom: 7px; }
 
 .shortcut__body {
   position: relative;
@@ -529,9 +529,40 @@ template {
     top: calc(100% + 1px); }
 
 .menu__body {
+  padding: 1px;
   border: 1px solid #dcddde;
   border-radius: 1px;
   background: #fbfcfd; }
+
+.menu__item {
+  z-index: 100000; }
+  .menu__item:hover {
+    background-color: #edf4fc;
+    border: 1px solid #a8d2fd;
+    border-radius: 1px 1px 0 0; }
+    .menu__item:hover .item__title {
+      border-left: 1px solid rgba(255, 255, 255, 1e-06); }
+
+.item__body {
+  display: flex;
+  align-items: center;
+  height: 20px; }
+
+.item__quickview {
+  width: 22px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.item__title {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px 0 6px;
+  color: #444444;
+  border-left: 1px solid #dcddde; }
 
 
 /*# sourceMappingURL=style.css.map*/

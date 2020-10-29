@@ -9,6 +9,7 @@ let general = (function () {
 
     // TODO: Сделать общий объект состояния приложения
     let status = {
+        activeTool: 'pencil',
         isDraw: false,
         isResizing: false,
         technicalImageData: undefined,
@@ -21,6 +22,10 @@ let general = (function () {
     function hideElem(elem) {
         elem.style.display = 'none';
     }
+    // TODO
+
+    ctx.fillStyle = "#ff0000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     return {
         canvas: canvas,
