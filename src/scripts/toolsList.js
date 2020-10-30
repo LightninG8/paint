@@ -29,7 +29,6 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                         y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
                     };
                     // Стили рисования
-                    console.log(status.options["thickness"]);
 
                     ctx.lineWidth = status.options["thickness"];
 
@@ -117,7 +116,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
         eraser: {
             id: "eraser",
             action: function() {
-                let size = 4;
+                let size = status.options["thickness"] * 2;
 
                 function eraseStart(e) {
                     status.isDraw = true;
