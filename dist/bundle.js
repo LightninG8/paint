@@ -747,6 +747,8 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
             
             
                     // Стили рисования
+                    size = status.options["thickness"] * 2
+
                     ctx.lineWidth = size;
                     ctx.fillStyle = "#ffffff";
                     ctx.strokeStyle = "#ffffff";
