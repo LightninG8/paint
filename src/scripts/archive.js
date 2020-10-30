@@ -16,7 +16,6 @@ let actionArchive = (function ({
             imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
             strokeStyle: ctx.strokeStyle,
             fillStyle: ctx.fillStyle,
-            lineWidth: ctx.lineWidth,
             lineCap: ctx.lineCap,
         });
 
@@ -67,7 +66,6 @@ let actionArchive = (function ({
         // Восстанавливаем настройки
         ctx.strokeStyle = archive[archiveCounter].strokeStyle;
         ctx.fillStyle = archive[archiveCounter].fillStyle;
-        ctx.lineWidth = archive[archiveCounter].lineWidth;
         ctx.lineCap = archive[archiveCounter].lineCap;
     }
 
