@@ -104,7 +104,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // js
-__webpack_require__(/*! ./options.js */ "./src/scripts/options.js");
+__webpack_require__(/*! ./optionsApplication.js */ "./src/scripts/optionsApplication.js");
+__webpack_require__(/*! ./optionsList.js */ "./src/scripts/optionsList.js");
 __webpack_require__(/*! ./toolApplication.js */ "./src/scripts/toolApplication.js");
 __webpack_require__(/*! ./toolsList.js */ "./src/scripts/toolsList.js");
 __webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
@@ -317,10 +318,44 @@ module.exports = general;
 
 /***/ }),
 
-/***/ "./src/scripts/options.js":
-/*!********************************!*\
-  !*** ./src/scripts/options.js ***!
-  \********************************/
+/***/ "./src/scripts/optionsApplication.js":
+/*!*******************************************!*\
+  !*** ./src/scripts/optionsApplication.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Подключение необходимых модулей
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+let optionsList = __webpack_require__(/*! ./optionsList.js */ "./src/scripts/optionsList.js");
+
+// Модуль
+let optionsApplication = (function ({status}, {options}) {
+    let optionsList = document.querySelectorAll(".option");
+
+    optionsList.forEach(elem => {
+        elem.addEventListener("mousedown", function() {
+            
+            status.options[elem.dataset.optionType] = options.thickness.get(this.id);
+
+            optionsList.forEach(item => {
+                    item.classList.remove("tool_actived");
+            });
+            this.classList.add("tool_actived");
+        })
+    })
+    return {}
+})(general, optionsList);
+
+// Экспорт модуля
+module.exports = optionsApplication;
+
+/***/ }),
+
+/***/ "./src/scripts/optionsList.js":
+/*!************************************!*\
+  !*** ./src/scripts/optionsList.js ***!
+  \************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -328,26 +363,19 @@ module.exports = general;
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 
 // Модуль
-let toolApplication = (function ({status}) {
-    let optionsList = document.querySelectorAll(".option");
+let optionsList = (function ({status}) {
 
-    optionsList.forEach(elem => {
-        elem.addEventListener("mousedown", function() {
-            status.options[elem.dataset.optionType] = this.id;
-
-            optionsList.forEach(item => {
-                if (item.dataset.optionType = this.id) {
-                    item.classList.remove("tool_actived");
-                }
-            });
-            this.classList.add("tool_actived");
-        })
-    })
-    return {}
+    let options = {
+        thickness: new Map([["thickness-1px", 1], ["thickness-2px", 2], ["thickness-3px", 3], ["thickness-4px", 4]]),
+    }
+    
+    return {
+        options: options
+    };
 })(general);
 
 // Экспорт модуля
-module.exports = toolApplication;
+module.exports = optionsList;
 
 /***/ }),
 
@@ -591,9 +619,10 @@ module.exports = toolApplication;
 // Подключение необходимых модулей
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 let archive = __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
+let optionsList = __webpack_require__(/*! ./optionsList.js */ "./src/scripts/optionsList.js");
 
 // Модуль
-let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
+let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options}) {
     // Чтобы задать обработчик события и занести его в буфер, чтобы потом удалить при смене инструмента
     Object.prototype.addBufferEventListener = function(type, func) {
         this.addEventListener(type, func);
@@ -618,7 +647,10 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                         y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
                     };
                     // Стили рисования
-                    ctx.lineWidth = 4;
+                    console.log(status.options["thickness"]);
+
+                    ctx.lineWidth = status.options["thickness"];
+
                     ctx.strokeStyle = "#000000";
                     ctx.fillStyle = "#000000";
                     ctx.lineCap = "round";
@@ -808,7 +840,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
         tools: tools,
         buffer: buffer
     };
-})(general, archive);
+})(general, archive, optionsList);
 
 // Экспорт модуля
 module.exports = toolsList;

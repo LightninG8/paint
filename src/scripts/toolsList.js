@@ -1,9 +1,10 @@
 // Подключение необходимых модулей
 let general = require("./general.js");
 let archive = require("./archive.js");
+let optionsList = require("./optionsList.js");
 
 // Модуль
-let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
+let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options}) {
     // Чтобы задать обработчик события и занести его в буфер, чтобы потом удалить при смене инструмента
     Object.prototype.addBufferEventListener = function(type, func) {
         this.addEventListener(type, func);
@@ -28,7 +29,10 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                         y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
                     };
                     // Стили рисования
-                    ctx.lineWidth = 4;
+                    console.log(status.options["thickness"]);
+
+                    ctx.lineWidth = status.options["thickness"];
+
                     ctx.strokeStyle = "#000000";
                     ctx.fillStyle = "#000000";
                     ctx.lineCap = "round";
@@ -218,7 +222,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
         tools: tools,
         buffer: buffer
     };
-})(general, archive);
+})(general, archive, optionsList);
 
 // Экспорт модуля
 module.exports = toolsList;

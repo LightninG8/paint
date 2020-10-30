@@ -4,7 +4,8 @@
 import "../styles/scss/style.scss";
 
 // js
-require("./options.js");
+require("./optionsApplication.js");
+require("./optionsList.js");
 require("./toolApplication.js");
 require("./toolsList.js");
 require("./resizing.js");
