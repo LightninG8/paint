@@ -21,9 +21,7 @@
             <div class="toolbar__body">
                 <!-- Clipboard -->
                 <div class="tools-group toolbar__group clipboard">
-                    <div class="tools-group__body">
 
-                    </div>
                 </div>
                 <!-- End Clipboard -->
 
@@ -35,10 +33,10 @@
 
                 <!-- Tools -->
                 <div class="tools-group toolbar__group tools">
-                    <div class="tools-group__body">
+                    <div class="tools-group__body tools__body">
                         <div class="tools__list">
                             <div class="tools__row">
-                                <div class="tools__tool tool" id="pencil"><img src="./images/icons/tools/pencil.png" alt="pencil" class="tool__icon"></div>
+                                <div class="tools__tool tool tool_actived" id="pencil"><img src="./images/icons/tools/pencil.png" alt="pencil" class="tool__icon"></div>
                                 <div class="tools__tool tool" id="fill"><img src="./images/icons/tools/fill.png" alt="fill" class="tool__icon"></div>
                                 <div class="tools__tool tool" id="text"><img src="./images/icons/tools/text.png" alt="text" class="tool__icon"></div>
                             </div>
@@ -66,9 +64,33 @@
                 </div>
                 <!-- End Figures -->
 
-                <!--Tthickness -->
-                <div class="tools-group toolbar__group">
-
+                <!--Thickness -->
+                <div class="tools-group toolbar__group thickness">
+                    <div class="tools-group__body">
+                        <div class="thickness__body dropdown dropdown__body">
+                            <div class="thickness__shortcut dropdown__shortcut tool tool__shortcut" id="thickness">
+                                <div class="thickness__quickview">
+                                    <img src="./images/icons/thickness/menu-icon.png" alt="thickness" class="thickness__icon">
+                                </div>
+                                <div class="thickness__name dropdown__name">Толщина</div>
+                                <img src="./images/symbols/arrow-down.png" alt="arrow-down" class="dropdown__arrow thickness__dropdown-arrow">
+                            </div>
+                            <div class="thickness__list dropdown__menu isHidden">
+                                <div class="thickness__option tool option" id="thickness-1px" data-option-type="thickness">
+                                    <img src="./images/icons/thickness/1px.png" alt="">
+                                </div>
+                                <div class="thickness__option tool option tool_actived" id="thickness-2px" data-option-type="thickness">
+                                    <img src="./images/icons/thickness/2px.png" alt="">
+                                </div>
+                                <div class="thickness__option tool option" id="thickness-3px" data-option-type="thickness">
+                                    <img src="./images/icons/thickness/3px.png" alt="">
+                                </div>
+                                <div class="thickness__option tool option" id="thickness-4px" data-option-type="thickness">
+                                    <img src="./images/icons/thickness/4px.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- End Thickness -->
                 
@@ -133,7 +155,8 @@
             </div>
             <!-- End Statusbar -->
         </div>
-
+    </div>
+    
         <!-- Scripts -->
         <script src="dist/bundle.js"></script>
 </body>

@@ -314,12 +314,19 @@ template {
 *,
 *:before,
 *:after {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
 
 .isHidden {
   display: none; }
 
 .page__body {
+  position: relative;
   height: 100vh; }
 
 .page__workspace {
@@ -406,13 +413,20 @@ template {
   top: 0;
   left: 0; }
 
-.tool:hover {
-  background: #e8eff7 !important;
-  border: 1px solid #a4cef9; }
-
-.tool_actived {
-  background: #c9e0f7;
-  border: 1px solid #62a2e4 !important; }
+.tool {
+  border: 1px solid rgba(255, 255, 255, 1e-16); }
+  .tool:hover {
+    background: #e8eff7;
+    border: 1px solid #a4cef9; }
+  .tool:active {
+    background: #c9e0f7;
+    border: 1px solid #62a2e4 !important; }
+  .tool_actived {
+    background: #c9e0f7;
+    border: 1px solid #62a2e4 !important; }
+    .tool_actived:hover {
+      background: #d5e6f7;
+      border: 1px solid #7ab0e7 !important; }
 
 .double-tool {
   z-index: 10;
@@ -471,12 +485,15 @@ template {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 5px 0 2px;
+  padding: 2px 6px 0 3px;
   border-right: 1px solid #e3e4e5; }
 
 .tools-group__name {
   text-align: center;
   color: #5a5a5a; }
+
+.tools__body {
+  padding-top: 10px; }
 
 .tools__tool {
   width: 20px;
@@ -522,11 +539,13 @@ template {
   position: absolute;
   top: 55px; }
 
-.dropdown {
+.dropdown__body {
   position: relative; }
-  .dropdown__item {
-    position: absolute;
-    top: calc(100% + 1px); }
+
+.dropdown__menu {
+  position: absolute;
+  z-index: 1010;
+  top: calc(100% + 1px); }
 
 .menu__body {
   padding: 1px;
@@ -563,6 +582,30 @@ template {
   padding: 0 10px 0 6px;
   color: #444444;
   border-left: 1px solid #dcddde; }
+
+.thickness__shortcut {
+  height: 64px;
+  width: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3px 1px 5px 1px; }
+
+.thickness__dropdown-arrow {
+  margin-top: 6px; }
+
+.thickness__list {
+  padding: 1px;
+  background: #fefeff;
+  border: 1px solid #dcddde;
+  border-radius: 1px; }
+
+.thickness__option {
+  height: 38px;
+  width: 126px;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
 
 /*# sourceMappingURL=style.css.map*/

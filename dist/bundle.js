@@ -104,12 +104,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // js
-// require("./draw.js");
+__webpack_require__(/*! ./options.js */ "./src/scripts/options.js");
+__webpack_require__(/*! ./toolApplication.js */ "./src/scripts/toolApplication.js");
+__webpack_require__(/*! ./toolsList.js */ "./src/scripts/toolsList.js");
 __webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
 __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
 __webpack_require__(/*! ./statusbar.js */ "./src/scripts/statusbar.js");
 __webpack_require__(/*! ./dropdown.js */ "./src/scripts/dropdown.js");
-__webpack_require__(/*! ./toolsList.js */ "./src/scripts/toolsList.js");
+
 
 /***/ }),
 
@@ -136,8 +138,6 @@ let actionArchive = (function ({
     function saveCache() {
         archive.push({
             imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
-            width: canvas.width,
-            height: canvas.height,
             strokeStyle: ctx.strokeStyle,
             fillStyle: ctx.fillStyle,
             lineWidth: ctx.lineWidth,
@@ -153,7 +153,6 @@ let actionArchive = (function ({
         if (backsteps != 0) {
             for (; backsteps > 0; backsteps--) {
                 archive.pop();
-                console.log("delete", backsteps);
             }
         }
 
@@ -181,8 +180,8 @@ let actionArchive = (function ({
     }
     function recovery() {
         // Восстанавливаем размер
-        canvas.width = archive[archiveCounter].width;
-        canvas.height = archive[archiveCounter].height;
+        canvas.width = archive[archiveCounter].imageData.width;
+        canvas.height = archive[archiveCounter].imageData.height;
         general.canvContainer.style.width = canvas.width + "px";
         general.canvContainer.style.height = canvas.height + "px";
 
@@ -202,7 +201,7 @@ let actionArchive = (function ({
             
             recovery();
 
-            backsteps++;
+            backsteps++;   
         }
     }
 
@@ -220,6 +219,7 @@ let actionArchive = (function ({
     runOnKeys(stepNext, "ControlLeft", "KeyY");
 
     return {
+        archive: archive,
         save: saveCache,
         clearPastImageData: clearPastImageData
     }
@@ -242,7 +242,21 @@ let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js"
 
 // Модуль
 let dropdown = (function () {
+    let dropdownList = document.querySelectorAll(".dropdown");
 
+    dropdownList.forEach(elem => {
+        let dropdownButton = elem.querySelector(".dropdown__shortcut");
+        let content = elem.querySelector(".dropdown__menu");
+
+        dropdownButton.addEventListener("click", function() {
+            content.classList.toggle("isHidden");
+        });
+        document.addEventListener("mousedown", function dropdownDocumentMouseDown(e) {
+            if (e.target != content && !dropdownButton.contains(e.target)) {
+                content.classList.add("isHidden"); 
+            }
+        });
+    })
     return {
 
     }
@@ -271,6 +285,9 @@ let general = (function () {
 
     // TODO: Сделать общий объект состояния приложения
     let status = {
+        options: {
+            thickness: "thickness-2px",
+        },
         activeTool: 'pencil',
         isDraw: false,
         isResizing: false,
@@ -284,10 +301,6 @@ let general = (function () {
     function hideElem(elem) {
         elem.style.display = 'none';
     }
-    // TODO
-
-    ctx.fillStyle = "#ff0000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     return {
         canvas: canvas,
@@ -301,6 +314,40 @@ let general = (function () {
 })();
 
 module.exports = general;
+
+/***/ }),
+
+/***/ "./src/scripts/options.js":
+/*!********************************!*\
+  !*** ./src/scripts/options.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Подключение необходимых модулей
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+
+// Модуль
+let toolApplication = (function ({status}) {
+    let optionsList = document.querySelectorAll(".option");
+
+    optionsList.forEach(elem => {
+        elem.addEventListener("mousedown", function() {
+            status.options[elem.dataset.optionType] = this.id;
+
+            optionsList.forEach(item => {
+                if (item.dataset.optionType = this.id) {
+                    item.classList.remove("tool_actived");
+                }
+            });
+            this.classList.add("tool_actived");
+        })
+    })
+    return {}
+})(general);
+
+// Экспорт модуля
+module.exports = toolApplication;
 
 /***/ }),
 
@@ -484,6 +531,56 @@ module.exports = statusbar;
 
 /***/ }),
 
+/***/ "./src/scripts/toolApplication.js":
+/*!****************************************!*\
+  !*** ./src/scripts/toolApplication.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Подключение необходимых модулей
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+let toolsList = __webpack_require__(/*! ./toolsList.js */ "./src/scripts/toolsList.js");
+
+// Модуль
+let toolApplication = (function (general, {tools, buffer}) {
+    tools[general.status.activeTool].action();
+    
+    let toolsButtons = document.querySelectorAll(".tools__tool");
+
+    toolsButtons.forEach(elem => {
+        elem.addEventListener("click", function() {
+            if(!this.classList.contains("tool_actived")) {
+                general.activeTool = this.id;
+
+                // Удаляем ненужные обработчики событий
+                for (let i = 0; i < buffer.eventListeners.length; i++) {
+                    buffer.eventListeners[i][0].removeEventListener(buffer.eventListeners[i][1][0], buffer.eventListeners[i][1][1]);
+                    // console.log(buffer.eventListeners[i][1][1]);
+                }
+
+                // Очищаем массив
+                buffer.eventListeners = [];
+
+                toolsButtons.forEach(elem => {
+                    elem.classList.remove("tool_actived");
+                })
+
+                this.classList.add("tool_actived");
+
+                tools[general.activeTool].action();
+            }
+        });
+    });
+
+    return {}
+})(general, toolsList);
+
+// Экспорт модуля
+module.exports = toolApplication;
+
+/***/ }),
+
 /***/ "./src/scripts/toolsList.js":
 /*!**********************************!*\
   !*** ./src/scripts/toolsList.js ***!
@@ -496,10 +593,18 @@ let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js"
 let archive = __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
 
 // Модуль
-let toolsList = (function ({canvas, workspace, ctx, status}) {
+let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
+    // Чтобы задать обработчик события и занести его в буфер, чтобы потом удалить при смене инструмента
+    Object.prototype.addBufferEventListener = function(type, func) {
+        this.addEventListener(type, func);
+
+        buffer.eventListeners.push([this, [type, func]]);
+    }
+
     let buffer = {
         eventListeners: [],
     };
+
     let tools = {
         pencil: {
             id: "pencil",
@@ -513,7 +618,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
                         y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
                     };
                     // Стили рисования
-                    ctx.lineWidth = 6;
+                    ctx.lineWidth = 4;
                     ctx.strokeStyle = "#000000";
                     ctx.fillStyle = "#000000";
                     ctx.lineCap = "round";
@@ -547,8 +652,11 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
             
                     // Удалить обработчики, чтобы не стакались
                     // Заносим измекнения в архив
-                    archive.clearPastImageData();
-                    archive.save();
+                    if(e.target == canvas) {  
+                        archive.clearPastImageData();
+                        archive.save(); 
+                    }
+                    
             
                 }
                 function drawLeave(e) {
@@ -566,34 +674,24 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
                         }
             
                     }
-                    document.addEventListener("mousemove", mousemove);
-                    canvas.addEventListener("mouseover", () => {
+                    document.addBufferEventListener("mousemove", mousemove);
+                    canvas.addBufferEventListener("mouseover", () => {
                         document.removeEventListener("mousemove", mousemove);
                     });
             
                 }
                 // desktop
-                canvas.addEventListener("mouseleave", drawLeave);
-                canvas.addEventListener("mousemove", drawMove);
-                document.addEventListener("mouseup", drawEnd);
+                canvas.addBufferEventListener("mouseleave", drawLeave);
+                canvas.addBufferEventListener("mousemove", drawMove);
+                document.addBufferEventListener("mouseup", drawEnd);
             
-                canvas.addEventListener("mousedown", drawStart);
+                canvas.addBufferEventListener("mousedown", drawStart);
             
                 // mobile
-                canvas.addEventListener("touchmove", drawMove);
-                document.addEventListener("touchend", drawEnd);
+                canvas.addBufferEventListener("touchmove", drawMove);
+                document.addBufferEventListener("touchend", drawEnd);
             
-                canvas.addEventListener("touchstart", drawStart);
-
-
-                // Добавляем в буффер все события
-                buffer.eventListeners.push([canvas, ["mouseleave", drawLeave]]);
-                buffer.eventListeners.push([canvas, ["mousemove", drawMove]]);
-                buffer.eventListeners.push([document, ["mouseup", drawEnd]]);
-                buffer.eventListeners.push([canvas, ["mousedown", drawStart]]);
-                buffer.eventListeners.push([canvas, ["touchmove", drawMove]]);
-                buffer.eventListeners.push([document, ["touchend", drawEnd]]);
-                buffer.eventListeners.push([canvas, ["touchstart", drawStart]]);
+                canvas.addBufferEventListener("touchstart", drawStart);      
             },
         },
         fill: {
@@ -605,7 +703,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
         eraser: {
             id: "eraser",
             action: function() {
-                let fillSize = 4;
+                let size = 4;
 
                 function eraseStart(e) {
                     status.isDraw = true;
@@ -618,12 +716,12 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
             
             
                     // Стили рисования
-                    ctx.lineWidth = fillSize;
+                    ctx.lineWidth = size;
                     ctx.fillStyle = "#ffffff";
                     ctx.strokeStyle = "#ffffff";
             
                     // Начало рисования точки
-                    ctx.fillRect(mousePos.x - fillSize / 2, mousePos.y - fillSize / 2, fillSize, fillSize);
+                    ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
                     ctx.beginPath();
                     ctx.moveTo(mousePos.x, mousePos.y);
                     ctx.lineTo(mousePos.x, mousePos.y);
@@ -636,7 +734,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
                             y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
                         };
                         // Проведение линии
-                        ctx.fillRect(mousePos.x - fillSize / 2, mousePos.y - fillSize / 2, fillSize, fillSize);
+                        ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
                         ctx.lineTo(mousePos.x, mousePos.y);
                         ctx.stroke();
                         ctx.moveTo(mousePos.x, mousePos.y);
@@ -653,8 +751,10 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
             
                     // Удалить обработчики, чтобы не стакались
                     // Заносим измекнения в архив
-                    archive.clearPastImageData();
-                    archive.save();
+                    if(e.target == canvas) {  
+                        archive.clearPastImageData();
+                        archive.save(); 
+                    }
             
                 }
                 function eraseLeave(e) {
@@ -666,7 +766,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
                             };
                             console.log();
                             // Проведение линии
-                            ctx.fillRect(mousePos.x - fillSize / 2, mousePos.y - fillSize / 2, fillSize, fillSize);
+                            ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
                             ctx.lineTo(mousePos.x, mousePos.y);
                             ctx.stroke();
                             ctx.moveTo(mousePos.x, mousePos.y);
@@ -675,33 +775,24 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
                             }
             
                     }
-                    document.addEventListener("mousemove", erasemove);
-                    canvas.addEventListener("mouseover", () => {
+                    document.addBufferEventListener("mousemove", erasemove);
+                    canvas.addBufferEventListener("mouseover", () => {
                         document.removeEventListener("mousemove", erasemove);
                     });
             
                 }
                 // desktop
-                canvas.addEventListener("mouseleave", eraseLeave);
-                canvas.addEventListener("mousemove", eraseMove);
-                document.addEventListener("mouseup", eraseEnd);
+                canvas.addBufferEventListener("mouseleave", eraseLeave);
+                canvas.addBufferEventListener("mousemove", eraseMove);
+                document.addBufferEventListener("mouseup", eraseEnd);
             
-                canvas.addEventListener("mousedown", eraseStart);
+                canvas.addBufferEventListener("mousedown", eraseStart);
             
                 // mobile
-                canvas.addEventListener("touchmove", eraseMove);
-                document.addEventListener("touchend", eraseEnd);
+                canvas.addBufferEventListener("touchmove", eraseMove);
+                document.addBufferEventListener("touchend", eraseEnd);
             
-                canvas.addEventListener("touchstart", eraseStart);
-
-                // Добавляем в буффер все события
-                buffer.eventListeners.push([canvas, ["mouseleave", eraseLeave]]);
-                buffer.eventListeners.push([canvas, ["mousemove", eraseMove]]);
-                buffer.eventListeners.push([document, ["mouseup", eraseEnd]]);
-                buffer.eventListeners.push([canvas, ["mousedown", eraseStart]]);
-                buffer.eventListeners.push([canvas, ["touchmove", eraseMove]]);
-                buffer.eventListeners.push([document, ["touchend", eraseEnd]]);
-                buffer.eventListeners.push([canvas, ["touchstart", eraseStart]]);
+                canvas.addBufferEventListener("touchstart", eraseStart);
             }
         },
         pallete: {
@@ -712,39 +803,12 @@ let toolsList = (function ({canvas, workspace, ctx, status}) {
         }
     };
 
-    let toolsButtons = document.querySelectorAll(".tools__tool");
-
-    toolsButtons.forEach(elem => {
-        elem.addEventListener("click", function() {
-            if(!this.classList.contains("tool_actived")) {
-                general.activeTool = this.id;
-
-                // Удаляем ненужные обработчики событий
-                for (let i = 0; i < buffer.eventListeners.length; i++) {
-                    buffer.eventListeners[i][0].removeEventListener(buffer.eventListeners[i][1][0], buffer.eventListeners[i][1][1]);
-                    // console.log(buffer.eventListeners[i][1][1]);
-                }
-
-                // Очищаем массив
-                buffer.eventListeners = [];
-
-                toolsButtons.forEach(elem => {
-                    elem.classList.remove("tool_actived");
-                })
-
-                this.classList.add("tool_actived");
-
-                tools[general.activeTool].action();
-
-                
-            }
-        });
-    })
     
     return {
-
-    }
-})(general);
+        tools: tools,
+        buffer: buffer
+    };
+})(general, archive);
 
 // Экспорт модуля
 module.exports = toolsList;

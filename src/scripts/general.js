@@ -9,6 +9,9 @@ let general = (function () {
 
     // TODO: Сделать общий объект состояния приложения
     let status = {
+        options: {
+            thickness: "thickness-2px",
+        },
         activeTool: 'pencil',
         isDraw: false,
         isResizing: false,
@@ -22,10 +25,6 @@ let general = (function () {
     function hideElem(elem) {
         elem.style.display = 'none';
     }
-    // TODO
-
-    ctx.fillStyle = "#ff0000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     return {
         canvas: canvas,

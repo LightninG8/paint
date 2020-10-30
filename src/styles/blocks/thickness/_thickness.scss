@@ -1,0 +1,27 @@
+.thickness {
+    &__shortcut {
+        height: 64px;
+        width: 55px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3px 1px 5px 1px;
+    }
+    &__dropdown-arrow {
+        margin-top: 6px;
+    }
+    &__list {
+        padding: 1px;
+
+        background: #fefeff;
+        border: 1px solid #dcddde;
+        border-radius: 1px;
+    }
+    &__option {
+        height: 38px;
+        width: 126px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

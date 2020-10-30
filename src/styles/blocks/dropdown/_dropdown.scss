@@ -1,8 +1,11 @@
 .dropdown {
-    position: relative;
-
-    &__item {
+    &__body {
+     position: relative;   
+    }
+    
+    &__menu {
         position: absolute;
+        z-index: 1010;
         top: calc(100% + 1px);
     }
 }

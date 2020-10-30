@@ -1,4 +1,7 @@
 .tools {
+    &__body {
+        padding-top: 10px;
+    }
     &__tool {
         width: 20px;
         height: 20px;
@@ -6,7 +9,7 @@
         justify-content: center;
         align-items: center;
 
-        border: 1px solid rgba(255, 255, 255, 0.0000000000000001)
+        border: 1px solid rgba(255, 255, 255, 0.0000000000000001);
     }
     &__list {
         display: flex;

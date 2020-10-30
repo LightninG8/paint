@@ -14,8 +14,6 @@ let actionArchive = (function ({
     function saveCache() {
         archive.push({
             imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
-            width: canvas.width,
-            height: canvas.height,
             strokeStyle: ctx.strokeStyle,
             fillStyle: ctx.fillStyle,
             lineWidth: ctx.lineWidth,
@@ -31,7 +29,6 @@ let actionArchive = (function ({
         if (backsteps != 0) {
             for (; backsteps > 0; backsteps--) {
                 archive.pop();
-                console.log("delete", backsteps);
             }
         }
 
@@ -59,8 +56,8 @@ let actionArchive = (function ({
     }
     function recovery() {
         // Восстанавливаем размер
-        canvas.width = archive[archiveCounter].width;
-        canvas.height = archive[archiveCounter].height;
+        canvas.width = archive[archiveCounter].imageData.width;
+        canvas.height = archive[archiveCounter].imageData.height;
         general.canvContainer.style.width = canvas.width + "px";
         general.canvContainer.style.height = canvas.height + "px";
 
@@ -80,7 +77,7 @@ let actionArchive = (function ({
             
             recovery();
 
-            backsteps++;
+            backsteps++;   
         }
     }
 
@@ -98,6 +95,7 @@ let actionArchive = (function ({
     runOnKeys(stepNext, "ControlLeft", "KeyY");
 
     return {
+        archive: archive,
         save: saveCache,
         clearPastImageData: clearPastImageData
     }
