@@ -73,8 +73,6 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                     // Рисование закончилось
                     status.isDraw = false;
             
-            
-                    // Удалить обработчики, чтобы не стакались
                     // Заносим измекнения в архив
                     if(e.target == canvas) {  
                         archive.clearPastImageData();
@@ -120,10 +118,110 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
         },
         fill: {
             id: "fill",
+            action: function() {
+                function fill(e) {
+                    function rgb2hex(r, g, b) {
+                        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                    }
+                    function hex2rgb(c) {
+                        var bigint = parseInt(c.split('#')[1], 16);
+                        var r = (bigint >> 16) & 255;
+                        var g = (bigint >> 8) & 255;
+                        var b = bigint & 255;
+                    
+                        return [r, g, b, 255];
+                    }
+                    let ex = e.layerX,
+                        ey = e.layerY;
+
+                    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                    let colorsList = [imageData.data[((ey *(imageData.width * 4)) + (ex * 4))],
+                        imageData.data[((ey *(imageData.width * 4)) + (ex * 4)) + 1],
+                        imageData.data[((ey *(imageData.width * 4)) + (ex * 4)) + 2],
+                        imageData.data[((ey *(imageData.width * 4)) + (ex * 4)) + 3]];
+                    
+                    
+                    let color = rgb2hex([colorsList]);
+
+                    
+                    function isEqualColors(take, comp) {
+                        for (let i = 0; i < 3; i++) {
+                            if (take[i] == comp[i]) {
+                                continue;
+                            } else {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                    function getPixel(x, y) {
+                        let pixel = []
+                        for (let i = 0; i < 3; i++) {
+                            pixel.push(imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i]);                     
+                        }
+                        return pixel;
+                    }
+                    
+                    function drawPixels(x, y) {
+                        if (isEqualColors(colorsList, getPixel(x + 1, y))) {
+                            if ((x < canvas.width - 1)) {
+                                for (let i = 0; i < 3; i++) {
+                                    imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
+                                    imageData.data[((y *(imageData.width * 4)) + ((x + 1) * 4)) + i] = hex2rgb(status.options.color.main)[i];
+                                }
+                                drawPixels(x + 1, y);
+                            }
+                        }
+                        if (isEqualColors(colorsList, getPixel(x - 1, y))) {
+                            if (x > 1) {
+                                for (let i = 0; i < 3; i++) {
+                                    imageData.data[((y *(imageData.width * 4)) + ((x - 1) * 4)) + i] = hex2rgb(status.options.color.main)[i];
+                                }
+                                drawPixels(x - 1, y);
+                            }
+                        }
+                        if (isEqualColors(colorsList, getPixel(x, y + 1))) {
+                            if ((y < canvas.height )) {
+                                for (let i = 0; i < 3; i++) {
+                                    imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
+                                    imageData.data[(((y + 1) *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
+                                }
+                                drawPixels(x, y + 1);
+                            }
+                        }
+                        if (isEqualColors(colorsList, getPixel(x, y - 1))) {
+                            if ((y > 0 )) {
+                                for (let i = 0; i < 3; i++) {
+                                    imageData.data[(((y - 1) *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
+                                }
+                                drawPixels(x, y - 1);
+                            }
+                        }
+                        
+                    }
+
+                    drawPixels(ex, ey);
+    
+                    ctx.putImageData(imageData, 0, 0);
+
+                    // Заносим измекнения в архив
+                    if(e.target == canvas) {  
+                        archive.clearPastImageData();
+                        archive.save(); 
+                    }
+                }
+
+                canvas.addBufferEventListener("mousedown", fill);
+                canvas.addBufferEventListener("touchstart", fill);
+            },
             blockTools: ["thickness"],
         },
         text: {
             id: "text",
+            action: function() {
+                alert("Не работает");
+            },
             blockTools: ["thickness"],
         },
         eraser: {
@@ -247,6 +345,9 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
         },
         scale: {
             id: "scale",
+            action: function() {
+                alert("Не работает");
+            },
             blockTools: ["thickness"],
         }
     };
