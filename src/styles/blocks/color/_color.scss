@@ -1,0 +1,40 @@
+.color {
+    &__choose {
+        margin-right: 2px;
+        
+        &:not(.color__choose_disabled):hover {
+            border-color: #64a5e7;
+            background: #cbe4fd;
+        }
+    }
+    &__icon {
+        position: relative;
+
+        width: 18px;
+        height: 18px;
+
+        border: 1px solid #808080;
+    }
+    &__content {
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        bottom: 1px;
+        left: 1px;
+    }
+    &__name {
+        text-align: center;
+
+        margin-top: 5px;
+    }
+}
+#main-color .color__icon {
+    width: 30px;
+    height: 30px;
+}
+
+#background-color .color__icon {
+    margin: 3px;
+    width: 22px;
+    height: 22px;
+}

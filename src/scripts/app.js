@@ -6,6 +6,7 @@ import "../styles/scss/style.scss";
 // js
 require("./optionsApplication.js");
 require("./optionsList.js");
+require("./colors.js");
 require("./toolApplication.js");
 require("./toolsList.js");
 require("./resizing.js");

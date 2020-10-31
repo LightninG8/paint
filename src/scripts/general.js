@@ -7,10 +7,23 @@ let general = (function () {
         workspaceBody = document.querySelector(".workspace__body"),
         canvContainer = document.querySelector(".canvas");
 
+    // Запрещаем контекстное меню
+    document.body.oncontextmenu = function() {
+        return false;
+    }
+
     // TODO: Сделать общий объект состояния приложения
     let status = {
         options: {
-            thickness: "thickness-2px",
+            thickness: "2",
+
+            color: {
+                curColor: "#000000",
+                prevColor: "#ffffff",
+                main: "#000000",
+                background: "#ffffff"
+            },
+
         },
         activeTool: 'pencil',
         isDraw: false,

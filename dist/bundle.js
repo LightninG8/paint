@@ -106,6 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 // js
 __webpack_require__(/*! ./optionsApplication.js */ "./src/scripts/optionsApplication.js");
 __webpack_require__(/*! ./optionsList.js */ "./src/scripts/optionsList.js");
+__webpack_require__(/*! ./colors.js */ "./src/scripts/colors.js");
 __webpack_require__(/*! ./toolApplication.js */ "./src/scripts/toolApplication.js");
 __webpack_require__(/*! ./toolsList.js */ "./src/scripts/toolsList.js");
 __webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
@@ -229,6 +230,41 @@ module.exports = actionArchive;
 
 /***/ }),
 
+/***/ "./src/scripts/colors.js":
+/*!*******************************!*\
+  !*** ./src/scripts/colors.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Подключение необходимых модулей
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+
+// Модуль
+let colors = (function ({status}) {
+    let colorButtons = document.querySelectorAll(".colors__color");
+    let colorList = document.querySelectorAll(".color__choose");
+
+    colorButtons.forEach(elem => {
+        elem.querySelector(".color__content").style.background = elem.dataset.optionValue;
+
+        status.options[elem.dataset.optionType][elem.dataset.colorType] = elem.dataset.optionValue;
+
+        status.options.color.curColor = status.options.color.main;
+        status.options.color.prevColor = status.options.color.background;
+    });
+    colorList.forEach(elem => {
+        elem.querySelector(".color__content").style.background = elem.dataset.optionValue;
+    })
+
+    return {}
+})(general);
+
+// Экспорт модуля
+module.exports = colors;
+
+/***/ }),
+
 /***/ "./src/scripts/dropdown.js":
 /*!*********************************!*\
   !*** ./src/scripts/dropdown.js ***!
@@ -282,10 +318,23 @@ let general = (function () {
         workspaceBody = document.querySelector(".workspace__body"),
         canvContainer = document.querySelector(".canvas");
 
+    // Запрещаем контекстное меню
+    document.body.oncontextmenu = function() {
+        return false;
+    }
+
     // TODO: Сделать общий объект состояния приложения
     let status = {
         options: {
-            thickness: "thickness-2px",
+            thickness: "2",
+
+            color: {
+                curColor: "#000000",
+                prevColor: "#ffffff",
+                main: "#000000",
+                background: "#ffffff"
+            },
+
         },
         activeTool: 'pencil',
         isDraw: false,
@@ -325,25 +374,37 @@ module.exports = general;
 
 // Подключение необходимых модулей
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
-let optionsList = __webpack_require__(/*! ./optionsList.js */ "./src/scripts/optionsList.js");
 
 // Модуль
-let optionsApplication = (function ({status}, {options}) {
+let optionsApplication = (function ({status}) {
     let optionsList = document.querySelectorAll(".option");
 
     optionsList.forEach(elem => {
         elem.addEventListener("mousedown", function() {
             
-            status.options[elem.dataset.optionType] = options.thickness.get(this.id);
+            if (elem.dataset.optionType == "color") {                  
+                if(this.dataset.optionValue != status.options[elem.dataset.optionType].curColor) {
+                    status.options[elem.dataset.optionType].prevColor = status.options[elem.dataset.optionType].curColor
+                };
+
+                status.options[elem.dataset.optionType].curColor = this.dataset.optionValue;
+                                
+            } else {
+                status.options[elem.dataset.optionType] = this.dataset.optionValue;
+            }
+            
 
             optionsList.forEach(item => {
+                if (item.dataset.optionType == elem.dataset.optionType) {
                     item.classList.remove("tool_actived");
+                }
+                    
             });
             this.classList.add("tool_actived");
         })
     })
     return {}
-})(general, optionsList);
+})(general);
 
 // Экспорт модуля
 module.exports = optionsApplication;
@@ -646,10 +707,18 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                     };
                     // Стили рисования
 
-                    ctx.lineWidth = status.options["thickness"];
+                    ctx.lineWidth = status.options.thickness;
 
-                    ctx.strokeStyle = "#000000";
-                    ctx.fillStyle = "#000000";
+                    if(e.button == 0) {
+                        ctx.strokeStyle = status.options.color.curColor;
+                        ctx.fillStyle = status.options.color.curColor;   
+                    } else if (e.button == 2) {
+                        ctx.strokeStyle = status.options.color.prevColor;
+                        ctx.fillStyle = status.options.color.prevColor;   
+                    }
+
+                    
+
                     ctx.lineCap = "round";
             
                     // Начало рисования точки
@@ -657,6 +726,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                     ctx.moveTo(mousePos.x, mousePos.y);
                     ctx.lineTo(mousePos.x, mousePos.y);
                     ctx.stroke();
+                    
                 }
                 function drawMove(e) {
                     if (status.isDraw) {
@@ -748,12 +818,13 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                     size = status.options["thickness"] * 2
 
                     ctx.lineWidth = size;
-                    ctx.fillStyle = "#ffffff";
-                    ctx.strokeStyle = "#ffffff";
+                    ctx.fillStyle = status.options.color.background;
+                    ctx.strokeStyle = status.options.color.background;
             
                     // Начало рисования точки
-                    ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
+                    
                     ctx.beginPath();
+                    ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
                     ctx.moveTo(mousePos.x, mousePos.y);
                     ctx.lineTo(mousePos.x, mousePos.y);
                     ctx.stroke();
@@ -765,8 +836,9 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                             y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
                         };
                         // Проведение линии
-                        ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
+                        
                         ctx.lineTo(mousePos.x, mousePos.y);
+                        ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
                         ctx.stroke();
                         ctx.moveTo(mousePos.x, mousePos.y);
                         

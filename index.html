@@ -76,16 +76,16 @@
                                 <img src="./images/symbols/arrow-down.png" alt="arrow-down" class="dropdown__arrow thickness__dropdown-arrow">
                             </div>
                             <div class="thickness__list dropdown__menu isHidden">
-                                <div class="thickness__option tool option" id="thickness-1px" data-option-type="thickness">
+                                <div class="thickness__option tool option" id="thickness-1px" data-option-type="thickness" data-option-value="1">
                                     <img src="./images/icons/thickness/1px.png" alt="">
                                 </div>
-                                <div class="thickness__option tool option tool_actived" id="thickness-2px" data-option-type="thickness">
+                                <div class="thickness__option tool option tool_actived" id="thickness-2px" data-option-type="thickness" data-option-value="2">
                                     <img src="./images/icons/thickness/2px.png" alt="">
                                 </div>
-                                <div class="thickness__option tool option" id="thickness-3px" data-option-type="thickness">
+                                <div class="thickness__option tool option" id="thickness-3px" data-option-type="thickness" data-option-value="3">
                                     <img src="./images/icons/thickness/3px.png" alt="">
                                 </div>
-                                <div class="thickness__option tool option" id="thickness-4px" data-option-type="thickness">
+                                <div class="thickness__option tool option" id="thickness-4px" data-option-type="thickness" data-option-value="4">
                                     <img src="./images/icons/thickness/4px.png" alt="">
                                 </div>
                             </div>
@@ -95,8 +95,129 @@
                 <!-- End Thickness -->
                 
                 <!--Colors -->
-                <div class="tools-group toolbar__group">
-
+                <div class="tools-group toolbar__group colors">
+                    <div class="tools-group__body">
+                        <div class="colors__body">
+                            <div class="colors__choose">
+                                <div class="color colors__color tool option tool_actived" id="main-color" data-option-type="color" data-color-type="main" data-option-value="#000000">
+                                    <div class="color__icon">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__name">
+                                        <div>Цвет</div>
+                                        <div>1</div>
+                                    </div>
+                                </div>
+                                <div class="color colors__color tool option" id="background-color" data-option-type="color" data-color-type="background" data-option-value="#ffffff">
+                                    <div class="color__icon">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__name">
+                                        <div>Цвет</div>
+                                        <div>2</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="colors__pallete">
+                                <div class="colors__row">
+                                    <div class="color__icon color__choose" data-option-value="#000000">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#7f7f7f">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#880015">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#ed1c24">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#ff7f27">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#fff200">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#22b14c">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#00a2e8">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#3f48cc">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#a349a4">
+                                        <div class="color__content"></div>
+                                    </div>
+                                </div>
+                                <div class="colors__row">
+                                    <div class="color__icon color__choose" data-option-value="#ffffff">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#c3c3c3">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#b97a57">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#ffaec9">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#ffc90e">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#efe4b0">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#b5e61d">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#99d9ea">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#7092be">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose" data-option-value="#c8bfe7">
+                                        <div class="color__content"></div>
+                                    </div>
+                                </div>
+                                <div class="colors__row">
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                    <div class="color__icon color__choose color__choose_disabled" data-option-value="">
+                                        <div class="color__content"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
+                    </div>
                 </div>
                 <!-- End Colors -->
             </div>

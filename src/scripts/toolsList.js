@@ -30,10 +30,18 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                     };
                     // Стили рисования
 
-                    ctx.lineWidth = status.options["thickness"];
+                    ctx.lineWidth = status.options.thickness;
 
-                    ctx.strokeStyle = "#000000";
-                    ctx.fillStyle = "#000000";
+                    if(e.button == 0) {
+                        ctx.strokeStyle = status.options.color.curColor;
+                        ctx.fillStyle = status.options.color.curColor;   
+                    } else if (e.button == 2) {
+                        ctx.strokeStyle = status.options.color.prevColor;
+                        ctx.fillStyle = status.options.color.prevColor;   
+                    }
+
+                    
+
                     ctx.lineCap = "round";
             
                     // Начало рисования точки
@@ -41,6 +49,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                     ctx.moveTo(mousePos.x, mousePos.y);
                     ctx.lineTo(mousePos.x, mousePos.y);
                     ctx.stroke();
+                    
                 }
                 function drawMove(e) {
                     if (status.isDraw) {
@@ -132,12 +141,13 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                     size = status.options["thickness"] * 2
 
                     ctx.lineWidth = size;
-                    ctx.fillStyle = "#ffffff";
-                    ctx.strokeStyle = "#ffffff";
+                    ctx.fillStyle = status.options.color.background;
+                    ctx.strokeStyle = status.options.color.background;
             
                     // Начало рисования точки
-                    ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
+                    
                     ctx.beginPath();
+                    ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
                     ctx.moveTo(mousePos.x, mousePos.y);
                     ctx.lineTo(mousePos.x, mousePos.y);
                     ctx.stroke();
@@ -149,8 +159,9 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                             y: e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop
                         };
                         // Проведение линии
-                        ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
+                        
                         ctx.lineTo(mousePos.x, mousePos.y);
+                        ctx.fillRect(mousePos.x - size / 2, mousePos.y - size / 2, size, size);
                         ctx.stroke();
                         ctx.moveTo(mousePos.x, mousePos.y);
                         

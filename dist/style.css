@@ -607,5 +607,55 @@ template {
   align-items: center;
   justify-content: center; }
 
+.colors__body {
+  display: flex; }
+
+.colors__choose {
+  display: flex; }
+
+.colors__color {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 64px;
+  width: 40px;
+  padding: 2px 3px; }
+
+.colors__row {
+  display: flex;
+  margin-top: 2px; }
+
+.color__choose {
+  margin-right: 2px; }
+  .color__choose:not(.color__choose_disabled):hover {
+    border-color: #64a5e7;
+    background: #cbe4fd; }
+
+.color__icon {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #808080; }
+
+.color__content {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  left: 1px; }
+
+.color__name {
+  text-align: center;
+  margin-top: 5px; }
+
+#main-color .color__icon {
+  width: 30px;
+  height: 30px; }
+
+#background-color .color__icon {
+  margin: 3px;
+  width: 22px;
+  height: 22px; }
+
 
 /*# sourceMappingURL=style.css.map*/

@@ -1,0 +1,25 @@
+// Подключение необходимых модулей
+let general = require("./general.js");
+
+// Модуль
+let colors = (function ({status}) {
+    let colorButtons = document.querySelectorAll(".colors__color");
+    let colorList = document.querySelectorAll(".color__choose");
+
+    colorButtons.forEach(elem => {
+        elem.querySelector(".color__content").style.background = elem.dataset.optionValue;
+
+        status.options[elem.dataset.optionType][elem.dataset.colorType] = elem.dataset.optionValue;
+
+        status.options.color.curColor = status.options.color.main;
+        status.options.color.prevColor = status.options.color.background;
+    });
+    colorList.forEach(elem => {
+        elem.querySelector(".color__content").style.background = elem.dataset.optionValue;
+    })
+
+    return {}
+})(general);
+
+// Экспорт модуля
+module.exports = colors;
