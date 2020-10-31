@@ -255,6 +255,21 @@ let colors = (function ({status}) {
     });
     colorList.forEach(elem => {
         elem.querySelector(".color__content").style.background = elem.dataset.optionValue;
+
+        elem.addEventListener("click", function() {
+            if (!elem.classList.contains("color__choose_disabled")) {
+                let curColorButton = document.querySelector(".colors__color.tool_actived");
+
+                curColorButton.querySelector(".color__content").style.background = elem.dataset.optionValue;
+
+                // Меняем цвет
+                status.options.color[curColorButton.dataset.colorType] = elem.dataset.optionValue;
+                status.options.color.curColor = elem.dataset.optionValue;
+
+                curColorButton.dataset.optionValue = elem.dataset.optionValue;
+            }
+            
+        });
     })
 
     return {}

@@ -625,6 +625,9 @@ template {
   display: flex;
   margin-top: 2px; }
 
+.colors__pallete {
+  margin-left: 2px; }
+
 .color__choose {
   margin-right: 2px; }
   .color__choose:not(.color__choose_disabled):hover {
