@@ -162,45 +162,24 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                         }
                         return pixel;
                     }
-                    
+
+                    //TODO рекурсия плохо
                     function drawPixels(x, y) {
-                        if (isEqualColors(colorsList, getPixel(x + 1, y))) {
-                            if ((x < canvas.width - 1)) {
-                                for (let i = 0; i < 3; i++) {
-                                    imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
-                                    imageData.data[((y *(imageData.width * 4)) + ((x + 1) * 4)) + i] = hex2rgb(status.options.color.main)[i];
-                                }
-                                drawPixels(x + 1, y);
-                            }
+                        if( !isEqualColors(colorsList, getPixel(x, y)) ) {
+                            return;
                         }
-                        if (isEqualColors(colorsList, getPixel(x - 1, y))) {
-                            if (x > 1) {
-                                for (let i = 0; i < 3; i++) {
-                                    imageData.data[((y *(imageData.width * 4)) + ((x - 1) * 4)) + i] = hex2rgb(status.options.color.main)[i];
-                                }
-                                drawPixels(x - 1, y);
-                            }
+                        for (let i = 0; i < 3; i++) {
+                            imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
                         }
-                        if (isEqualColors(colorsList, getPixel(x, y + 1))) {
-                            if ((y < canvas.height )) {
-                                for (let i = 0; i < 3; i++) {
-                                    imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
-                                    imageData.data[(((y + 1) *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
-                                }
-                                drawPixels(x, y + 1);
-                            }
-                        }
-                        if (isEqualColors(colorsList, getPixel(x, y - 1))) {
-                            if ((y > 0 )) {
-                                for (let i = 0; i < 3; i++) {
-                                    imageData.data[(((y - 1) *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
-                                }
-                                drawPixels(x, y - 1);
-                            }
-                        }
-                        
+                        drawPixels(x - 1, y);
+                        drawPixels(x + 1, y);
+                        drawPixels(x, y - 1);
+                        drawPixels(x, y + 1);
+
+                        return;
                     }
 
+                    
                     drawPixels(ex, ey);
     
                     ctx.putImageData(imageData, 0, 0);
