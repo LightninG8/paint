@@ -10,9 +10,6 @@ let colors = (function ({status}) {
         elem.querySelector(".color__content").style.background = elem.dataset.optionValue;
 
         status.options[elem.dataset.optionType][elem.dataset.colorType] = elem.dataset.optionValue;
-
-        status.options.color.curColor = status.options.color.main;
-        status.options.color.prevColor = status.options.color.background;
     });
     colorList.forEach(elem => {
         elem.querySelector(".color__content").style.background = elem.dataset.optionValue;
@@ -25,7 +22,6 @@ let colors = (function ({status}) {
 
                 // Меняем цвет
                 status.options.color[curColorButton.dataset.colorType] = elem.dataset.optionValue;
-                status.options.color.curColor = elem.dataset.optionValue;
 
                 curColorButton.dataset.optionValue = elem.dataset.optionValue;
             }

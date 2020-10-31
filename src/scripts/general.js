@@ -19,8 +19,6 @@ let general = (function () {
             thickness: "2",
 
             color: {
-                curColor: "#000000",
-                prevColor: "#ffffff",
                 main: "#000000",
                 background: "#ffffff"
             },

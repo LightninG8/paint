@@ -9,11 +9,7 @@ let optionsApplication = (function ({status}) {
         elem.addEventListener("mousedown", function() {
             
             if (elem.dataset.optionType == "color") {                  
-                if(this.dataset.optionValue != status.options[elem.dataset.optionType].curColor) {
-                    status.options[elem.dataset.optionType].prevColor = status.options[elem.dataset.optionType].curColor
-                };
-
-                status.options[elem.dataset.optionType].curColor = this.dataset.optionValue;
+                status.options[elem.dataset.optionType][elem.dataset.colorType] = this.dataset.optionValue;
                                 
             } else {
                 status.options[elem.dataset.optionType] = this.dataset.optionValue;

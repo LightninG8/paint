@@ -241,9 +241,6 @@ let colors = (function ({status}) {
         elem.querySelector(".color__content").style.background = elem.dataset.optionValue;
 
         status.options[elem.dataset.optionType][elem.dataset.colorType] = elem.dataset.optionValue;
-
-        status.options.color.curColor = status.options.color.main;
-        status.options.color.prevColor = status.options.color.background;
     });
     colorList.forEach(elem => {
         elem.querySelector(".color__content").style.background = elem.dataset.optionValue;
@@ -256,7 +253,6 @@ let colors = (function ({status}) {
 
                 // Меняем цвет
                 status.options.color[curColorButton.dataset.colorType] = elem.dataset.optionValue;
-                status.options.color.curColor = elem.dataset.optionValue;
 
                 curColorButton.dataset.optionValue = elem.dataset.optionValue;
             }
@@ -337,8 +333,6 @@ let general = (function () {
             thickness: "2",
 
             color: {
-                curColor: "#000000",
-                prevColor: "#ffffff",
                 main: "#000000",
                 background: "#ffffff"
             },
@@ -391,11 +385,7 @@ let optionsApplication = (function ({status}) {
         elem.addEventListener("mousedown", function() {
             
             if (elem.dataset.optionType == "color") {                  
-                if(this.dataset.optionValue != status.options[elem.dataset.optionType].curColor) {
-                    status.options[elem.dataset.optionType].prevColor = status.options[elem.dataset.optionType].curColor
-                };
-
-                status.options[elem.dataset.optionType].curColor = this.dataset.optionValue;
+                status.options[elem.dataset.optionType][elem.dataset.colorType] = this.dataset.optionValue;
                                 
             } else {
                 status.options[elem.dataset.optionType] = this.dataset.optionValue;
@@ -739,14 +729,14 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                     ctx.lineWidth = status.options.thickness;
 
                     if(e.button == 0) {
-                        ctx.strokeStyle = status.options.color.curColor;
-                        ctx.fillStyle = status.options.color.curColor;   
+                        ctx.strokeStyle = status.options.color.main;
+                        ctx.fillStyle = status.options.color.main;   
                     } else if (e.button == 2) {
-                        ctx.strokeStyle = status.options.color.prevColor;
-                        ctx.fillStyle = status.options.color.prevColor;   
+                        ctx.strokeStyle = status.options.color.background;
+                        ctx.fillStyle = status.options.color.background;   
                     } else {
-                        ctx.strokeStyle = status.options.color.curColor;
-                        ctx.fillStyle = status.options.color.curColor;  
+                        ctx.strokeStyle = status.options.color.main;
+                        ctx.fillStyle = status.options.color.main;  
                     }
 
                     

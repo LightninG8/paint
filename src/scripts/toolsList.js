@@ -32,14 +32,14 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                     ctx.lineWidth = status.options.thickness;
 
                     if(e.button == 0) {
-                        ctx.strokeStyle = status.options.color.curColor;
-                        ctx.fillStyle = status.options.color.curColor;   
+                        ctx.strokeStyle = status.options.color.main;
+                        ctx.fillStyle = status.options.color.main;   
                     } else if (e.button == 2) {
-                        ctx.strokeStyle = status.options.color.prevColor;
-                        ctx.fillStyle = status.options.color.prevColor;   
+                        ctx.strokeStyle = status.options.color.background;
+                        ctx.fillStyle = status.options.color.background;   
                     } else {
-                        ctx.strokeStyle = status.options.color.curColor;
-                        ctx.fillStyle = status.options.color.curColor;  
+                        ctx.strokeStyle = status.options.color.main;
+                        ctx.fillStyle = status.options.color.main;  
                     }
 
                     
