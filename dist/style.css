@@ -324,7 +324,7 @@ template {
 
 .disabled {
   position: relative;
-  filter: grayscale(0.5) opacity(0.5); }
+  filter: grayscale(1) opacity(0.5); }
   .disabled:after {
     content: '';
     position: absolute;
@@ -427,10 +427,10 @@ template {
 
 .tool {
   border: 1px solid rgba(255, 255, 255, 1e-16); }
-  .tool:hover {
+  .tool:not(.disabled):hover {
     background: #e8eff7;
     border: 1px solid #a4cef9; }
-  .tool:active {
+  .tool:not(.disabled):active {
     background: #c9e0f7;
     border: 1px solid #62a2e4 !important; }
   .tool_actived {

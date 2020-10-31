@@ -6,7 +6,8 @@ let toolsList = require("./toolsList.js");
 let toolApplication = (function (general, {tools, buffer}) {
     tools[general.status.activeTool].action();
     
-    let toolsButtons = document.querySelectorAll(".tools__tool");
+    // TODO Убрать дисейблед
+    let toolsButtons = document.querySelectorAll(".tools__tool:not(.disabled)");
     let blockedTools = [];
     toolsButtons.forEach(elem => {
         elem.addEventListener("click", function() {
@@ -35,7 +36,6 @@ let toolApplication = (function (general, {tools, buffer}) {
                 }
                 if (tools[general.activeTool].blockTools != undefined) {
                     tools[general.activeTool].blockTools.forEach(tool => {
-                        console.log(tool);
                         document.getElementById(tool).parentNode.classList.add("disabled");
 
                         blockedTools.push(tool);

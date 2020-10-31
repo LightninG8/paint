@@ -105,7 +105,6 @@ __webpack_require__.r(__webpack_exports__);
 
 // js
 __webpack_require__(/*! ./optionsApplication.js */ "./src/scripts/optionsApplication.js");
-__webpack_require__(/*! ./optionsList.js */ "./src/scripts/optionsList.js");
 __webpack_require__(/*! ./colors.js */ "./src/scripts/colors.js");
 __webpack_require__(/*! ./toolApplication.js */ "./src/scripts/toolApplication.js");
 __webpack_require__(/*! ./toolsList.js */ "./src/scripts/toolsList.js");
@@ -113,6 +112,7 @@ __webpack_require__(/*! ./resizing.js */ "./src/scripts/resizing.js");
 __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
 __webpack_require__(/*! ./statusbar.js */ "./src/scripts/statusbar.js");
 __webpack_require__(/*! ./dropdown.js */ "./src/scripts/dropdown.js");
+__webpack_require__(/*! ./savecanvas.js */ "./src/scripts/savecanvas.js");
 
 
 /***/ }),
@@ -419,33 +419,6 @@ module.exports = optionsApplication;
 
 /***/ }),
 
-/***/ "./src/scripts/optionsList.js":
-/*!************************************!*\
-  !*** ./src/scripts/optionsList.js ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Подключение необходимых модулей
-let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
-
-// Модуль
-let optionsList = (function ({status}) {
-
-    let options = {
-        thickness: new Map([["thickness-1px", 1], ["thickness-2px", 2], ["thickness-3px", 3], ["thickness-4px", 4]]),
-    }
-    
-    return {
-        options: options
-    };
-})(general);
-
-// Экспорт модуля
-module.exports = optionsList;
-
-/***/ }),
-
 /***/ "./src/scripts/resizing.js":
 /*!*********************************!*\
   !*** ./src/scripts/resizing.js ***!
@@ -576,6 +549,36 @@ module.exports = resizing;
 
 /***/ }),
 
+/***/ "./src/scripts/savecanvas.js":
+/*!***********************************!*\
+  !*** ./src/scripts/savecanvas.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Подключение необходимых модулей
+let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
+
+// Модуль
+let savecanvas = (function ({canvas, ctx}) {
+    let saveButton = document.getElementById("savecanvas");
+
+    saveButton.addEventListener("click", function() {
+        var dataURL = canvas.toDataURL("image/jpeg");
+        var link = document.createElement("a");
+        link.href = dataURL;
+        link.download = "Безымянный.jpg";
+        link.click();
+
+    });
+    return {}
+})(general);
+
+// Экспорт модуля
+module.exports = savecanvas;
+
+/***/ }),
+
 /***/ "./src/scripts/statusbar.js":
 /*!**********************************!*\
   !*** ./src/scripts/statusbar.js ***!
@@ -645,7 +648,8 @@ let toolsList = __webpack_require__(/*! ./toolsList.js */ "./src/scripts/toolsLi
 let toolApplication = (function (general, {tools, buffer}) {
     tools[general.status.activeTool].action();
     
-    let toolsButtons = document.querySelectorAll(".tools__tool");
+    // TODO Убрать дисейблед
+    let toolsButtons = document.querySelectorAll(".tools__tool:not(.disabled)");
     let blockedTools = [];
     toolsButtons.forEach(elem => {
         elem.addEventListener("click", function() {
@@ -674,7 +678,6 @@ let toolApplication = (function (general, {tools, buffer}) {
                 }
                 if (tools[general.activeTool].blockTools != undefined) {
                     tools[general.activeTool].blockTools.forEach(tool => {
-                        console.log(tool);
                         document.getElementById(tool).parentNode.classList.add("disabled");
 
                         blockedTools.push(tool);
@@ -705,10 +708,9 @@ module.exports = toolApplication;
 // Подключение необходимых модулей
 let general = __webpack_require__(/*! ./general.js */ "./src/scripts/general.js");
 let archive = __webpack_require__(/*! ./archive.js */ "./src/scripts/archive.js");
-let optionsList = __webpack_require__(/*! ./optionsList.js */ "./src/scripts/optionsList.js");
 
 // Модуль
-let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options}) {
+let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
     // Чтобы задать обработчик события и занести его в буфер, чтобы потом удалить при смене инструмента
     Object.prototype.addBufferEventListener = function(type, func) {
         this.addEventListener(type, func);
@@ -956,12 +958,11 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
         }
     };
 
-    
     return {
         tools: tools,
         buffer: buffer
     };
-})(general, archive, optionsList);
+})(general, archive);
 
 // Экспорт модуля
 module.exports = toolsList;

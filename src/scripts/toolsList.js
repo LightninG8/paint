@@ -1,10 +1,9 @@
 // Подключение необходимых модулей
 let general = require("./general.js");
 let archive = require("./archive.js");
-let optionsList = require("./optionsList.js");
 
 // Модуль
-let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options}) {
+let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
     // Чтобы задать обработчик события и занести его в буфер, чтобы потом удалить при смене инструмента
     Object.prototype.addBufferEventListener = function(type, func) {
         this.addEventListener(type, func);
@@ -252,12 +251,11 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
         }
     };
 
-    
     return {
         tools: tools,
         buffer: buffer
     };
-})(general, archive, optionsList);
+})(general, archive);
 
 // Экспорт модуля
 module.exports = toolsList;

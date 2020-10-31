@@ -1,12 +1,15 @@
 .tool {
     border: 1px solid rgba(255, 255, 255, 0.0000000000000001); 
-    &:hover {
-        background: #e8eff7;
-        border: 1px solid #a4cef9;
-    }
-    &:active {
-        background: #c9e0f7;
-        border: 1px solid #62a2e4 !important;  
+    &:not(.disabled) {
+        &:hover {
+            background: #e8eff7;
+            border: 1px solid #a4cef9;
+        }
+        &:active {
+            background: #c9e0f7;
+            border: 1px solid #62a2e4 !important;  
+        }
+        
     }
     &_actived {
         background: #c9e0f7;
