@@ -267,6 +267,8 @@ let colors = (function ({status}) {
                 status.options.color.curColor = elem.dataset.optionValue;
 
                 curColorButton.dataset.optionValue = elem.dataset.optionValue;
+
+                console.log(status.options.color);
             }
             
         });
@@ -734,6 +736,9 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                     } else if (e.button == 2) {
                         ctx.strokeStyle = status.options.color.prevColor;
                         ctx.fillStyle = status.options.color.prevColor;   
+                    } else {
+                        ctx.strokeStyle = status.options.color.curColor;
+                        ctx.fillStyle = status.options.color.curColor;  
                     }
 
                     

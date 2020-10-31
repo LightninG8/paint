@@ -38,6 +38,9 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                     } else if (e.button == 2) {
                         ctx.strokeStyle = status.options.color.prevColor;
                         ctx.fillStyle = status.options.color.prevColor;   
+                    } else {
+                        ctx.strokeStyle = status.options.color.curColor;
+                        ctx.fillStyle = status.options.color.curColor;  
                     }
 
                     
