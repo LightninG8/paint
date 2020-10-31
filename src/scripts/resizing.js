@@ -72,6 +72,10 @@ let resizing = (function ({
                 canvContainer.style.width = canvas.width + 'px';
                 canvContainer.style.height = canvas.height + 'px';
 
+                // Заполняем цветом
+                ctx.fillStyle = status.options.color.background;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
                 ctx.putImageData(imageData, 0, 0);
 
                 // desktop
