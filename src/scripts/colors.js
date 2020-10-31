@@ -28,8 +28,6 @@ let colors = (function ({status}) {
                 status.options.color.curColor = elem.dataset.optionValue;
 
                 curColorButton.dataset.optionValue = elem.dataset.optionValue;
-
-                console.log(status.options.color);
             }
             
         });

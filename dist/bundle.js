@@ -140,9 +140,6 @@ let actionArchive = (function ({
     function saveCache() {
         archive.push({
             imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
-            strokeStyle: ctx.strokeStyle,
-            fillStyle: ctx.fillStyle,
-            lineCap: ctx.lineCap,
         });
 
         archiveCounter = archive.length - 1;
@@ -188,11 +185,6 @@ let actionArchive = (function ({
 
         // Вставляем изображение
         ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
-
-        // Восстанавливаем настройки
-        ctx.strokeStyle = archive[archiveCounter].strokeStyle;
-        ctx.fillStyle = archive[archiveCounter].fillStyle;
-        ctx.lineCap = archive[archiveCounter].lineCap;
     }
 
     function stepBack() {
@@ -267,8 +259,6 @@ let colors = (function ({status}) {
                 status.options.color.curColor = elem.dataset.optionValue;
 
                 curColorButton.dataset.optionValue = elem.dataset.optionValue;
-
-                console.log(status.options.color);
             }
             
         });
@@ -339,7 +329,8 @@ let general = (function () {
     document.body.oncontextmenu = function() {
         return false;
     }
-
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     // TODO: Сделать общий объект состояния приложения
     let status = {
         options: {
@@ -655,7 +646,7 @@ let toolApplication = (function (general, {tools, buffer}) {
     tools[general.status.activeTool].action();
     
     let toolsButtons = document.querySelectorAll(".tools__tool");
-
+    let blockedTools = [];
     toolsButtons.forEach(elem => {
         elem.addEventListener("click", function() {
             if(!this.classList.contains("tool_actived")) {
@@ -675,6 +666,21 @@ let toolApplication = (function (general, {tools, buffer}) {
                 })
 
                 this.classList.add("tool_actived");
+
+                // Блокируем ненужное
+                for (let tool of blockedTools) {
+                    document.getElementById(tool).parentNode.classList.remove("disabled");
+                    blockedTools.pop();
+                }
+                if (tools[general.activeTool].blockTools != undefined) {
+                    tools[general.activeTool].blockTools.forEach(tool => {
+                        console.log(tool);
+                        document.getElementById(tool).parentNode.classList.add("disabled");
+
+                        blockedTools.push(tool);
+                    });
+                }
+                
 
                 tools[general.activeTool].action();
             }
@@ -717,7 +723,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
     let tools = {
         pencil: {
             id: "pencil",
-            action: function (actionArchive) {
+            action: function () {
                 function drawStart(e) {
                     status.isDraw = true;
                     // Рисование началось
@@ -819,9 +825,11 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
         },
         fill: {
             id: "fill",
+            blockTools: ["thickness"],
         },
         text: {
             id: "text",
+            blockTools: ["thickness"],
         },
         eraser: {
             id: "eraser",
@@ -920,13 +928,31 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                 document.addBufferEventListener("touchend", eraseEnd);
             
                 canvas.addBufferEventListener("touchstart", eraseStart);
-            }
+            },
         },
         pallete: {
             id: "pallete",
+            action: function() {
+                canvas.addBufferEventListener("click", function(e) {
+                    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    let color = `rgb(${imageData.data[((e.layerY *(imageData.width * 4)) + (e.layerX * 4))]}, ${imageData.data[((e.layerY *(imageData.width * 4)) + (e.layerX * 4)) + 1]}, ${imageData.data[((e.layerY *(imageData.width * 4)) + (e.layerX * 4)) + 2]})`;
+                    
+                    let curColorButton = document.querySelector(".colors__color.tool_actived");
+
+                    curColorButton.querySelector(".color__content").style.background = color;
+
+                    // Меняем цвет
+                    status.options.color[curColorButton.dataset.colorType] = color;
+                    status.options.color.curColor = color;
+
+                    curColorButton.dataset.optionValue = color;
+                });
+            },
+            blockTools: ["thickness"],
         },
         scale: {
             id: "scale",
+            blockTools: ["thickness"],
         }
     };
 

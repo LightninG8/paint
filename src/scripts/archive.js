@@ -14,9 +14,6 @@ let actionArchive = (function ({
     function saveCache() {
         archive.push({
             imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
-            strokeStyle: ctx.strokeStyle,
-            fillStyle: ctx.fillStyle,
-            lineCap: ctx.lineCap,
         });
 
         archiveCounter = archive.length - 1;
@@ -62,11 +59,6 @@ let actionArchive = (function ({
 
         // Вставляем изображение
         ctx.putImageData(archive[archiveCounter].imageData, 0, 0);
-
-        // Восстанавливаем настройки
-        ctx.strokeStyle = archive[archiveCounter].strokeStyle;
-        ctx.fillStyle = archive[archiveCounter].fillStyle;
-        ctx.lineCap = archive[archiveCounter].lineCap;
     }
 
     function stepBack() {

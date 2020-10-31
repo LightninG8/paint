@@ -322,6 +322,18 @@ template {
   -ms-user-select: none;
   user-select: none; }
 
+.disabled {
+  position: relative;
+  filter: grayscale(0.5) opacity(0.5); }
+  .disabled:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000; }
+
 .isHidden {
   display: none; }
 

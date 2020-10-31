@@ -11,7 +11,8 @@ let general = (function () {
     document.body.oncontextmenu = function() {
         return false;
     }
-
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     // TODO: Сделать общий объект состояния приложения
     let status = {
         options: {

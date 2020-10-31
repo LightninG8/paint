@@ -19,7 +19,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
     let tools = {
         pencil: {
             id: "pencil",
-            action: function (actionArchive) {
+            action: function () {
                 function drawStart(e) {
                     status.isDraw = true;
                     // Рисование началось
@@ -121,9 +121,11 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
         },
         fill: {
             id: "fill",
+            blockTools: ["thickness"],
         },
         text: {
             id: "text",
+            blockTools: ["thickness"],
         },
         eraser: {
             id: "eraser",
@@ -222,13 +224,31 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive, {options})
                 document.addBufferEventListener("touchend", eraseEnd);
             
                 canvas.addBufferEventListener("touchstart", eraseStart);
-            }
+            },
         },
         pallete: {
             id: "pallete",
+            action: function() {
+                canvas.addBufferEventListener("click", function(e) {
+                    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    let color = `rgb(${imageData.data[((e.layerY *(imageData.width * 4)) + (e.layerX * 4))]}, ${imageData.data[((e.layerY *(imageData.width * 4)) + (e.layerX * 4)) + 1]}, ${imageData.data[((e.layerY *(imageData.width * 4)) + (e.layerX * 4)) + 2]})`;
+                    
+                    let curColorButton = document.querySelector(".colors__color.tool_actived");
+
+                    curColorButton.querySelector(".color__content").style.background = color;
+
+                    // Меняем цвет
+                    status.options.color[curColorButton.dataset.colorType] = color;
+                    status.options.color.curColor = color;
+
+                    curColorButton.dataset.optionValue = color;
+                });
+            },
+            blockTools: ["thickness"],
         },
         scale: {
             id: "scale",
+            blockTools: ["thickness"],
         }
     };
 

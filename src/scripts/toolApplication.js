@@ -7,7 +7,7 @@ let toolApplication = (function (general, {tools, buffer}) {
     tools[general.status.activeTool].action();
     
     let toolsButtons = document.querySelectorAll(".tools__tool");
-
+    let blockedTools = [];
     toolsButtons.forEach(elem => {
         elem.addEventListener("click", function() {
             if(!this.classList.contains("tool_actived")) {
@@ -27,6 +27,21 @@ let toolApplication = (function (general, {tools, buffer}) {
                 })
 
                 this.classList.add("tool_actived");
+
+                // Блокируем ненужное
+                for (let tool of blockedTools) {
+                    document.getElementById(tool).parentNode.classList.remove("disabled");
+                    blockedTools.pop();
+                }
+                if (tools[general.activeTool].blockTools != undefined) {
+                    tools[general.activeTool].blockTools.forEach(tool => {
+                        console.log(tool);
+                        document.getElementById(tool).parentNode.classList.add("disabled");
+
+                        blockedTools.push(tool);
+                    });
+                }
+                
 
                 tools[general.activeTool].action();
             }
