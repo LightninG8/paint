@@ -164,23 +164,76 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                     }
 
                     //TODO рекурсия плохо
-                    function drawPixels(x, y) {
-                        if( !isEqualColors(colorsList, getPixel(x, y)) ) {
+                    // function drawPixels(x, y) {
+                    //     if( !isEqualColors(colorsList, getPixel(x, y)) ) {
+                    //         return;
+                    //     }
+                    //     for (let i = 0; i < 3; i++) {
+                    //         imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
+                    //     }
+                    //     drawPixels(x - 1, y);
+                    //     drawPixels(x + 1, y);
+                    //     drawPixels(x, y - 1);
+                    //     drawPixels(x, y + 1);
+
+                    //     return;
+                    // }
+                    function drawPixels(pixel) {
+
+                        let queue = [pixel];
+                        let list = new Set();
+
+                        if (rgb2hex(colorsList[0], colorsList[1], colorsList[2]) == status.options.color.main) {
                             return;
                         }
-                        for (let i = 0; i < 3; i++) {
-                            imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(status.options.color.main)[i];
+                        while (queue.length != 0) {
+                            for (let i = 0; i < queue.length; i++) {
+                                if ( isEqualColors(colorsList, getPixel(queue[i][0], queue[i][1])) && queue[i][0] < canvas.width && queue[i][1] < canvas.height) {
+                                    let start = queue[i].slice(0),
+                                        end = queue[i].slice(0);
+
+                                    while ( isEqualColors(colorsList, getPixel(start[0], queue[i][1]))) {
+                                         // Помещаем точку в массив
+                                        list.add([start[0], start[1]]);
+                                        // Смещаем точку влево
+                                        start[0] = start[0] - 1;
+
+                                    }
+
+
+                                    while ( isEqualColors(colorsList, getPixel(end[0] - 1, queue[i][1]))) {
+                                        // Помещаем точку в массив
+                                        list.add([end[0], end[1]]);
+                                        // Смещаем точку влево
+                                        end[0] = end[0] + 1;
+                                    }
+                                   
+                                    for (let value of list) {
+                                        for (let j = 0; j < 3; j++) {
+                                            imageData.data[((value[1] *(imageData.width * 4)) + (value[0] * 4)) + j] = hex2rgb(status.options.color.main)[j];
+                                        }
+                                        if (isEqualColors(colorsList, getPixel(value[0], value[1] - 1))) {
+                                            // console.log(value[0], value[1] - 1);
+
+                                            queue.push([value[0], value[1] - 1]);
+                                        }
+                                        if (isEqualColors(colorsList, getPixel(value[0], value[1] + 1))) {
+                                            // console.log(value[0], value[1] + 1);
+
+                                            queue.push([value[0], value[1] + 1]);
+                                        }
+                                    }
+                                    list.clear();
+                                }
+                                queue.shift();  
+                            }
+                                     
                         }
-                        drawPixels(x - 1, y);
-                        drawPixels(x + 1, y);
-                        drawPixels(x, y - 1);
-                        drawPixels(x, y + 1);
-
                         return;
-                    }
-
+                    };
                     
-                    drawPixels(ex, ey);
+                    
+                    drawPixels([ex, ey]);
     
                     ctx.putImageData(imageData, 0, 0);
 
