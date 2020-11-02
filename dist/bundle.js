@@ -828,8 +828,8 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                     
                         return [r, g, b, 255];
                     }
-                    let ex = e.layerX,
-                        ey = e.layerY;
+                    let ex = e.layerX || e.changedTouches[0].pageX - 5 + workspace.scrollLeft,
+                        ey = e.layerY || e.changedTouches[0].pageY - 5 - 92 + workspace.scrollTop;
 
                     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -912,7 +912,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                 }
 
                 canvas.addBufferEventListener("mousedown", fill);
-                canvas.addBufferEventListener("touchstart", fill);
+                canvas.addBufferEventListener("touch", fill);
             },
             blockTools: ["thickness"],
         },
