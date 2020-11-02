@@ -840,7 +840,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                     
                     
                     let initialColor = rgb2hex(colorsList);
-                    let newColor = e.button == 0 ? status.options.color.main : status.options.color.background;
+                    let newColor = document.querySelector(".colors__color.tool_actived").dataset.optionValue;
                     
                     function getPixel(x, y) {
                         let pixel = []
