@@ -881,43 +881,24 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                             // Вытолкнуть первый элемент из Q
                             queue.shift();
 
-                            // Если цвет элемента к западу от n - заменяемый цвет:
-                            if (rgb2hex(getPixel(curPixel[0] - 1, curPixel[1])) == iColor) {
-                                // Установить цветом этого элемента цвет заливки
-                                for (let i = 0; i <= 3; i++) {
-                                    imageData.data[((curPixel[1] *(imageData.width * 4)) + ((curPixel[0] - 1) * 4)) + i] = hex2rgb(nColor)[i];
+                            function fillPixel(x, y) {
+                                if (rgb2hex(getPixel(x, y)) == iColor) {
+                                    // Установить цветом этого элемента цвет заливки
+                                    for (let i = 0; i <= 3; i++) {
+                                        imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(nColor)[i];
+                                    }
+                                    queue.push([x, y]);
                                 }
-                                queue.push([curPixel[0] - 1, curPixel[1]]);
                             }
-
-                            // Если цвет элемента к востоку от n - заменяемый цвет:
-                            if (rgb2hex(getPixel(curPixel[0] + 1, curPixel[1])) == iColor) {
-                                // Установить цветом этого элемента цвет заливки
-                                for (let i = 0; i <= 3; i++) {
-                                    imageData.data[((curPixel[1] *(imageData.width * 4)) + ((curPixel[0] + 1) * 4)) + i] = hex2rgb(nColor)[i];
-                                }
-                                queue.push([curPixel[0] + 1, curPixel[1]]);
-                            }
-
-                            // Если цвет элемента к северу от n - заменяемый цвет:
-                            if (rgb2hex(getPixel(curPixel[0], curPixel[1] - 1)) == iColor) {
-                                // Установить цветом этого элемента цвет заливки
-                                for (let i = 0; i <= 3; i++) {
-                                    imageData.data[(((curPixel[1] - 1) *(imageData.width * 4)) + (curPixel[0] * 4)) + i] = hex2rgb(nColor)[i];
-                                }
-                                queue.push([curPixel[0], curPixel[1] - 1]);
-                            }
-                            // Если цвет элемента к югу от n - заменяемый цвет:
-                            if (rgb2hex(getPixel(curPixel[0], curPixel[1] + 1)) == iColor) {
-                                // Установить цветом этого элемента цвет заливки
-                                for (let i = 0; i <= 3; i++) {
-                                    imageData.data[(((curPixel[1] + 1) *(imageData.width * 4)) + (curPixel[0] * 4)) + i] = hex2rgb(nColor)[i];
-                                }
-                                queue.push([curPixel[0], curPixel[1] + 1]);
-                            }
+                            // Проверка по сторонам
+                            fillPixel(curPixel[0] - 1, curPixel[1]);
+                            fillPixel(curPixel[0] + 1, curPixel[1]);
+                            fillPixel(curPixel[0], curPixel[1] - 1);
+                            fillPixel(curPixel[0], curPixel[1] + 1);
                         }
 
                         ctx.putImageData(imageData, 0, 0);
+
                         return;
                     }
                     drawPixels([ex, ey], initialColor, newColor);
