@@ -121,7 +121,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
             action: function() {
                 function fill(e) {
                     function rgb2hex(rgb) {
-                        return "#" + ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[3]).toString(16).slice(1);
+                        return "#" + ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).slice(1);
                     }
                     function hex2rgb(c) {
                         var bigint = parseInt(c.split('#')[1], 16);
@@ -187,7 +187,7 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                             function fillPixel(x, y) {
                                 if (rgb2hex(getPixel(x, y)) == iColor) {
                                     // Установить цветом этого элемента цвет заливки
-                                    for (let i = 0; i <= 3; i++) {
+                                    for (let i = 0; i < 3; i++) {
                                         imageData.data[((y *(imageData.width * 4)) + (x * 4)) + i] = hex2rgb(nColor)[i];
                                     }
                                     queue.push([x, y]);
