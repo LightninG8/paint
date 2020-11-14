@@ -1,8 +1,9 @@
 .canvas {
     position: relative;
 
-    width: 940px;
-    height: 540px;
+    display: inline-flex;
+    // width: 940px;
+    // height: 540px;
 
     &__size-slider {
         position: absolute;
@@ -31,10 +32,12 @@
         right: 0;
         bottom: 0;
         left: 0;
+        z-index: 10000;
 
         display: none;
 
         border: 1px dotted $color-frame;
+        
     }
 }
 

@@ -11,8 +11,7 @@ let resizing = (function ({
 }, archive, statusbar) {
 
     // Изменение размера
-    let canvContainer = document.querySelector(".canvas"),
-        canvFrame = document.querySelector(".canvas__frame"),
+    let canvFrame = document.querySelector(".canvas__frame"),
         canvBottom = document.getElementById("canvBottom"),
         canvRight = document.getElementById("canvRight"),
         canvCorner = document.getElementById("canvCorner");
@@ -67,10 +66,6 @@ let resizing = (function ({
                 }
 
                 general.hideElem(canvFrame);
-
-                // Канвас
-                canvContainer.style.width = canvas.width + 'px';
-                canvContainer.style.height = canvas.height + 'px';
 
                 // Заполняем цветом
                 ctx.fillStyle = status.options.color.background;

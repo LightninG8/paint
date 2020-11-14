@@ -429,8 +429,7 @@ let resizing = (function ({
 }, archive, statusbar) {
 
     // Изменение размера
-    let canvContainer = document.querySelector(".canvas"),
-        canvFrame = document.querySelector(".canvas__frame"),
+    let canvFrame = document.querySelector(".canvas__frame"),
         canvBottom = document.getElementById("canvBottom"),
         canvRight = document.getElementById("canvRight"),
         canvCorner = document.getElementById("canvCorner");
@@ -485,10 +484,6 @@ let resizing = (function ({
                 }
 
                 general.hideElem(canvFrame);
-
-                // Канвас
-                canvContainer.style.width = canvas.width + 'px';
-                canvContainer.style.height = canvas.height + 'px';
 
                 // Заполняем цветом
                 ctx.fillStyle = status.options.color.background;
@@ -840,7 +835,15 @@ let toolsList = (function ({canvas, workspace, ctx, status}, archive) {
                     
                     
                     let initialColor = rgb2hex(colorsList);
-                    let newColor = document.querySelector(".colors__color.tool_actived").dataset.optionValue;
+                    let newColor;
+                    
+                    if (e.button == 0) {
+                        newColor = status.options.color.main;
+                    } else if (e.button == 2) {
+                        newColor = status.options.color.background;
+                    } else {
+                        newColor = document.querySelector(".colors__color.tool_actived").dataset.optionValue;
+                    }
                     
                     function getPixel(x, y) {
                         let pixel = []

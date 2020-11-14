@@ -350,8 +350,7 @@ template {
 
 .canvas {
   position: relative;
-  width: 940px;
-  height: 540px; }
+  display: inline-flex; }
   .canvas__size-slider {
     position: absolute;
     display: flex;
@@ -370,6 +369,7 @@ template {
     right: 0;
     bottom: 0;
     left: 0;
+    z-index: 10000;
     display: none;
     border: 1px dotted #261d10; }
 
